@@ -1,0 +1,2996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科研查询自动生成流水线</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ───────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Claude warm palette */
+  --bg-primary:#FAF9F6;
+  --bg-secondary:#F3F0EB;
+  --bg-tertiary:#EDE8E1;
+  --bg-white:#FFFFFF;
+
+  --accent:#C45A3C;
+  --accent-light:#E8A590;
+  --accent-bg:rgba(196,90,60,.06);
+  --accent-bg-hover:rgba(196,90,60,.1);
+
+  --text-primary:#1A1612;
+  --text-secondary:#5D544B;
+  --text-tertiary:#8C8278;
+  --text-inverse:#FAF9F6;
+
+  --border:#E5DFD7;
+  --border-light:#EFEBE5;
+
+  --tag-blue-bg:#EEF2F7;--tag-blue:#4A6FA5;
+  --tag-green-bg:#EDF5F0;--tag-green:#3D7A5F;
+  --tag-orange-bg:#FDF1EB;--tag-orange:#B85C38;
+  --tag-red-bg:#FBEEED;--tag-red:#B54A4A;
+  --tag-purple-bg:#F2EFF7;--tag-purple:#6B5B95;
+  --tag-teal-bg:#EDF5F4;--tag-teal:#3D7A72;
+
+  --radius:14px;
+  --radius-sm:10px;
+  --radius-xs:7px;
+  --shadow-sm:0 1px 3px rgba(26,22,18,.04),0 1px 2px rgba(26,22,18,.06);
+  --shadow:0 2px 8px rgba(26,22,18,.05),0 1px 3px rgba(26,22,18,.08);
+  --shadow-lg:0 8px 24px rgba(26,22,18,.06),0 2px 8px rgba(26,22,18,.04);
+
+  --font-sans:"Noto Sans SC",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;
+  --font-serif:"Noto Serif SC","Songti SC","SimSun",serif;
+  --font-mono:"SF Mono","Fira Code","Consolas",monospace;
+}
+
+html{scroll-behavior:smooth;font-size:18px}
+body{font-family:var(--font-sans);color:var(--text-primary);line-height:1.75;background:var(--bg-primary);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+::selection{background:var(--accent-light);color:var(--text-primary)}
+
+.container{max-width:92%;margin:0 auto;padding:0 48px}
+
+/* ── Typography ──────────────────────────────────── */
+h1{font-family:var(--font-serif);font-size:clamp(2.4rem,5vw,3.6rem);font-weight:900;line-height:1.25;letter-spacing:-.02em;color:var(--text-primary)}
+h2{font-family:var(--font-serif);font-size:clamp(1.7rem,3vw,2.6rem);font-weight:700;line-height:1.3;color:var(--text-primary)}
+h3{font-size:1.3rem;font-weight:600;color:var(--text-primary)}
+h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
+.overline{font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.section-desc{color:var(--text-tertiary);max-width:700px;font-size:1.05rem;margin-bottom:52px}
+
+/* ── Reveal ──────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}.reveal-d4{transition-delay:.32s}.reveal-d5{transition-delay:.40s}
+
+/* ══════════════════════════════════════════════════════
+   HERO
+   ══════════════════════════════════════════════════════ */
+.hero{
+  display:flex;align-items:center;
+  background:var(--bg-primary);position:relative;overflow:hidden;
+  padding:100px 0 80px;
+}
+.hero::after{
+  content:'';position:absolute;top:-40%;right:-20%;width:70%;height:120%;
+  background:radial-gradient(ellipse,rgba(196,90,60,.045) 0%,transparent 65%);
+  pointer-events:none
+}
+.hero .container{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent-bg);border:1px solid rgba(196,90,60,.12);border-radius:50px;
+  padding:6px 16px;font-size:.78rem;font-weight:500;color:var(--accent);margin-bottom:28px
+}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.hero h1{margin-bottom:20px}
+.hero h1 .highlight{color:var(--accent)}
+.hero-subtitle{font-size:1.2rem;color:var(--text-secondary);max-width:720px;line-height:1.85;margin-bottom:52px}
+
+/* Stats */
+.stats-row{display:flex;gap:56px;flex-wrap:wrap;margin-bottom:56px}
+.stat-item{display:flex;flex-direction:column}
+.stat-num{font-family:var(--font-serif);font-size:clamp(2.8rem,5vw,4rem);font-weight:900;line-height:1;color:var(--text-primary);margin-bottom:6px}
+.stat-label{font-size:.95rem;color:var(--text-tertiary);font-weight:400}
+
+/* Persona card */
+.persona{
+  background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:32px 40px;max-width:640px;
+}
+.persona-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.persona-avatar{width:48px;height:48px;border-radius:50%;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.persona-head h4{font-size:1.05rem}
+.persona-head p{font-size:.88rem;color:var(--text-tertiary);margin:0}
+.persona-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.persona-list li{font-size:1rem;color:var(--text-secondary);padding-left:20px;position:relative;line-height:1.7}
+.persona-list li::before{content:'';position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%;background:var(--accent-light)}
+.persona-test{font-size:.95rem;color:var(--text-tertiary);padding-top:16px;border-top:1px solid var(--border-light);line-height:1.7}
+.persona-test strong{color:var(--accent);font-weight:600}
+
+/* Scroll */
+.scroll-cue{margin-top:64px;display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--text-tertiary);cursor:pointer;transition:color .2s}
+.scroll-cue:hover{color:var(--accent)}
+.scroll-cue svg{width:16px;height:16px;animation:bounce 2s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* ══════════════════════════════════════════════════════
+   PIPELINE FLOW
+   ══════════════════════════════════════════════════════ */
+.pipeline-section{padding:100px 0;background:var(--bg-white)}
+.flow-wrap{overflow-x:auto;padding:12px 0 24px}
+.flow{display:flex;align-items:flex-start;gap:0}
+.flow-node{flex:1;min-width:140px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .2s}
+.flow-node:hover{transform:translateY(-3px)}
+.flow-icon{
+  width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;position:relative;color:var(--text-inverse);transition:box-shadow .2s
+}
+.flow-node:hover .flow-icon{box-shadow:var(--shadow-lg)}
+.fi-1{background:#8B7EC8}.fi-2{background:#6B8FC2}.fi-3{background:#5BA08A}
+.fi-4{background:#C4903C}.fi-5{background:#C45A3C}.fi-6{background:#7A7268}
+.flow-num{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--bg-white);color:var(--text-primary);font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+.flow-name{font-size:.95rem;font-weight:600;margin-top:12px;text-align:center;color:var(--text-primary)}
+.flow-brief{font-size:.82rem;color:var(--text-tertiary);text-align:center;margin-top:4px;max-width:140px}
+.flow-badge{display:inline-block;font-size:.72rem;font-weight:600;color:var(--accent);background:var(--accent-bg);padding:3px 10px;border-radius:50px;margin-top:6px}
+.flow-arrow{flex:0 0 40px;display:flex;align-items:center;justify-content:center;padding-top:20px;color:var(--border);font-size:1.1rem}
+.flow-arrow-label{font-size:.7rem;color:var(--text-tertiary);position:absolute;top:-14px;white-space:nowrap}
+
+/* ══════════════════════════════════════════════════════
+   DOMAINS
+   ══════════════════════════════════════════════════════ */
+.domains-section{padding:100px 0;background:var(--bg-primary)}
+.domains-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.domain-card{
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);
+  padding:28px 30px;transition:box-shadow .2s,border-color .2s
+}
+.domain-card:hover{box-shadow:var(--shadow);border-color:var(--border)}
+.domain-card h4{font-size:1.08rem;margin-bottom:8px}
+.domain-card>p{font-size:.92rem;color:var(--text-tertiary);margin-bottom:14px;line-height:1.7}
+.dtags{display:flex;flex-wrap:wrap;gap:6px}
+.dtags span{font-size:.8rem;background:var(--bg-secondary);color:var(--text-secondary);padding:4px 12px;border-radius:50px;font-weight:500}
+
+/* ══════════════════════════════════════════════════════
+   PHASE DETAILS — Accordion
+   ══════════════════════════════════════════════════════ */
+.details-section{padding:100px 0;background:var(--bg-white)}
+.accordion{display:flex;flex-direction:column;gap:10px;max-width:100%;margin:0 auto}
+.acc-item{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.acc-item:hover{border-color:var(--border)}
+.acc-item.open{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light)}
+.acc-header{display:flex;align-items:center;gap:16px;padding:22px 28px;cursor:pointer;user-select:none;transition:background .12s}
+.acc-header:hover{background:var(--bg-primary)}
+.acc-dot{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--text-inverse);flex-shrink:0}
+.acc-title{flex:1}
+.acc-title h4{font-size:1.05rem;margin-bottom:2px}
+.acc-title p{font-size:.9rem;color:var(--text-tertiary);margin:0}
+.acc-chev{font-size:.8rem;color:var(--text-tertiary);transition:transform .3s}
+.acc-item.open .acc-chev{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.acc-inner{padding:0 28px 28px 88px;font-size:1rem;line-height:1.8;color:var(--text-secondary)}
+.acc-inner h5{font-size:.95rem;font-weight:600;color:var(--text-primary);margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.acc-inner ul{padding-left:18px;margin-bottom:8px}
+.acc-inner li{margin-bottom:4px;font-size:.95rem}
+.acc-inner .vbadge{font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:50px}
+.data-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--accent-bg);border-radius:var(--radius-xs);font-size:.82rem;color:var(--accent);margin-bottom:12px}
+.data-row .arr{font-weight:700}
+.param-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin:8px 0}
+.param{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:8px 12px}
+.param .k{display:block;font-size:.7rem;color:var(--text-tertiary)}
+.param .v{font-size:.82rem;font-weight:600;color:var(--text-primary);font-family:var(--font-mono)}
+
+/* ══════════════════════════════════════════════════════
+   STRATEGIES
+   ══════════════════════════════════════════════════════ */
+.strategies-section{padding:100px 0;background:var(--bg-primary)}
+.strategy-grid{display:flex;flex-direction:column;gap:24px}
+.s-card{
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);
+  overflow:hidden;transition:box-shadow .2s,border-color .2s,transform .2s
+}
+.s-card:hover{box-shadow:var(--shadow);border-color:var(--border);transform:translateY(-2px)}
+.s-bar{height:3px}
+.bar-lit{background:#8B7EC8}.bar-meth{background:#6B8FC2}.bar-contra{background:#C45A3C}
+.bar-quant{background:#5BA08A}.bar-cross{background:#C4903C}
+.s-body{padding:28px}
+.s-body h4{font-size:1.08rem;margin-bottom:3px}
+.s-body .en{font-size:.82rem;color:var(--text-tertiary);font-weight:400}
+.s-body .desc{font-size:.95rem;color:var(--text-secondary);margin:12px 0 16px;line-height:1.75}
+.s-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.s-chips span{font-size:.82rem;padding:5px 14px;border-radius:50px;background:var(--bg-secondary);color:var(--text-secondary);font-weight:500}
+.s-weight{height:4px;background:var(--bg-secondary);border-radius:2px;overflow:hidden}
+.s-weight-fill{height:100%;border-radius:2px}
+.s-weight-label{font-size:.65rem;color:var(--text-tertiary);text-align:right;margin-top:4px}
+
+/* Strategy examples (query cards nested under each strategy) */
+.s-examples{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.s-ex{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:18px 20px;transition:border-color .2s}
+.s-ex:hover{border-color:var(--border)}
+.s-ex-query{font-size:.92rem;font-weight:500;color:var(--text-primary);line-height:1.7;margin-bottom:10px}
+.s-ex-meta{font-size:.78rem;color:var(--text-tertiary);margin-bottom:8px}
+.s-ex-meta strong{color:var(--text-secondary)}
+.s-ex-toggle{font-size:.8rem;color:var(--accent);cursor:pointer;user-select:none;font-weight:500;display:inline-flex;align-items:center;gap:4px}
+.s-ex-toggle:hover{opacity:.7}
+.s-ex-toggle .chev{transition:transform .3s;font-size:.65rem}
+.s-ex-detail{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.s-ex-detail-inner{padding-top:12px;margin-top:10px;border-top:1px solid var(--border-light)}
+.s-ex-detail-inner h6{font-size:.78rem;font-weight:600;color:var(--text-primary);margin:10px 0 5px}
+.s-ex-detail-inner h6:first-child{margin-top:0}
+.s-ex-detail-inner p,.s-ex-detail-inner li{font-size:.82rem;color:var(--text-secondary);line-height:1.7}
+.s-ex-detail-inner ul{padding-left:16px;margin-bottom:4px}
+.s-ex-paper{padding:6px 10px;background:var(--bg-white);border-radius:var(--radius-xs);margin-bottom:4px;font-size:.78rem;border:1px solid var(--border-light)}
+.s-ex-paper .pt{font-weight:600;color:var(--text-primary)}
+.s-ex-paper .pm{color:var(--text-tertiary);font-size:.72rem}
+.s-ex-arrow{display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px 12px;background:rgba(196,90,60,.04);border-radius:var(--radius-xs);font-size:.78rem;color:var(--accent)}
+.s-ex-arrow svg{flex-shrink:0;width:16px;height:16px}
+
+/* ══════════════════════════════════════════════════════
+   VERIFICATION
+   ══════════════════════════════════════════════════════ */
+.verif-section{padding:100px 0;background:var(--bg-white)}
+.verif-stack{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.v-card{
+  padding:32px 36px;background:var(--bg-white);border:1px solid var(--border-light);
+  border-radius:var(--radius-sm);margin-bottom:-6px;position:relative;
+  transition:transform .2s,box-shadow .2s
+}
+.v-card:hover{transform:translateX(4px);box-shadow:var(--shadow);z-index:5}
+.v-card:nth-child(1){z-index:3}
+.v-card:nth-child(3){z-index:2;margin-left:16px}
+.v-card:nth-child(5){z-index:1;margin-left:32px}
+.v-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.v-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-inverse);font-size:.78rem;font-weight:700;flex-shrink:0}
+.vn1{background:#5BA08A}.vn2{background:#C4903C}.vn3{background:#C45A3C}
+.v-head h4{flex:1;font-size:1.05rem}
+.v-phase{font-size:.78rem;color:var(--text-tertiary);background:var(--bg-secondary);padding:4px 12px;border-radius:50px;font-weight:500}
+.v-card>p{font-size:.95rem;color:var(--text-tertiary);margin-bottom:12px;line-height:1.75}
+.v-tags{display:flex;gap:8px;flex-wrap:wrap}
+.v-tags .t{font-size:.82rem;font-weight:600;padding:4px 14px;border-radius:50px}
+.t-pass{background:var(--tag-green-bg);color:var(--tag-green)}
+.t-fail{background:var(--tag-red-bg);color:var(--tag-red)}
+.v-sep{text-align:center;padding:8px 0;color:var(--text-tertiary);font-size:.75rem}
+
+/* ══════════════════════════════════════════════════════
+   EXAMPLE QUERIES
+   ══════════════════════════════════════════════════════ */
+.examples-section{padding:100px 0;background:var(--bg-primary)}
+.examples-note{
+  font-size:.8rem;color:var(--accent);background:var(--accent-bg);
+  border:1px solid rgba(196,90,60,.1);border-radius:var(--radius-xs);
+  padding:10px 18px;display:inline-block;margin-bottom:40px
+}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:20px}
+.q-card{
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);
+  overflow:hidden;position:relative;transition:border-color .2s,box-shadow .2s
+}
+.q-card:hover{border-color:var(--border);box-shadow:var(--shadow)}
+.q-bar{height:3px}
+.q-body{padding:28px}
+.q-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.q-tag{font-size:.8rem;font-weight:600;padding:4px 14px;border-radius:50px;color:var(--text-inverse)}
+.qt-lit{background:#8B7EC8}.qt-meth{background:#6B8FC2}.qt-contra{background:#C45A3C}
+.qt-quant{background:#5BA08A}.qt-cross{background:#C4903C}
+.q-domain{font-size:.88rem;color:var(--text-tertiary)}
+.q-text{font-size:1.05rem;font-weight:500;color:var(--text-primary);line-height:1.8;margin-bottom:16px}
+.q-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px}
+.q-meta .m{font-size:.88rem;color:var(--text-tertiary)}
+.q-meta .m strong{color:var(--text-secondary)}
+.q-toggle{
+  display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:var(--accent);
+  cursor:pointer;user-select:none;font-weight:500;transition:opacity .15s
+}
+.q-toggle:hover{opacity:.75}
+.q-toggle .chev{transition:transform .3s;font-size:.65rem}
+.q-detail{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.q-detail-inner{padding-top:14px;border-top:1px solid var(--border-light);margin-top:10px}
+.q-detail-inner h5{font-size:.9rem;font-weight:600;color:var(--text-primary);margin:14px 0 8px}
+.q-detail-inner h5:first-child{margin-top:0}
+.q-detail-inner p{font-size:.95rem;color:var(--text-secondary);line-height:1.75}
+.q-detail-inner ul{padding-left:18px}
+.q-detail-inner li{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:3px}
+.paper-item{padding:10px 14px;background:var(--bg-primary);border-radius:var(--radius-xs);margin-bottom:6px;font-size:.9rem}
+.paper-item .pt{font-weight:600;color:var(--text-primary)}
+.paper-item .pm{color:var(--text-tertiary);font-size:.82rem}
+.scores{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.scores .sc{font-size:.72rem;padding:3px 10px;border-radius:50px;font-weight:600}
+.sc-low{background:var(--tag-red-bg);color:var(--tag-red)}
+.sc-med{background:var(--tag-orange-bg);color:var(--tag-orange)}
+.placeholder-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-12deg);font-size:2rem;font-weight:800;color:rgba(0,0,0,.025);pointer-events:none;white-space:nowrap;letter-spacing:.1em}
+/* Filter bar */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.filter-btn{
+  font-size:.82rem;padding:6px 16px;border-radius:50px;border:1px solid var(--border-light);
+  background:var(--bg-white);color:var(--text-secondary);cursor:pointer;font-weight:500;
+  font-family:var(--font-sans);transition:all .15s
+}
+.filter-btn:hover{border-color:var(--border);background:var(--bg-secondary)}
+.filter-btn.active{background:var(--accent);color:var(--text-inverse);border-color:var(--accent)}
+.filter-count{font-size:.78rem;color:var(--text-tertiary);margin-left:auto}
+.q-card.hidden-by-filter{display:none}
+
+/* ══════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════ */
+.footer{padding:40px 0;background:var(--bg-secondary);border-top:1px solid var(--border)}
+.footer-row{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:10px}
+.footer-row .f{font-size:.78rem;color:var(--text-tertiary);display:flex;align-items:center;gap:5px}
+.footer-row .f strong{color:var(--text-secondary);font-weight:600}
+.footer p{text-align:center;font-size:.75rem;color:var(--text-tertiary)}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .stats-row{gap:28px}
+  .flow{flex-direction:column;align-items:center}
+  .flow-arrow{transform:rotate(90deg);flex:0 0 24px}
+  .q-grid{grid-template-columns:1fr}
+  .domains-grid{grid-template-columns:1fr}
+  .s-ex-query{font-size:.85rem}
+  .v-card:nth-child(3),.v-card:nth-child(5){margin-left:0}
+  .acc-inner{padding-left:22px}
+}
+@media(max-width:1024px){
+  .domains-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ══════════════════════════════════════════════════════
+   DOODLE SYSTEM — hand-drawn SVG decorations
+   ══════════════════════════════════════════════════════ */
+:root{
+  --doodle-terra:#D4714E;
+  --doodle-olive:#8B9E6B;
+  --doodle-beige:#D9D2C9;
+}
+
+/* ── Keyframes ───────────────────────────────────── */
+@keyframes doodleFadeIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes doodleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes steamRise{0%{opacity:.5;transform:translateY(0) scaleX(1)}50%{opacity:.8;transform:translateY(-8px) scaleX(1.1)}100%{opacity:.3;transform:translateY(-18px) scaleX(.8)}}
+@keyframes catTail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes drawLine{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes twinkle{0%,100%{opacity:.12}50%{opacity:.22}}
+@keyframes gentleSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ── Floating Background Doodles ─────────────────── */
+.floating-doodles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.floating-doodles svg{position:absolute;opacity:0;animation:doodleFadeIn .8s ease forwards}
+.fd-1{top:8%;left:5%;animation-delay:.5s !important}
+.fd-2{top:22%;right:8%;animation-delay:1s !important}
+.fd-3{top:45%;left:3%;animation-delay:1.5s !important}
+.fd-4{top:62%;right:5%;animation-delay:2s !important}
+.fd-5{top:78%;left:7%;animation-delay:2.5s !important}
+.fd-6{top:35%;right:3%;animation-delay:1.2s !important}
+.fd-7{top:88%;right:10%;animation-delay:1.8s !important}
+.fd-8{top:12%;left:50%;animation-delay:.8s !important}
+.floating-doodles svg.float-anim{animation:doodleFadeIn .8s ease forwards, doodleFloat 6s ease-in-out infinite 1s}
+
+/* ── Hero Illustration ───────────────────────────── */
+.hero-illust{position:absolute;right:4%;top:50%;transform:translateY(-50%);width:320px;opacity:.18;z-index:0}
+.hero-illust .steam{animation:steamRise 2.5s ease-in-out infinite}
+.hero-illust .steam2{animation:steamRise 2.5s ease-in-out infinite .8s}
+.hero-illust .cat-tail{transform-origin:85% 80%;animation:catTail 2s ease-in-out infinite}
+.hero .container{z-index:2}
+
+/* ── Section Dividers ────────────────────────────── */
+.section-divider{width:100%;padding:0;display:flex;justify-content:center;overflow:hidden;position:relative}
+.section-divider svg{display:block;max-width:90%;height:auto}
+.divider-vine{height:48px}
+.divider-wave{height:32px}
+.divider-dots{height:24px}
+.divider-vine .vine-line{stroke:var(--doodle-olive);stroke-width:2;fill:none;stroke-linecap:round;opacity:.25;stroke-dasharray:1;stroke-dashoffset:1;pathLength:1}
+.divider-vine .vine-leaf{fill:var(--doodle-olive);opacity:.2}
+.divider-vine .vine-dot{fill:var(--doodle-terra);opacity:.2}
+.divider-vine.visible .vine-line{animation:drawLine 2s ease forwards}
+.divider-wave .wave-path{stroke:var(--doodle-beige);stroke-width:2.5;fill:none;stroke-linecap:round;opacity:.35}
+.divider-dots .ddot{fill:var(--doodle-terra);opacity:.15}
+
+/* ══════════════════════════════════════════════════════
+   COVER — Project Overview
+   ══════════════════════════════════════════════════════ */
+.cover{min-height:100vh;display:flex;align-items:center;background:var(--bg-primary);padding:80px 0;position:relative;overflow:hidden}
+.cover::after{
+  content:'';position:absolute;bottom:-30%;left:-10%;width:60%;height:80%;
+  background:radial-gradient(ellipse,rgba(139,158,107,.04) 0%,transparent 60%);pointer-events:none
+}
+.cover .container{position:relative;z-index:1}
+.cover-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent-bg);border:1px solid rgba(196,90,60,.12);border-radius:50px;
+  padding:6px 18px;font-size:.82rem;font-weight:500;color:var(--accent);margin-bottom:24px
+}
+.cover-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.cover h1{margin-bottom:16px}
+.cover-subtitle{font-size:1.15rem;color:var(--text-secondary);max-width:740px;line-height:1.85;margin-bottom:20px}
+.cover-approach{font-size:1rem;color:var(--text-tertiary);max-width:680px;line-height:1.8;margin-bottom:40px;padding:16px 20px;border-left:3px solid var(--accent-light);background:var(--accent-bg);border-radius:0 var(--radius-xs) var(--radius-xs) 0}
+
+/* Persona matrix */
+.persona-matrix{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:48px}
+.pm-card{
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);
+  padding:22px 18px;position:relative;transition:box-shadow .2s,border-color .2s,transform .2s;overflow:hidden
+}
+.pm-card:hover{box-shadow:var(--shadow);border-color:var(--border);transform:translateY(-2px)}
+.pm-card.pm-active{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light)}
+.pm-card.pm-active::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);border-radius:var(--radius-sm) var(--radius-sm) 0 0
+}
+.pm-card.pm-pending{opacity:.6}
+.pm-status{
+  position:absolute;top:10px;right:10px;font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:50px
+}
+.pm-status-done{background:var(--tag-green-bg);color:var(--tag-green)}
+.pm-status-plan{background:var(--bg-secondary);color:var(--text-tertiary)}
+.pm-icon{font-size:1.6rem;margin-bottom:10px;display:block}
+.pm-card h4{font-size:.92rem;margin-bottom:6px}
+.pm-pain{font-size:.78rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:10px;min-height:60px}
+.pm-test{font-size:.72rem;color:var(--text-tertiary);padding-top:10px;border-top:1px solid var(--border-light);line-height:1.6}
+.pm-test strong{color:var(--accent);font-weight:600;font-size:.7rem}
+
+/* Editable notes pad */
+.notes-pad{
+  background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:24px 28px;margin-bottom:48px;position:relative
+}
+.notes-pad-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.notes-pad-header h4{font-size:.95rem;color:var(--text-secondary)}
+.notes-save{
+  font-size:.78rem;font-weight:600;color:var(--accent);background:var(--accent-bg);
+  border:1px solid rgba(196,90,60,.15);border-radius:50px;padding:5px 16px;cursor:pointer;
+  transition:background .15s
+}
+.notes-save:hover{background:var(--accent-bg-hover)}
+.notes-save.saved{color:var(--tag-green);background:var(--tag-green-bg);border-color:rgba(61,122,95,.15)}
+.notes-area{
+  width:100%;min-height:100px;border:1px dashed var(--border);border-radius:var(--radius-xs);
+  padding:14px 16px;font-family:var(--font-sans);font-size:.92rem;line-height:1.75;
+  color:var(--text-secondary);background:var(--bg-primary);resize:vertical;outline:none;
+  transition:border-color .2s
+}
+.notes-area:focus{border-color:var(--accent-light);border-style:solid}
+.notes-area::placeholder{color:var(--text-tertiary);opacity:.7}
+
+/* Cover scroll cue */
+.cover-scroll{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--accent);cursor:pointer;font-weight:500;transition:opacity .2s}
+.cover-scroll:hover{opacity:.7}
+.cover-scroll svg{width:18px;height:18px;animation:bounce 2s ease infinite}
+
+/* Pipeline intro label (replaces the old big hero) */
+.pipeline-intro{
+  background:var(--bg-secondary);border-bottom:1px solid var(--border-light);
+  padding:28px 0;
+}
+.pipeline-intro .container{display:flex;align-items:center;gap:16px}
+.pipeline-intro-badge{
+  background:var(--accent);color:var(--text-inverse);font-size:.75rem;font-weight:700;
+  padding:5px 14px;border-radius:50px;white-space:nowrap;flex-shrink:0
+}
+.pipeline-intro-text{font-size:.95rem;color:var(--text-secondary);line-height:1.6}
+.pipeline-intro-text strong{color:var(--text-primary)}
+
+/* ── Responsive: hide doodles on mobile ──────────── */
+@media(max-width:768px){
+  .floating-doodles{display:none}
+  .hero-illust{display:none}
+  .section-divider svg{max-width:70%}
+  .persona-matrix{grid-template-columns:repeat(2,1fr)}
+  .pm-card:last-child{grid-column:span 2}
+}
+@media(max-width:1200px){
+  .persona-matrix{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ══════════════════════════════════════════════════════
+   PROPOSALS SECTION — Other Personas
+   ══════════════════════════════════════════════════════ */
+.proposals-section{padding:100px 0;background:var(--bg-secondary)}
+.expert-callout{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--accent-bg);border:1px solid rgba(196,90,60,.15);border-radius:var(--radius-sm);
+  padding:20px 28px;margin-bottom:48px;line-height:1.7
+}
+.expert-callout .ec-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.expert-callout p{font-size:.95rem;color:var(--text-secondary)}
+.expert-callout strong{color:var(--accent)}
+.draft-badge{
+  display:inline-block;font-size:.72rem;font-weight:700;
+  background:var(--tag-orange-bg);color:var(--tag-orange);
+  padding:3px 12px;border-radius:50px;margin-left:8px;vertical-align:middle
+}
+.source-chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+.source-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.85rem;padding:6px 14px;border-radius:var(--radius-xs);
+  background:var(--bg-white);border:1px solid var(--border-light);color:var(--text-primary);font-weight:500
+}
+.source-chip .sc-free{font-size:.7rem;color:var(--tag-green);font-weight:600}
+.source-chip .sc-paid{font-size:.7rem;color:var(--tag-orange);font-weight:600}
+.strategy-compact{margin:12px 0}
+.strategy-compact-item{
+  display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light);align-items:flex-start
+}
+.strategy-compact-item:last-child{border-bottom:none}
+.sc-name{font-size:.95rem;font-weight:600;color:var(--text-primary);min-width:170px;flex-shrink:0}
+.sc-desc{font-size:.88rem;color:var(--text-secondary);line-height:1.7;flex:1}
+.sc-example{
+  margin-top:8px;padding:12px 16px;background:var(--bg-primary);border-radius:var(--radius-xs);
+  font-size:.9rem;color:var(--text-primary);line-height:1.75;border-left:3px solid var(--accent-light)
+}
+.todo-box{
+  margin-top:16px;padding:16px 20px;
+  border:2px dashed var(--border);border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.4)
+}
+.todo-box h5{font-size:.88rem;font-weight:600;color:var(--text-tertiary);margin-bottom:8px}
+.todo-box li{font-size:.88rem;color:var(--text-tertiary);line-height:1.7;margin-bottom:3px}
+.todo-box ul{padding-left:16px}
+.cmp-table-wrap{overflow-x:auto;margin-top:48px}
+.cmp-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.88rem}
+.cmp-table th,.cmp-table td{padding:14px 18px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border-light)}
+.cmp-table thead th{font-size:.8rem;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;background:var(--bg-secondary);position:sticky;top:0}
+.cmp-table .row-label{font-weight:600;color:var(--text-primary);min-width:130px;background:var(--bg-secondary)}
+.cmp-table .col-done{background:rgba(196,90,60,.04)}
+.cmp-table .col-done th{color:var(--accent);background:rgba(196,90,60,.08)}
+.cmp-table .col-draft{background:var(--bg-white)}
+.next-steps{
+  margin-top:48px;padding:24px 28px;
+  background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);
+  display:flex;align-items:flex-start;gap:14px
+}
+.next-steps .ns-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.next-steps p{font-size:.95rem;color:var(--text-secondary);line-height:1.7}
+.next-steps strong{color:var(--text-primary)}
+
+/* ── Collapsible queries section ─────────────────── */
+.collapse-toggle{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:var(--radius-xs);
+  background:var(--bg-white);border:1px solid var(--border);
+  font-size:.95rem;font-weight:600;color:var(--accent);cursor:pointer;
+  transition:background .15s,box-shadow .15s;margin-bottom:24px;user-select:none
+}
+.collapse-toggle:hover{background:var(--accent-bg);box-shadow:var(--shadow-sm)}
+.collapse-toggle .ct-chev{transition:transform .3s;font-size:.75rem}
+.collapse-toggle.open .ct-chev{transform:rotate(180deg)}
+.collapse-content{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.collapse-content.open{max-height:none;overflow:visible}
+</style>
+</head>
+<body>
+
+<!-- ══════════ COVER: Project Overview ══════════ -->
+<section class="cover" id="cover">
+  <div class="container">
+    <h1 class="reveal reveal-d1">Deep Research 评测<br><span class="highlight">问题自动构造</span></h1>
+    <p class="cover-subtitle reveal reveal-d2">
+      我们为 5 个核心 Persona 各设计一条自动化 pipeline：基于该角色的真实痛点，从权威数据源（论文、判例、临床指南等）中挖掘素材，自动生成高难度的开放式研究问题并附带参考答案。目前已完成「科学家/研究员」Pipeline 的设计与实现。
+    </p>
+
+    <!-- 5 Persona Cards -->
+    <div class="persona-matrix reveal reveal-d2">
+      <!-- 1. Researcher — DONE -->
+      <div class="pm-card pm-active">
+        <span class="pm-status pm-status-done">已完成</span>
+        <span class="pm-icon">&#128300;</span>
+        <h4>科学家 / 研究员</h4>
+        <p class="pm-pain">文献综述耗时、跨领域信息难以验证、AI 幻觉在学术场景代价极高</p>
+        <p class="pm-test"><strong>测什么：</strong>能否基于一手文献做精确论证、能否识别方法论边界</p>
+      </div>
+      <!-- 2. Engineer — PLANNED -->
+      <div class="pm-card pm-pending">
+        <span class="pm-status pm-status-plan">待开发</span>
+        <span class="pm-icon">&#128187;</span>
+        <h4>工程师 / 程序员</h4>
+        <p class="pm-pain">复杂系统设计耗时、跨层抽象理解困难、AI 生成方案不可靠</p>
+        <p class="pm-test"><strong>测什么：</strong>能否从硬件到系统做端到端设计、能否给出可落地的工程决策</p>
+      </div>
+      <!-- 3. Finance — PLANNED -->
+      <div class="pm-card pm-pending">
+        <span class="pm-status pm-status-plan">待开发</span>
+        <span class="pm-icon">&#128200;</span>
+        <h4>金融分析师</h4>
+        <p class="pm-pain">市场研究耗时、信息来源分散、分析报告质量参差不齐</p>
+        <p class="pm-test"><strong>测什么：</strong>能否做多层漏斗式筛选、能否给出有具体标的的投资建议</p>
+      </div>
+      <!-- 4. Doctor — PLANNED -->
+      <div class="pm-card pm-pending">
+        <span class="pm-status pm-status-plan">待开发</span>
+        <span class="pm-icon">&#129657;</span>
+        <h4>医生 / 医疗人员</h4>
+        <p class="pm-pain">医学文献更新快、临床决策需要可靠信息来源、AI 幻觉风险极高</p>
+        <p class="pm-test"><strong>测什么：</strong>能否引用正确试验数据、能否在循证和现实约束间权衡</p>
+      </div>
+      <!-- 5. Lawyer — PLANNED -->
+      <div class="pm-card pm-pending">
+        <span class="pm-status pm-status-plan">待开发</span>
+        <span class="pm-icon">&#9878;</span>
+        <h4>律师 / 法研人员</h4>
+        <p class="pm-pain">法律检索耗时、引用错误代价极高、合规分析复杂</p>
+        <p class="pm-test"><strong>测什么：</strong>能否准确引用法源和判例、能否做跨法域对比分析</p>
+      </div>
+    </div>
+
+    <!-- Editable Notes -->
+    <div class="notes-pad reveal reveal-d3">
+      <div class="notes-pad-header">
+        <h4>&#128221; 待讨论 / 备忘</h4>
+        <button class="notes-save" onclick="saveNotes(this)">保存</button>
+      </div>
+      <textarea class="notes-area" id="editableNotes" placeholder="在此记录待讨论的事项、想法、待确认的决策...&#10;&#10;例如：&#10;- 工程师 persona 的数据源用 GitHub + Stack Overflow？&#10;- 金融 persona 是否需要实时行情数据？&#10;- 医疗 persona 的临床指南版本如何确定？"></textarea>
+    </div>
+
+    <div class="cover-scroll reveal reveal-d4" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+      查看已完成的「科学家/研究员」Pipeline 详情
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline intro label -->
+<div class="pipeline-intro">
+  <div class="container">
+    <span class="pipeline-intro-badge">Pipeline #1</span>
+    <p class="pipeline-intro-text"><strong>科学家 / 研究员</strong> &mdash; 以 Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题</p>
+  </div>
+</div>
+
+<div id="hero"></div>
+
+<!-- Divider: vine -->
+<div class="section-divider divider-vine reveal">
+  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="vine-line" d="M0 24 Q100 8 200 24 Q300 40 400 24 Q500 8 600 24 Q700 40 800 24" pathLength="1"/>
+    <ellipse class="vine-leaf" cx="150" cy="16" rx="6" ry="4" transform="rotate(-20 150 16)"/>
+    <ellipse class="vine-leaf" cx="350" cy="32" rx="5" ry="3.5" transform="rotate(15 350 32)"/>
+    <ellipse class="vine-leaf" cx="550" cy="14" rx="6" ry="4" transform="rotate(-25 550 14)"/>
+    <ellipse class="vine-leaf" cx="700" cy="34" rx="5" ry="3" transform="rotate(10 700 34)"/>
+    <circle class="vine-dot" cx="250" cy="24" r="2.5"/>
+    <circle class="vine-dot" cx="480" cy="24" r="2"/>
+    <circle class="vine-dot" cx="650" cy="24" r="2.5"/>
+  </svg>
+</div>
+
+<!-- ══════════ PIPELINE FLOW ══════════ -->
+<section class="pipeline-section" id="pipeline">
+  <div class="container">
+    <p class="overline">Pipeline Overview</p>
+    <h2>六阶段流水线全景</h2>
+    <p class="section-desc">从领域种子到最终问题，数据经过逐级精炼。每个阶段都有明确的输入、输出与质量门控。</p>
+
+    <div class="flow-wrap">
+      <div class="flow reveal">
+        <div class="flow-node" onclick="scrollToPhase(1)">
+          <div class="flow-icon fi-1"><span class="flow-num">1</span>&#127981;</div>
+          <div class="flow-name">子领域扩展</div>
+          <div class="flow-brief">6 大领域 → 细分方向</div>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">10 子领域</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase(2)">
+          <div class="flow-icon fi-2"><span class="flow-num">2</span>&#128269;</div>
+          <div class="flow-name">论文发现</div>
+          <div class="flow-brief">Scholar API → 论文 + 作者</div>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">199 论文</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase(3)">
+          <div class="flow-icon fi-3"><span class="flow-num">3</span>&#128300;</div>
+          <div class="flow-name">知识提取</div>
+          <div class="flow-brief">结构化抽取 + 验证</div>
+          <span class="flow-badge">Layer 1</span>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">已验证知识</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase(4)">
+          <div class="flow-icon fi-4"><span class="flow-num">4</span>&#128279;</div>
+          <div class="flow-name">关系挖掘</div>
+          <div class="flow-brief">论文间关系识别</div>
+          <span class="flow-badge">Layer 2</span>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">140 关系组</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase(5)">
+          <div class="flow-icon fi-5"><span class="flow-num">5</span>&#9997;</div>
+          <div class="flow-name">查询生成</div>
+          <div class="flow-brief">5 策略 + 参考答案</div>
+          <span class="flow-badge">Layer 3</span>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">44 queries</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase(6)">
+          <div class="flow-icon fi-6"><span class="flow-num">6</span>&#128736;</div>
+          <div class="flow-name">过滤与质控</div>
+          <div class="flow-brief">基线测试 + 去重均衡</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: wave -->
+<div class="section-divider divider-wave reveal">
+  <svg viewBox="0 0 800 32" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="wave-path" d="M0 16 C50 4 100 4 150 16 S250 28 300 16 S400 4 450 16 S550 28 600 16 S700 4 750 16 S800 28 800 16"/>
+  </svg>
+</div>
+
+<!-- ══════════ DOMAINS ══════════ -->
+<section class="domains-section" id="domains">
+  <div class="container">
+    <p class="overline">Research Domains</p>
+    <h2>六大学科领域覆盖</h2>
+    <p class="section-desc">硬编码领域保证可复现性与覆盖面，子领域由 LLM 动态生成以探索不同方向。</p>
+
+    <div class="domains-grid">
+      <div class="domain-card reveal">
+        <h4>&#128187; 计算机科学</h4>
+        <p>人工智能、机器学习、系统、安全、人机交互</p>
+        <div class="dtags"><span>大语言模型</span><span>计算机视觉</span><span>强化学习</span><span>软件工程</span><span>网络安全</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d1">
+        <h4>&#129516; 生物医学与生命科学</h4>
+        <p>分子生物学、基因组学、神经科学、药理学</p>
+        <div class="dtags"><span>CRISPR 基因编辑</span><span>癌症免疫治疗</span><span>神经退行性疾病</span><span>药物发现</span><span>微生物组</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d2">
+        <h4>&#9883; 物理学与天文学</h4>
+        <p>凝聚态、量子物理、天体物理、粒子物理</p>
+        <div class="dtags"><span>量子计算硬件</span><span>暗物质探测</span><span>拓扑材料</span><span>引力波</span><span>聚变能源</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d3">
+        <h4>&#9878; 材料科学与化学</h4>
+        <p>纳米材料、催化、高分子、电化学、计算化学</p>
+        <div class="dtags"><span>固态电池</span><span>金属有机框架</span><span>钙钛矿太阳能</span><span>绿色催化</span><span>二维材料</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d4">
+        <h4>&#128200; 经济学与社会科学</h4>
+        <p>宏观经济、行为经济、政治学、社会学</p>
+        <div class="dtags"><span>AI 与劳动力市场</span><span>气候经济学</span><span>行为金融</span><span>平台监管</span><span>虚假信息</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d5">
+        <h4>&#127758; 环境与地球科学</h4>
+        <p>气候科学、生态学、水文学、环境工程</p>
+        <div class="dtags"><span>碳捕获</span><span>生物多样性建模</span><span>极端天气预测</span><span>微塑料污染</span><span>可持续农业</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: dots -->
+<div class="section-divider divider-dots reveal">
+  <svg viewBox="0 0 800 24" fill="none" preserveAspectRatio="xMidYMid meet">
+    <circle class="ddot" cx="100" cy="12" r="5" opacity=".2"/>
+    <circle class="ddot" cx="160" cy="12" r="4" opacity=".17"/>
+    <circle class="ddot" cx="215" cy="12" r="3.5" opacity=".14"/>
+    <circle class="ddot" cx="265" cy="12" r="3" opacity=".12"/>
+    <circle class="ddot" cx="340" cy="12" r="6" opacity=".2"/>
+    <circle class="ddot" cx="400" cy="12" r="4.5" opacity=".17"/>
+    <circle class="ddot" cx="455" cy="12" r="3.5" opacity=".13"/>
+    <circle class="ddot" cx="530" cy="12" r="5.5" opacity=".2"/>
+    <circle class="ddot" cx="590" cy="12" r="4" opacity=".16"/>
+    <circle class="ddot" cx="640" cy="12" r="3" opacity=".12"/>
+    <circle class="ddot" cx="700" cy="12" r="5" opacity=".18"/>
+  </svg>
+</div>
+
+<!-- ══════════ PHASE DETAILS ══════════ -->
+<section class="details-section" id="details">
+  <div class="container">
+    <p class="overline">Phase Details</p>
+    <h2>各阶段详细设计</h2>
+    <p class="section-desc">点击展开查看每个阶段的输入、输出、核心逻辑与关键参数。</p>
+
+    <div class="accordion">
+      <!-- P1 -->
+      <div class="acc-item reveal" id="phase-1">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-1">&#127981;</div>
+          <div class="acc-title"><h4>Phase 1: 子领域扩展</h4><p>从 6 大领域生成细分研究方向与搜索关键词</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>6 个硬编码研究大领域<span class="arr">&#8594;</span><strong>输出</strong> ~30 个子领域（含搜索关键词）</div>
+          <h5>核心逻辑</h5>
+          <ul>
+            <li>LLM 为每个大领域生成 N 个具体、当前活跃的研究子领域</li>
+            <li>子领域数量 N 由目标 query 总数反推，保证漏斗产量足够</li>
+            <li>每个子领域附带 3-5 个 Semantic Scholar 搜索关键词</li>
+            <li>要求子领域足够具体（如「检索增强生成」而非「NLP」）</li>
+          </ul>
+        </div></div>
+      </div>
+      <!-- P2 -->
+      <div class="acc-item reveal reveal-d1" id="phase-2">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-2">&#128269;</div>
+          <div class="acc-title"><h4>Phase 2: 论文发现与作者定位</h4><p>通过 Semantic Scholar API 找到高引论文和活跃研究者</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>子领域 + 关键词<span class="arr">&#8594;</span><strong>输出</strong> 每个子领域的论文池</div>
+          <h5>两阶段时间窗口</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">作者发现窗口</span><span class="v">近 36 个月</span></div>
+            <div class="param"><span class="k">论文采集窗口</span><span class="v">近 18 个月</span></div>
+          </div>
+          <p style="margin:8px 0;font-size:.82rem;color:var(--text-tertiary)">先用 2-3 年窗口找高引论文（确保引用量充足），提取活跃作者后，再拉取他们近 12-18 个月的最新发表（确保前沿性）。</p>
+          <h5>核心逻辑</h5>
+          <ul>
+            <li>按<strong>引用速率</strong>（citations / 论文月龄）排序，避免偏向旧论文</li>
+            <li>统计高频出现的作者 → 取 top 5 活跃研究者</li>
+            <li>拉取每位作者的近期发表 → 汇总为子领域论文池</li>
+          </ul>
+          <h5>关键参数</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">top 论文 / 子领域</span><span class="v">20</span></div>
+            <div class="param"><span class="k">top 作者 / 子领域</span><span class="v">5</span></div>
+            <div class="param"><span class="k">论文 / 作者</span><span class="v">10</span></div>
+          </div>
+        </div></div>
+      </div>
+      <!-- P3 -->
+      <div class="acc-item reveal reveal-d2" id="phase-3">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-3">&#128300;</div>
+          <div class="acc-title"><h4>Phase 3: 知识提取 + Layer 1 验证</h4><p>从论文摘要中提取结构化知识，并验证提取准确性</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>论文池（含摘要）<span class="arr">&#8594;</span><strong>输出</strong> 通过验证的结构化知识库</div>
+          <h5>提取内容（LLM Call #1）</h5>
+          <ul>
+            <li><strong>research_question</strong> &mdash; 核心研究问题</li>
+            <li><strong>methodology</strong> &mdash; 方法论概述</li>
+            <li><strong>key_findings</strong> &mdash; 关键发现列表</li>
+            <li><strong>limitations</strong> &mdash; 研究局限</li>
+            <li><strong>claims</strong> &mdash; 具体可验证声明（含类型标签）</li>
+          </ul>
+          <h5><span class="vbadge" style="background:var(--tag-green-bg);color:var(--tag-green)">Layer 1</span> 验证逻辑（LLM Call #2）</h5>
+          <ul>
+            <li>将提取结果与原始摘要交给另一次 LLM 调用做对比审查</li>
+            <li>通过条件：<strong>accuracy &ge; 0.8</strong> 且无 critical 级别错误</li>
+            <li>未通过验证的论文直接移除，不进入后续阶段</li>
+          </ul>
+        </div></div>
+      </div>
+      <!-- P4 -->
+      <div class="acc-item reveal reveal-d3" id="phase-4">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-4">&#128279;</div>
+          <div class="acc-title"><h4>Phase 4: 关系挖掘 + Layer 2 验证</h4><p>发现论文间的方法论争论、矛盾、互补等非平凡关系</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>已验证知识库<span class="arr">&#8594;</span><strong>输出</strong> 已验证的论文关系组</div>
+          <h5>五种关系类型</h5>
+          <ul>
+            <li><strong>方法论争论</strong> &mdash; 不同方法研究同一问题</li>
+            <li><strong>矛盾解决</strong> &mdash; 论文结论相互冲突</li>
+            <li><strong>文献综合</strong> &mdash; 覆盖同一主题的不同方面</li>
+            <li><strong>定量验证</strong> &mdash; 可交叉引用的量化结果</li>
+            <li><strong>跨领域桥梁</strong> &mdash; 不同子领域的方法可互相借鉴</li>
+          </ul>
+          <h5><span class="vbadge" style="background:var(--tag-orange-bg);color:var(--tag-orange)">Layer 2</span> 验证逻辑</h5>
+          <ul>
+            <li>将检测到的关系连同论文摘要交给 LLM 做二次确认</li>
+            <li>核心问题：「这些论文是否真的在研究同一问题？矛盾是否真实存在？」</li>
+            <li>通过条件：<strong>verdict = verified</strong> 且 <strong>confidence &ge; 0.7</strong></li>
+          </ul>
+        </div></div>
+      </div>
+      <!-- P5 -->
+      <div class="acc-item reveal reveal-d4" id="phase-5">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-5">&#9997;</div>
+          <div class="acc-title"><h4>Phase 5: 查询生成 + Layer 3 验证</h4><p>基于论文关系生成高难度研究问题，同时生成参考答案</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>已验证关系组<span class="arr">&#8594;</span><strong>输出</strong> Query + 参考答案 + 源论文</div>
+          <h5>生成内容</h5>
+          <ul>
+            <li><strong>query</strong> &mdash; 30-80 词研究问题（有明确交付物与时间范围）</li>
+            <li><strong>reference_answer</strong> &mdash; 500-800 词参考答案（引用源论文）</li>
+            <li><strong>expected_answer_elements</strong> &mdash; 完整回答应包含的要素清单</li>
+            <li><strong>difficulty_factors</strong> &mdash; 难度来源分析</li>
+          </ul>
+          <h5><span class="vbadge" style="background:var(--tag-red-bg);color:var(--tag-red)">Layer 3</span> 验证逻辑</h5>
+          <ul>
+            <li>检查参考答案中引用的论文是否在源论文列表中</li>
+            <li>检查归因到特定论文的声明是否与该论文摘要一致</li>
+            <li>通过条件：<strong>verification_passed = true</strong> 且 <strong>score &ge; 0.6</strong></li>
+          </ul>
+        </div></div>
+      </div>
+      <!-- P6 -->
+      <div class="acc-item reveal reveal-d5" id="phase-6">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-6">&#128736;</div>
+          <div class="acc-title"><h4>Phase 6: 过滤与质量控制</h4><p>搜索必要性验证 → 难度下限 → 去重 → 策略均衡</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>四道过滤门</h5>
+          <ul>
+            <li><strong>搜索必要性测试</strong> &mdash; LLM 在无搜索条件下回答 → 评估基线质量 → 淘汰基线已足够好的问题（quality_score &le; 0.7 才保留）</li>
+            <li><strong>难度下限</strong> &mdash; 需引用论文 &ge; 3 篇，难度因子 &ge; 2 项</li>
+            <li><strong>语义去重</strong> &mdash; Jaccard 相似度 > 0.6 视为重复</li>
+            <li><strong>策略均衡裁剪</strong> &mdash; 按权重分配配额，裁剪至目标数量</li>
+          </ul>
+          <h5>基线评估五维度</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">准确性</span><span class="v">accuracy</span></div>
+            <div class="param"><span class="k">完整性</span><span class="v">completeness</span></div>
+            <div class="param"><span class="k">深度</span><span class="v">depth</span></div>
+            <div class="param"><span class="k">时效性</span><span class="v">timeliness</span></div>
+            <div class="param"><span class="k">具体性</span><span class="v">specificity</span></div>
+          </div>
+          <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出高质量回答 → 该问题不需要深度搜索 → 淘汰。</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: vine 2 -->
+<div class="section-divider divider-vine reveal">
+  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="vine-line" d="M0 24 Q80 40 200 24 Q320 8 400 24 Q480 40 600 24 Q720 8 800 24" pathLength="1"/>
+    <ellipse class="vine-leaf" cx="120" cy="34" rx="5" ry="3.5" transform="rotate(20 120 34)"/>
+    <ellipse class="vine-leaf" cx="300" cy="12" rx="6" ry="4" transform="rotate(-15 300 12)"/>
+    <ellipse class="vine-leaf" cx="520" cy="34" rx="5.5" ry="3.5" transform="rotate(25 520 34)"/>
+    <ellipse class="vine-leaf" cx="750" cy="14" rx="5" ry="3" transform="rotate(-12 750 14)"/>
+    <circle class="vine-dot" cx="200" cy="24" r="2"/>
+    <circle class="vine-dot" cx="420" cy="24" r="2.5"/>
+    <circle class="vine-dot" cx="620" cy="24" r="2"/>
+  </svg>
+</div>
+
+<!-- ══════════ STRATEGIES ══════════ -->
+<section class="strategies-section" id="strategies">
+  <div class="container">
+    <p class="overline">Generation Strategies</p>
+    <h2>五种查询生成策略</h2>
+    <p class="section-desc">不同论文关系类型映射到不同的出题策略，难度来自论文关系的真实复杂性。</p>
+
+    <div class="strategy-grid">
+
+      <!-- ── 1. Literature Synthesis ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-lit"></div>
+        <div class="s-body">
+          <h4>文献综合 <span class="en">Literature Synthesis</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 6 条</span></h4>
+          <p class="desc">综合多篇论文的方法、发现与理论视角，做系统性比较分析。考验模型能否全面覆盖某个研究问题的各个方面。</p>
+          <div class="s-chips"><span>需 3-5 篇论文</span><span>30-80 词</span><span>含时间范围</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">2023&ndash;2025 年间，植物基生物塑料、壳聚糖和其他可降解塑料在生产工艺、应用场景和降解方式上有哪些异同？目前学界对其环境影响的共识和待解问题分别是什么？</div>
+              <div class="s-ex-meta">材料科学 / 可降解高分子 &middot; 源论文 <strong>4 篇</strong> &middot; 基线 <strong>0.64</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Production and Multidisciplinary Applications of Bioplastic</span><br><span class="pm">Chauhan et al., 2025 &mdash; 综述植物基生物塑料的生产工艺</span></div>
+                <div class="s-ex-paper"><span class="pt">A Comprehensive Review on Chitosan Biopolymer of Crab Shell</span><br><span class="pm">Devaraju et al., 2025 &mdash; 壳聚糖在包装领域的应用与降解</span></div>
+                <div class="s-ex-paper"><span class="pt">Biodegradable Plastics: A Sustainable Solution for The Future</span><br><span class="pm">Anjum et al., 2025 &mdash; 可降解塑料的商业化挑战</span></div>
+                <div class="s-ex-paper"><span class="pt">Composting of Biodegradable Packaging Materials: A Review</span><br><span class="pm">Sokač Cvetnić et al., 2026 &mdash; 堆肥降解技术评估</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>4 篇论文分别覆盖不同材料体系（植物基、壳聚糖、通用可降解塑料）和不同阶段（生产、应用、降解），构成「同一主题的多角度覆盖」关系 → 生成要求系统比较各材料路线的综合性问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">2023&ndash;2025 年间，基于 AI 的语音分析模型在两个方向上的进展如何对比：一是通过语音生物标记物评估心理健康状态，二是为神经退行性疾病患者生成辅助沟通的语音？两类方法在准确性、临床实用性和用户体验上各有何优劣？</div>
+              <div class="s-ex-meta">计算机科学 / 机器学习与材料发现 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.54</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Voice of Mind: A Deep Learning Model for Depression and Anxiety Assessment</span><br><span class="pm">Regondi et al., 2025 &mdash; 从语音生物标记评估心理健康</span></div>
+                <div class="s-ex-paper"><span class="pt">AI Empowered Voice Generation for ALS Patients</span><br><span class="pm">Regondi et al., 2025 &mdash; 为神经退行性疾病患者增强沟通</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文都使用 AI 处理语音，但方向相反（一个分析、一个生成），构成「同一技术在不同医疗场景的应用」关系 → 生成要求综合比较方法、评估指标和临床价值的问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. Methodology Debate ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-meth"></div>
+        <div class="s-body">
+          <h4>方法论争论 <span class="en">Methodology Debate</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 18 条</span></h4>
+          <p class="desc">比较和评价不同的技术方法路线，指出各自的适用条件和局限。考验模型对方法论细节的深度理解。</p>
+          <div class="s-chips"><span>2-3 种方法</span><span>需实验证据</span><span>无显然最优</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">利用农业生物质发酵生产可降解塑料的方法，与使用芦苇/大麻等非粮原料做填充物的复合材料路线相比，在不同资源条件和生产规模下，各自的生态效益和经济可行性如何？</div>
+              <div class="s-ex-meta">材料科学 / 可降解高分子 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.42</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Biodegradable Innovations: Harnessing Agriculture for Eco-Friendly Plastics</span><br><span class="pm">Pandey et al., 2026 &mdash; 农业生物质发酵路线</span></div>
+                <div class="s-ex-paper"><span class="pt">Design and Research of Eco-Friendly Biodegradable Composites Based on Renewable Biopolymer Materials, Reed, and Hemp Waste</span><br><span class="pm">Kariev &amp; Lebedev et al., 2025 &mdash; 芦苇/大麻填充物路线</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文目标一致（生产生态友好型可降解材料）但方法论完全不同（发酵 vs 纤维填充），且各有优劣 → 构成典型「方法论对比」关系 → 生成要求在不同条件下评估两种路线的问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在组织工程和植入体应用中，柔性水凝胶涂层与低温等离子体处理两种表面改性方法，在提升高分子生物材料的生物界面性能方面各有什么优势和局限？是否存在协同使用的可能？</div>
+              <div class="s-ex-meta">材料科学 / 生物界面工程 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.68</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Flexible Coatings Based on Hydrogel to Enhance the Biointerface of Biomedical Implants</span><br><span class="pm">Kun Tang et al., 2024 &mdash; 水凝胶涂层方法</span></div>
+                <div class="s-ex-paper"><span class="pt">Plasma-Treated Polymeric Biomaterials for Improved Surface and Cell Adhesion</span><br><span class="pm">Rondon et al., 2025 &mdash; 低温等离子处理方法</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两种完全不同的表面改性技术（化学涂层 vs 物理等离子）用于同一目标（提升植入物生物相容性）→ 方法论争论关系 → 生成要求比较各自机理、适用条件和协同潜力的问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">纳米纤维素支架工程中的结构改性方法，能否迁移用于优化聚电解质复合物药物递送系统？特别是在稳定性、生物利用度和控释性能方面，两种方法论的可借鉴之处和根本差异在哪里？</div>
+              <div class="s-ex-meta">材料科学 / 生物界面工程 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.40</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Engineering Nanocellulose Scaffolds: Property Modification Strategies and Mechanisms</span><br><span class="pm">Rodr&iacute;guez Mart&iacute;nez et al., 2026 &mdash; 纳米纤维素支架工程</span></div>
+                <div class="s-ex-paper"><span class="pt">Chondroitin Sulfate/Cyanocobalamin&ndash;Chitosan Polyelectrolyte Complexes for Improved Drug Delivery</span><br><span class="pm">Dubashynskaya et al., 2025 &mdash; 聚电解质药物递送</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两种生物材料工程方法（支架工程 vs 聚电解质复合），各自优化不同参数 → 生成要求评估方法论可迁移性和条件适配性的问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Contradiction Resolution ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-contra"></div>
+        <div class="s-body">
+          <h4>矛盾解决 <span class="en">Contradiction Resolution</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 0 条</span></h4>
+          <p class="desc">聚焦已发表研究中的真实矛盾，要求分析矛盾来源并判断哪个结论更可靠。这是最难的一类策略。</p>
+          <div class="s-chips"><span>真实矛盾</span><span>证据权衡</span><span>需精细分析</span></div>
+          <div class="s-examples">
+            <div class="s-ex" style="border-style:dashed;opacity:.7">
+              <div class="s-ex-query" style="color:var(--text-tertiary)">本次运行中 Phase 4 仅检测到 2 组矛盾关系，均未通过 Layer 2 验证（置信度 &lt; 0.7）。这符合预期 &mdash; 真实的学术矛盾较为稀缺，需要更大的论文池才能可靠发现。</div>
+              <div class="s-ex-meta">后续扩大领域覆盖后此策略将产出更多查询</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4. Quantitative Verification ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-quant"></div>
+        <div class="s-body">
+          <h4>定量验证 <span class="en">Quantitative Verification</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 1 条</span></h4>
+          <p class="desc">查找、交叉引用和验证具体的量化结果。数字错误在学术场景中代价极高，专门测试精确引用能力。</p>
+          <div class="s-chips"><span>具体数字 / 指标</span><span>多源交叉验证</span><span>区分一手 / 二手</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">MOF-808-0.5AA-mm 所实现的体积储氢密度，与基于描述符 &Phi; 预测的 d-block 过渡金属单原子非解离化学吸附材料的储氢容量之间，差异有多大？对照已有的储氢效率基准和技术经济分析数据，哪种路线更接近商业化可行？</div>
+              <div class="s-ex-meta">材料科学 / 储氢材料 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.34 (low)</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Balancing Nucleation and Growth Kinetics Enables Fully-Coordinated Acetic Acid-Tethered MOFs for Technoeconomic-Viable Hydrogen Storage</span><br><span class="pm">Zi Li et al., 2025 &mdash; 报告 MOF-808-0.5AA-mm 达 50 g/L (77K, 100bar)，成本 2.34 $/kgH2</span></div>
+                <div class="s-ex-paper"><span class="pt">Experimentally Validated Design Principles of D-Block TM Single-Atom Non-Dissociative Chemisorption SHSM</span><br><span class="pm">Qiuyan Yue et al., 2025 &mdash; 提出描述符 &Phi; 预测超越碳基材料的储氢容量</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文都声称突破性储氢性能但使用完全不同的材料体系和评估方式（实验值 vs 理论预测），构成「可交叉验证的定量声明」关系 → 生成要求精确比对数字、区分实验值与预测值的问题。基线分仅 0.34，说明 LLM 内部知识完全无法回答这类精确数字问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. Cross-Domain Bridge ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-cross"></div>
+        <div class="s-body">
+          <h4>跨领域桥梁 <span class="en">Cross-Domain Bridge</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 19 条</span></h4>
+          <p class="desc">连接不同研究子领域的方法或发现，分析跨域迁移的可行性与障碍。需要同时理解两个领域。</p>
+          <div class="s-chips"><span>跨 2+ 子领域</span><span>理论 + 实践</span><span>非表面类比</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">将金属有机框架（MOF）引入等离子体电解氧化（PEO）工艺，能否实现镁基生物材料表面性能的精细调控？这种跨领域整合在提升生物相容性和推进临床应用方面有哪些机遇和技术瓶颈？</div>
+              <div class="s-ex-meta">材料科学 / 生物界面工程 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.64</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Electrochemical Surface Modification of Fully Biodegradable Mg-Based Biomaterials</span><br><span class="pm">Radwan-Prag&#322;owska et al., 2025 &mdash; 研究 PEO 电化学表面改性</span></div>
+                <div class="s-ex-paper"><span class="pt">Research and Application of Metal-Organic Framework in Surface Modification of Biomaterials</span><br><span class="pm">Zhang et al., 2023 &mdash; 综述 MOF 在生物材料中的应用</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文分属不同技术领域（电化学工程 vs 材料化学），但应用场景重叠（生物材料表面改性）→ 构成「跨领域桥梁」关系 → 生成要求评估技术整合可行性和临床应用前景的问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">移动金融服务中结合差分隐私与联邦学习的隐私保护算法，在迁移到多租户云 AI 环境时，需要做哪些适配才能同时优化隐私&ndash;效用权衡和计算资源效率？两个场景的核心约束差异在哪里？</div>
+              <div class="s-ex-meta">计算机科学 / AI 中的差分隐私 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.60</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Privacy-Preserving AI Algorithms in Mobile Financial Services</span><br><span class="pm">M. Harsha, 2025 &mdash; 移动金融场景下的隐私保护算法</span></div>
+                <div class="s-ex-paper"><span class="pt">Differentially Private Federated Learning: A Provably Secure Framework for Multi-Tenant Cloud AI Training</span><br><span class="pm">Weihong Ou, 2025 &mdash; 多租户云环境下的联邦学习框架</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文使用相同技术栈（DP + FL）但应用于完全不同的部署场景（移动端金融 vs 云端多租户），面临的约束条件迥异 → 生成要求分析技术迁移中的适配挑战和优化方向的问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">金属有机框架（MOF）的结构优势能否用于改善体外膜氧合（ECMO）回路材料的血液相容性和机械可靠性？MOF 的多孔结构和可功能化特性在 ECMO 的高流速、持续接触血液的苛刻环境下是否仍然有效？</div>
+              <div class="s-ex-meta">材料科学 / 生物界面工程 &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Research and Application of Metal-Organic Framework in Surface Modification of Biomaterials &mdash; A Review</span><br><span class="pm">Zhang et al., 2023 &mdash; MOF 材料的结构优势与表面改性能力</span></div>
+                <div class="s-ex-paper"><span class="pt">What Are the Best Biocompatible Materials for ECMO?</span><br><span class="pm">Hagiwara et al., 2025 &mdash; ECMO 回路材料的生物相容性需求</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>MOF 材料化学 × ECMO 生物医学工程，两个完全不同的研究社区 → 生成要求同时理解 MOF 结构化学和 ECMO 血液动力学环境的深度跨领域问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Divider: wave 2 -->
+<div class="section-divider divider-wave reveal">
+  <svg viewBox="0 0 800 32" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="wave-path" d="M0 16 C60 28 120 28 180 16 S300 4 360 16 S480 28 540 16 S660 4 720 16 S800 28 800 16" stroke="#8B9E6B"/>
+  </svg>
+</div>
+
+<!-- ══════════ VERIFICATION ══════════ -->
+<section class="verif-section" id="verification">
+  <div class="container">
+    <p class="overline">Quality Assurance</p>
+    <h2>三层交叉验证体系</h2>
+    <p class="section-desc">防止 LLM 在流水线中引入幻觉。每一层验证解决一个特定的可信性问题。</p>
+
+    <div class="verif-stack">
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn1">L1</div>
+          <h4>知识提取验证</h4>
+          <span class="v-phase">Phase 3</span>
+        </div>
+        <p>确保从论文摘要中提取的结构化知识与原文一致，不存在 LLM 的过度推断或臆造。</p>
+        <div class="v-tags">
+          <span class="t t-pass">accuracy &ge; 0.8</span>
+          <span class="t t-pass">无 critical 错误</span>
+          <span class="t t-fail">失败 → 论文移除</span>
+        </div>
+      </div>
+      <div class="v-sep reveal">&#9662; 已验证知识流入</div>
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn2">L2</div>
+          <h4>论文关系验证</h4>
+          <span class="v-phase">Phase 4</span>
+        </div>
+        <p>确保检测到的论文间关系是真实且有实质意义的，而非基于表面主题重叠的错误判断。</p>
+        <div class="v-tags">
+          <span class="t t-pass">verdict = verified</span>
+          <span class="t t-pass">confidence &ge; 0.7</span>
+          <span class="t t-fail">失败 → 关系丢弃</span>
+        </div>
+      </div>
+      <div class="v-sep reveal">&#9662; 已验证关系流入</div>
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn3">L3</div>
+          <h4>参考答案溯源验证</h4>
+          <span class="v-phase">Phase 5</span>
+        </div>
+        <p>确保参考答案中每一条引用和声明都可以追溯到源论文，杜绝捏造的论文标题、虚假数字和错误归因。</p>
+        <div class="v-tags">
+          <span class="t t-pass">引用均可追溯</span>
+          <span class="t t-pass">score &ge; 0.6</span>
+          <span class="t t-fail">失败 → Query 丢弃</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: dots 2 -->
+<div class="section-divider divider-dots reveal">
+  <svg viewBox="0 0 800 24" fill="none" preserveAspectRatio="xMidYMid meet">
+    <circle class="ddot" cx="80" cy="12" r="4" opacity=".18" fill="#8B9E6B"/>
+    <circle class="ddot" cx="140" cy="12" r="5.5" opacity=".2" fill="#D4714E"/>
+    <circle class="ddot" cx="210" cy="12" r="3" opacity=".13" fill="#8B9E6B"/>
+    <circle class="ddot" cx="310" cy="12" r="5" opacity=".18" fill="#D9D2C9"/>
+    <circle class="ddot" cx="380" cy="12" r="4" opacity=".15" fill="#D4714E"/>
+    <circle class="ddot" cx="470" cy="12" r="6" opacity=".2" fill="#8B9E6B"/>
+    <circle class="ddot" cx="540" cy="12" r="3.5" opacity=".14" fill="#D4714E"/>
+    <circle class="ddot" cx="620" cy="12" r="4.5" opacity=".17" fill="#D9D2C9"/>
+    <circle class="ddot" cx="710" cy="12" r="5" opacity=".2" fill="#D4714E"/>
+  </svg>
+</div>
+
+<!-- ══════════ EXAMPLE QUERIES ══════════ -->
+<section class="examples-section" id="examples">
+  <div class="container">
+    <p class="overline">Generated Queries</p>
+    <h2>全部生成结果（44 条）</h2>
+    <p class="section-desc">本次运行实际产出的全部查询。点击策略标签筛选，点击卡片展开查看参考答案与源论文。</p>
+    <div class="examples-note">&#9889; 真实生成数据 &mdash; 2 个领域 / 10 个子领域 / 199 篇论文 / 140 组关系 &rarr; 44 条最终查询</div>
+
+    <div class="collapse-toggle" id="queryCollapseBtn" onclick="toggleQueryCollapse()">
+      <span class="ct-chev">&#9660;</span> 展开查看全部 44 条生成结果
+    </div>
+
+    <div class="collapse-content" id="queryCollapseContent">
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterQueries('all',this)">全部 (44)</button>
+      <button class="filter-btn" onclick="filterQueries('cross_domain_bridge',this)">跨领域桥梁 (19)</button>
+      <button class="filter-btn" onclick="filterQueries('methodology_debate',this)">方法论争论 (18)</button>
+      <button class="filter-btn" onclick="filterQueries('literature_synthesis',this)">文献综合 (6)</button>
+      <button class="filter-btn" onclick="filterQueries('quantitative_verification',this)">定量验证 (1)</button>
+      <span class="filter-count" id="filterCount">显示 44 / 44</span>
+    </div>
+
+    <div class="q-grid" id="queryGrid">
+      <!-- Q1 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">How can the integration of metal–organic frameworks (MOFs) into plasma electrolytic oxidation (PEO) processes enhance the customization of surface properties in magnesium-based biomaterials for improved biocompatibility and clinical applications?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.64 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Integrating MOFs into PEO processes for magnesium-based biomaterials combines promising techniques from electrochemical surface modification and materials chemistry. MOFs, recognized for their highly customizable structures and porosity, offer potential to enhance biocompatibility and surface characteristics when incorporated into PEO. PEO is a wel...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Electrochemical Surface Modification of Fully Biodegradable Mg-Based Biomaterials as a Sustainable Alternative to Non-Resorbable Bone Implants</span><br><span class="pm">J. Radwan-Pragłowska et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Research and Application of Metal–Organic Framework in Surface Modification of Biomaterials—A Review</span><br><span class="pm">Zhongna Zhang et al., 2023</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.64</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q2 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Biodegradable Polymers</span>
+          </div>
+          <div class="q-text">How do the methodologies using agricultural biomass fermentation versus non-food raw materials with reed and hemp filler compare in terms of ecological and economic benefits, specifically under varying conditions of resource availability and production scale?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.42 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The comparison between using agricultural biomass fermentation (Paper 1) and non-food raw materials with reed and hemp filler (Paper 2) involves examining the methodologies&#x27; ecological and economic impacts under different conditions. Agricultural biomass approaches employ lignocellulosic residues, edible crop by-products, and algal biomass. Their t...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Biodegradable Innovations: Harnessing Agriculture for Eco-Friendly Plastics</span><br><span class="pm">Komal Pandey et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Design and Research of Eco-Friendly Biodegradable Composites Based on Renewable Biopolymer Materials, Reed, and Hemp Waste</span><br><span class="pm">A. Kariev et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.42</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q3 -->
+      <div class="q-card reveal reveal-d3" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">材料科学与化学 / Biodegradable Polymers</span>
+          </div>
+          <div class="q-text">Between 2023 and 2025, how do the production, application, and degradation methods of plant-based bioplastics, chitosan, and other biodegradable plastics compare, and what consensus and open questions exist about their commercial viability and environmental impact?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>4 篇</strong></span>
+            <span class="m">基线质量: <strong>0.64 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The period between 2023 and 2025 has seen extensive research into alternatives to traditional plastics, with plant-based bioplastics, chitosan from crab shells, and a variety of other biodegradable plastics emerging as key contenders.
+
+1. **Production Methods**
+
+- According to &#x27;Production and Multidisciplinary Applications of Bioplastic&#x27; by Ajesh C...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Production and Multidisciplinary Applications of Bioplastic: A Biodegradable and Eco-Friendly Alternative to Plastic</span><br><span class="pm">Ajesh Chauhan et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">A comprehensive review on chitosan biopolymer of crab shell: Unveiling its potential usage as an eco-friendly alternative to synthetic materials</span><br><span class="pm">Vinitha Devaraju et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Biodegradable Plastics: A Sustainable Solution for The Future</span><br><span class="pm">Arshiya Anjum et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Composting of Biodegradable Packaging Materials: A Review of Available Technology for Biopolymer Degradation</span><br><span class="pm">Tea Sokač Cvetnić et al., 2026</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.64</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q4 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biodegradable Polymers</span>
+          </div>
+          <div class="q-text">How can the integration of chitosan&#x27;s biodegradable properties with starch&#x27;s antioxidant capabilities enhance the development of eco-friendly packaging, and what are the theoretical and practical challenges involved in synthesizing these biopolymers to balance mechanical strength, thermal stability, and biodegradability?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Combining chitosan&#x27;s biodegradable properties with starch&#x27;s antioxidant features offers a promising avenue for developing eco-friendly packaging. Chitosan, a biopolymer derived from chitin, is known for its excellent biodegradability and film-forming abilities, but typically lacks sufficient antioxidant properties for protecting perishable goods. S...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Eco-Friendly Design of Chitosan-Based Films with Biodegradable Properties as an Alternative to Low-Density Polyethylene Packaging</span><br><span class="pm">Johanna Fiallos-Núñez et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Eco-Friendly, Biodegradable Starch-Based Packaging Materials with Antioxidant Features</span><br><span class="pm">Dagmara Bajer et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.58</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q5 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">How can methodologies in nanocellulose scaffold engineering be adapted for optimizing polyelectrolyte complex drug delivery systems regarding stability, bioavailability, and targeted release? Evaluate their effectiveness under specific biomedical conditions and provide comparative analysis with supporting experimental data.</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.4 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The examination of methodologies in both nanocellulose scaffold engineering and polyelectrolyte complex drug delivery reveals several insightful comparisons. In nanocellulose scaffold engineering, chemical and structural modification strategies focus on adjustments such as oxidation, functionalization, and crosslinking to enable specific cellular i...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Engineering Nanocellulose Scaffolds: Property Modification Strategies and Mechanotransduction‐Driven Tissue Outcomes</span><br><span class="pm">Aurora Rodríguez Martínez et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Chondroitin Sulfate/Cyanocobalamin–Chitosan Polyelectrolyte Complexes for Improved Oral Delivery of Colistin</span><br><span class="pm">N. Dubashynskaya et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.4</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q6 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">How can the structural advantages of metal–organic frameworks (MOFs) be adapted to improve biocompatibility and mechanical properties in extracorporeal membrane oxygenation (ECMO) circuits, considering both molecular interactions with blood and the mechanical stresses within ECMO environments?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The integration of metal–organic frameworks (MOFs) into ECMO circuits presents an innovative opportunity for enhancing biocompatibility and reducing complications such as thrombosis, bleeding, and hemolysis. MOFs are known for their high surface area, tunable porosity, and structural versatility, which make them ideal candidates for novel surface m...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Research and Application of Metal–Organic Framework in Surface Modification of Biomaterials—A Review</span><br><span class="pm">Zhongna Zhang et al., 2023</span></div>
+            <div class="paper-item"><span class="pt">What Are the Best Biocompatible Materials for Extracorporeal Membrane Oxygenation</span><br><span class="pm">Junya Hagiwara et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.58</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q7 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">How do flexible hydrogel coatings and low-temperature plasma treatments compare in enhancing the biointerface of polymeric biomaterials for implants, and under what conditions might a hybrid approach outperform individual methodologies in terms of biocompatibility and cell adhesion?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.68 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>In comparing hydrogel coatings and plasma treatments for the modification of polymeric biomaterials used in implants, it&#x27;s crucial to delve into their respective methodologies and the resultant effects on biocompatibility and cell adhesion. Hydrogel coatings, as discussed by Tang et al. (2024), offer remarkable versatility due to their three-dimens...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Flexible coatings based on hydrogel to enhance the biointerface of biomedical implants.</span><br><span class="pm">Kun Tang et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Plasma-Treated Polymeric Biomaterials for Improved Surface and Cell Adhesion</span><br><span class="pm">J. Rondon et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.68</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q8 -->
+      <div class="q-card reveal reveal-d2" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biodegradable Polymers</span>
+          </div>
+          <div class="q-text">How can hydrogel-enhanced microalgae cultivation techniques be integrated with food waste-derived biochar systems to optimize pollutant removal while maintaining circular economy goals, considering methodological compatibilities and scaling challenges?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.65 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Integrating hydrogel-enhanced microalgae cultivation with biochar systems derived from solid food waste presents unique opportunities and challenges. On one hand, both methods aim to advance circular economy principles, with biochar contributing to soil enrichment and pollutant adsorption, and hydrogels improving microalgae productivity and nutrien...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Closed‐Loop Recycling and Circular Economy for Conversion of Solid Food Waste Into Biochar: A Review</span><br><span class="pm">N. Rosli et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Comprehensive Advancements in Hydrogel, and Its Application in Microalgae Cultivation and Wastewater Treatment</span><br><span class="pm">Guangtao Yang et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.65</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q9 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">How can nanolignin-based biomaterials be integrated with hydrogel surface coatings to enhance both drug delivery efficiency and biointerface compatibility in implantable devices, considering the methodological boundaries in cancer therapy and implant modification?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Integrating nanolignin-based biomaterials with hydrogel surface coatings offers a promising avenue for advancing implantable devices. Nanolignin provides a high surface area for drug delivery, enabling controlled release and reduced chemotherapy doses, per Sathasivam et al. (2023). Hydrogels, with their three-dimensional crosslinked network, offer ...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Nano‐Strategies for Lignin Biomaterials toward Cancer Therapy</span><br><span class="pm">Thenapakiam Sathasivam et al., 2023</span></div>
+            <div class="paper-item"><span class="pt">Flexible coatings based on hydrogel to enhance the biointerface of biomedical implants.</span><br><span class="pm">Kun Tang et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q10 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Biodegradable Polymers</span>
+          </div>
+          <div class="q-text">How can the antimicrobial and biocompatibility properties of marine-sourced chitosan be optimized for use in advanced medical applications, such as wound healing and drug delivery, while also considering the scalability and environmental impact in industrial soap production?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.66 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To address the cross-domain application of chitosan&#x27;s properties for both medical and industrial purposes, one must first consider the specific requirements of each field. In medical applications such as wound healing and drug delivery, chitosan&#x27;s antimicrobial properties are crucial. Its ability to form films and interact with biological tissues m...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">A Study on Marine-Sourced Chitosan Biopolymer as an Eco-Friendly Soap Alternative using Sustainable Materials</span><br><span class="pm">C.M. Balamurugan et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">A comprehensive review on chitosan biopolymer of crab shell: Unveiling its potential usage as an eco-friendly alternative to synthetic materials</span><br><span class="pm">Vinitha Devaraju et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.66</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q11 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How do generative AI models compare with predictive modeling and high-throughput experimentation in terms of efficiency and effectiveness for accelerating materials discovery, and what contexts lend themselves to each method&#x27;s advantages or disadvantages?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.68 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Generative AI models, characterized by their use of advanced machine learning frameworks, excel in creating new materials with specific properties due to their ability to predict material properties and synthesize novel compounds. Conversely, predictive modeling and high-throughput experimentation offer broader applications across varied domains by...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">A survey of AI-supported materials informatics</span><br><span class="pm">S. Chakraborty et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Harnessing the Power of Artificial Intelligence in Materials Science: An Overview</span><br><span class="pm">A. Adetunla et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.68</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q12 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How can the autoencoder-based materials mapping method used for lithium ionic conductors be integrated with machine learning-driven optimization frameworks for redox-active organic materials in battery applications to enhance discovery and design, considering the predictive accuracy and limitations across different chemical systems?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The integration of autoencoder-based materials mapping, as employed in lithium ionic conductors, with a machine learning-driven optimization framework used for redox-active organic materials in battery applications presents both opportunities and challenges. This cross-domain endeavor could lead to the accelerated discovery and enhanced design of n...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Drawing a materials map with an autoencoder for lithium ionic conductors</span><br><span class="pm">Yudai Yamaguchi et al., 2023</span></div>
+            <div class="paper-item"><span class="pt">AI-Driven Discovery of High Performance Polymer Electrodes for Next-Generation Batteries</span><br><span class="pm">Subhash V. S. Ganti et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.5</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q13 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Biointerface Engineering</span>
+          </div>
+          <div class="q-text">In comparing vitamin B12-mediated and Zn2+-crosslinked polyelectrolyte complexes as drug delivery systems, what are the critical factors that influence their efficacy in terms of drug release profiles, biopharmaceutical properties, and application-specific suitability?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Vitamin B12-mediated and Zn2+-crosslinked polyelectrolyte complexes represent two distinct strategies for formulating advanced drug delivery systems, each with unique mechanisms affecting drug release, encapsulation, and therapeutic outcomes. Paper 1&#x27;s approach highlights the use of vitamin B12 as a receptor-mediated targeting ligand, optimizing in...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Chondroitin Sulfate/Cyanocobalamin–Chitosan Polyelectrolyte Complexes for Improved Oral Delivery of Colistin</span><br><span class="pm">N. Dubashynskaya et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Delivery system for dexamethasone phosphate based on a Zn2+-crosslinked polyelectrolyte complex of diethylaminoethyl chitosan and chondroitin sulfate.</span><br><span class="pm">N. Dubashynskaya et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.54</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q14 -->
+      <div class="q-card reveal reveal-d2" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How can generative AI-designed skin-like actuator patterns and advanced lattice geometries be synthesized to enhance customization and adaptability in 3D-printed orthopaedic devices for spinal muscular atrophy treatment?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To explore the synthesis of generative AI-designed skin-like actuator patterns and advanced lattice geometries into 3D-printed orthopaedic devices for treating spinal muscular atrophy (SMA), researchers must navigate multiple technical and domain-specific complexities. At the intersection of generative AI and clinical orthopaedics, the integration ...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Reconceiving orthopaedic spinal braces for spinal muscular atrophy treatment: A digital modeling and 3D printing combined framework.</span><br><span class="pm">Silvia Badini et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Generative AI-Driven 3D Printing of Conformable, Skin-Inspired Actuators for Advanced Wearable Technologies</span><br><span class="pm">Silvia Badini et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q15 -->
+      <div class="q-card reveal reveal-d3" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How do the methodologies of employing solvent-assisted blending in the development of bioactive 3D printable filaments and using LLMs to optimize design and manufacturing processes compare in scalability, efficacy, and adaptability for Medtech applications?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The two methodologies, solvent-assisted blending for bioactive filaments and large language models for 3D material design, offer distinct yet potentially complementary approaches to advancing Medtech applications. Solvent-assisted blending demonstrates robust potential for material scalability through the integration of collagen peptides, which enh...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Development of a 3D-printable bioactive polycaprolactone–collagen peptides filament for biomedical applications</span><br><span class="pm">Stefano Cantella et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Words to Matter: A Comparative Study for Developing Intelligent Design and Manufacturing of 3D Materials Based on Large Language Models</span><br><span class="pm">Raffaele Pugliese et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q16 -->
+      <div class="q-card reveal" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How do immersive virtual reality experiences impact the emotional well-being and user experience of hospitalized neuromuscular patients, comparing studies conducted between 2023 and 2025? Evaluate methods, findings, limitations, and suggest areas for further research.</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>3 篇</strong></span>
+            <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To comprehensively understand how immersive virtual reality impacts the emotional well-being and user experience of hospitalized neuromuscular patients, several key studies between 2023 and 2025 must be evaluated. The study titled &#x27;Exploring Patient Perspectives on an Immersive Virtual Reality Experience for Neuromuscular Diseases&#x27; by Marta Mondell...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Exploring Patient Perspectives on an Immersive Virtual Reality Experience for Neuromuscular Diseases.</span><br><span class="pm">Marta Mondellini et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Observational Study on Emotional-Affective States in Neuromuscular Patients Using Recreational Virtual Reality</span><br><span class="pm">L. Greco et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">User experience and cybersickness in neuromuscular patients using recreational immersive virtual reality</span><br><span class="pm">L. Greco et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.54</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q17 -->
+      <div class="q-card reveal reveal-d2" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">Between 2023 and 2025, how do different AI-based models compare in assessing mental health conditions from vocal biomarkers and enhancing communication for patients with neurodegenerative diseases? Compare the approaches, list strengths/weaknesses, and identify consensus and open questions.</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To address this query, several papers need to be analyzed to understand the landscape of AI applications in health-related voice analysis. A study such as &#x27;Voice of Mind, a Deep Learning Model for Depression and Anxiety Assessment From Acoustic and Lexical Vocal Biomarkers&#x27; highlights the use of a hybrid model combining Convolutional Neural Network...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Voice of Mind, a Deep Learning Model for Depression and Anxiety Assessment From Acoustic and Lexical Vocal Biomarkers.</span><br><span class="pm">S. Regondi et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Artificial intelligence empowered voice generation for amyotrophic lateral sclerosis patients</span><br><span class="pm">S. Regondi et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.54</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q18 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How can the biomimetic design principles from dandelion-inspired thermal interface materials and mussel-inspired polymer composites be synthesized to develop a hybrid system for thermal management that is effective across diverse environments such as flexible electronics and underwater cooling systems?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.55 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The exploration of hybrid systems for thermal management across flexible electronics and underwater cooling systems requires a nuanced understanding of the biomimetic design principles from both dandelion-inspired and mussel-inspired approaches. Dandelion-inspired thermal interface materials, as explored in the study by He et al. (2025), utilize ra...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Dandelion‐Inspired Radial Oriented Microspheres for Dynamic Interface Thermal Management</span><br><span class="pm">Qingxia He et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Mussel-Inspired Polymer-Based Composites for Efficient Thermal Management in Dry and Underwater Environments.</span><br><span class="pm">Heng Zhang et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.55</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q19 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How can the adaptive AI-driven features in virtual reality rehabilitation platforms be integrated with personalized voice synthesis systems to enhance communication and emotional well-being in patients with neurodegenerative diseases such as ALS?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.68 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The integration of adaptive AI-driven features in virtual reality (VR) rehabilitation platforms with personalized voice synthesis systems holds significant potential to enhance both communication and emotional well-being for patients with neurodegenerative diseases like ALS. Papers 4e01bd7b8309d4748e5890758cc5ecfc7deb46c6 and 7463e42eee13b5f5c2c9cb...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">An AI-Enhanced Virtual Reality Platform for Improving Well-Being and Emotional States of Neurological Patients: From Immersive Scenarios to Adaptive Clinical Pathways</span><br><span class="pm">R. Pierdicca et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Artificial intelligence empowered voice generation for amyotrophic lateral sclerosis patients</span><br><span class="pm">S. Regondi et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.68</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q20 -->
+      <div class="q-card reveal reveal-d2" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">Between 2023 and 2025, how do the implementations of Differential Privacy in AI models across various domains compare in terms of privacy preservation, utility, and computational efficiency? Discuss strengths, weaknesses, consensus, and open questions identified across these studies.</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>3 篇</strong></span>
+            <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The application of Differential Privacy in AI models between 2023 and 2025 demonstrates varying degrees of success across domains such as Data Collaboration and Federated Learning. Paper 1, titled &#x27;Toward the Application of Differential Privacy to Data Collaboration,&#x27; introduces a PCA-based method applied to Data Collaboration that achieves perform...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Toward the Application of Differential Privacy to Data Collaboration</span><br><span class="pm">Hiromi Yamashiro et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Differentially Private Federated Learning: A Provably Secure Framework for Multi-Tenant Cloud AI Training</span><br><span class="pm">Weihong Ou et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Data Privacy and Security in AI: Strategies for protecting user data while maintaining the functionality and scalability of AI solutions</span><br><span class="pm">Sameerkumar Prajapati et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.6</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q21 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How can mussel-inspired polymer-based composites be integrated with graphene-based aerogels to develop multifunctional materials for diverse thermal management applications and electromagnetic protection in both underwater and extreme temperature environments?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>In seeking to integrate mussel-inspired polymer composites such as PDMS-DMA/EGaIn with graphene-based aerogels like G-PI@F20/CNTx, researchers must consider both theoretical compatibility and practical challenges. The PDMS-DMA/EGaIn composites offer significant thermal management and water resistance advantages, making them suitable for varied envi...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Mussel-Inspired Polymer-Based Composites for Efficient Thermal Management in Dry and Underwater Environments.</span><br><span class="pm">Heng Zhang et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Superelastic Graphene‐Based Composite Aerogel for Thermal and Electromagnetic Protection in Extreme Temperature Environments</span><br><span class="pm">Junwei Yue et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.62</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q22 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Machine Learning in Materials Discovery</span>
+          </div>
+          <div class="q-text">How do the biomimetic structural designs of dandelion-inspired radial microspheres and mussel-inspired polymer composites compare in terms of their effectiveness and adaptability in dynamic thermal management systems across diverse environmental conditions?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.55 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Both the dandelion-inspired and mussel-inspired methodologies provide novel solutions for dynamic thermal management. The dandelion-inspired radial microspheres achieve high thermal conductivity (11.1 W m−1K−1 per vol%) due to their innovative 3D thermal network architecture. This structure excels in applications requiring isotropic heat distributi...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Dandelion‐Inspired Radial Oriented Microspheres for Dynamic Interface Thermal Management</span><br><span class="pm">Qingxia He et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Mussel-Inspired Polymer-Based Composites for Efficient Thermal Management in Dry and Underwater Environments.</span><br><span class="pm">Heng Zhang et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.55</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q23 -->
+      <div class="q-card reveal reveal-d2" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">How can privacy-preserving algorithms in mobile financial services, combining differential privacy and federated learning, be adapted to enhance both the privacy-utility tradeoff and resource efficiency in multi-tenant cloud AI environments?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The application of privacy-preserving algorithms from mobile financial services to multi-tenant cloud AI environments requires a nuanced understanding of both domains. Mobile financial services as explored in Harsha&#x27;s work (Paper 1) leverage technologies like differential privacy and federated learning to not only protect sensitive information but ...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Privacy-Preserving Ai Algorithms In Mobile Financial Services</span><br><span class="pm">M. Harsha et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Differentially Private Federated Learning: A Provably Secure Framework for Multi-Tenant Cloud AI Training</span><br><span class="pm">Weihong Ou et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.6</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q24 -->
+      <div class="q-card reveal reveal-d3" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">How do privacy-preserving techniques like Secure Multi-Party Computation combined with Differential Privacy in text classification compare to server-side adaptive optimization using Federated Learning in terms of guaranteeing operational trade-offs across varied data sources?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.7 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To critically compare privacy-preserving methods used in AI systems, it&#x27;s essential to delve into both Secure Multi-Party Computation (SMPC) with Differential Privacy (DP) and Federated Learning, focusing on server-side adaptive optimization. The SMPC strategy fortified by DP, as described by Lin et al. (2024) in their PPJP system, primarily addres...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Exploiting Multi-Model Collaborative Inference for Privacy Enhancement in Text Classification</span><br><span class="pm">Yong Lin et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">A Robust Framework for Secure Cardiovascular Risk Prediction: An Architectural Case Study of Differentially Private Federated Learning</span><br><span class="pm">Rodrigo Tertulino et al., 2026</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.7</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q25 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">How can deep learning-driven segmentation methods, like those used in KaryoXpert for chromosome analysis, be adapted to improve non-contrast imaging techniques in pulmonary artery-vein segmentation, considering the unique methodological and data characteristics of each domain?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The adaptation of deep learning-driven segmentation techniques such as those developed in KaryoXpert for chromosome analysis to improve non-contrast imaging in pulmonary artery-vein segmentation involves navigable yet challenging opportunities and barriers.
+
+KaryoXpert utilizes a sophisticated framework combining morphology algorithms with deep lea...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">KaryoXpert: An accurate chromosome segmentation and classification framework for karyotyping analysis without training with manually labeled metaphase-image mask annotations</span><br><span class="pm">Siyuan Chen et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Deep learning-driven pulmonary artery and vein segmentation reveals demography-associated vasculature anatomical differences</span><br><span class="pm">Yuetan Chu et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.58</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q26 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">How do OLi3-decorated irida-graphene and atomic layer deposited Al2O3 encapsulation of MgH2-ZrTi compare in terms of hydrogen storage capacity, stability under mixed gas atmospheres, and practical applicability for real-world hydrogen storage scenarios?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.3 (low)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Both OLi3-decorated irida-graphene and atomic layer deposited Al2O3 encapsulation of MgH2-ZrTi present innovative approaches for enhancing hydrogen storage. Paper 1 highlights the promising capacity advancement achieved with OLi3 clusters on irida-graphene, demonstrating a significant storage capacity (10.00 wt%) and efficient hydrogen release at a...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">OLi3-decorated Irida-graphene for High-capacity Hydrogen Storage: A First-principles Study</span><br><span class="pm">J. Laranjeira et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Solid–State Hydrogen Storage Materials with Excellent Selective Hydrogen Adsorption in the Presence of Alkanes, Oxygen, and Carbon Dioxide by Atomic Layer Amorphous Al2O3 Encapsulation</span><br><span class="pm">Fanqi Bu et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.3</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q27 -->
+      <div class="q-card reveal reveal-d3" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">Under what conditions do the methodologies proposed in KaryoXpert and BR-ChromNet excel or fail in achieving accurate chromosome segmentation and abnormality detection, considering their approaches to handling data annotation, domain shifts, and interpretability?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.32 (low)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The methodologies explored in KaryoXpert and BR-ChromNet present distinct approaches to chromosome analysis, reflecting the complexity and nuances of modern cytogenetic research. KaryoXpert utilizes a hybridization of morphology algorithms with deep learning, aiming to bypass the necessity of manually labeled data by implementing an efficient segme...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">KaryoXpert: An accurate chromosome segmentation and classification framework for karyotyping analysis without training with manually labeled metaphase-image mask annotations</span><br><span class="pm">Siyuan Chen et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">BR-ChromNet: Banding Resolution Localization of Chromosome Structural Abnormality with Conditional Random Field.</span><br><span class="pm">Siyuan Chen et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.32</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q28 -->
+      <div class="q-card reveal" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">How do recent advancements between 2023 and 2025 in metal hydrides, metal-organic frameworks, and AB2 alloys compare in terms of hydrogen storage efficiency, and what are their respective strengths, weaknesses, and open research questions?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>3 篇</strong></span>
+            <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>A comprehensive answer would involve synthesizing findings from the papers: &#x27;Metal Hydrides for Sustainable Hydrogen Storage: A Review&#x27; by E. Nemukula et al., &#x27;Solid-state hydrogen storage materials&#x27; by M. Kalibek et al., and &#x27;Tailoring AB2 Alloys for Enhanced Solid‐State Hydrogen Storage&#x27; by Dongming Yin et al. Metal hydrides demonstrate potential...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Metal Hydrides for Sustainable Hydrogen Storage: A Review</span><br><span class="pm">E. Nemukula et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Solid-state hydrogen storage materials</span><br><span class="pm">M. Kalibek et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Tailoring AB2 Alloys for Enhanced Solid‐State Hydrogen Storage: Unraveling Compositional Effects on Kinetics, Diffusion, and Thermodynamics</span><br><span class="pm">Dongming Yin et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.5</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q29 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">How do the methodologies of AI-driven optimization, structural and morphological variation, and synthesis and characterization impact hydrogen storage efficiency in carbon-based materials, considering specific operational conditions like temperature and pressure, and what evidence supports their respective advantages or limitations?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>3 篇</strong></span>
+            <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The question explores the comparative effectiveness of three main methodologies in enhancing hydrogen storage within carbon-based materials, focusing particularly on AI-driven optimization, structural and morphological variations, and synthesis and characterization. AI-driven optimization, as discussed in Paper 1, provides data-driven insights into...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Hydrogen Energy Storage via Carbon-Based Materials: From Traditional Sorbents to Emerging Architecture Engineering and AI-Driven Optimization</span><br><span class="pm">Han Fu et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Solid‐State Hydrogen Storage Origin and Design Principles of Carbon‐Based Light Metal Single‐Atom Materials</span><br><span class="pm">Yong Gao et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">A Review on Advancements in Solid‐State Hydrogen Storage: The Role of Porous Hollow Carbon Nanospheres</span><br><span class="pm">Ahmad Tarmizi Abd Wahab et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.5</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q30 -->
+      <div class="q-card reveal reveal-d3" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">How do the methodological approaches of density functional theory-based models and spectroscopic characterization compare with adsorption-based nanostructured materials in predicting and enhancing hydrogen storage capacities under varied thermal conditions, while taking into account material stability and cost considerations?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The comparison of density functional theory (DFT) models, spectroscopic characterizations, and adsorption-based nanostructured materials for hydrogen storage highlights distinct strengths and limitations inherent in each approach. DFT models as explained in Gao et al. (2024) establish theoretical relationships between material structure and hydroge...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Solid‐State Hydrogen Storage Origin and Design Principles of Carbon‐Based Light Metal Single‐Atom Materials</span><br><span class="pm">Yong Gao et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">A Review on Functional Materials for Hydrogen Storage</span><br><span class="pm">Parag Girhe et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q31 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">How can the precision decoupling of nucleation and growth kinetics from MOF synthesis be adapted to enhance the structural stability of superalkali-decorated nanostructures for selective hydrogen adsorption in mixed gas environments?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>3 篇</strong></span>
+            <span class="m">基线质量: <strong>0.52 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The adaptation of precision decoupling of nucleation and growth kinetics from MOF synthesis offers a promising avenue to improve the structural stability and performance of superalkali-decorated nanostructures in mixed gas environments. MOFs, known for their porous structure and tunable chemical properties, utilize controlled nucleation and growth ...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">OLi3-decorated Irida-graphene for High-capacity Hydrogen Storage: A First-principles Study</span><br><span class="pm">J. Laranjeira et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Balancing Nucleation and Growth Kinetics Enables Fully‐Coordinated Acetic Acid‐Tethered Metal–Organic Frameworks for Technoeconomic‐Viable Hydrogen Storage</span><br><span class="pm">Zi Li et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Solid–State Hydrogen Storage Materials with Excellent Selective Hydrogen Adsorption in the Presence of Alkanes, Oxygen, and Carbon Dioxide by Atomic Layer Amorphous Al2O3 Encapsulation</span><br><span class="pm">Fanqi Bu et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.52</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q32 -->
+      <div class="q-card reveal reveal-d2" data-strategy="quantitative_verification">
+        <div class="q-bar bar-quant"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-quant">定量验证</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">What is the discrepancy between the volumetric hydrogen storage capacity achieved by MOF-808-0.5AA-mm in Paper 1 and the predictive capacity enhanced by descriptor Φ in d-block TM MSA-NC-SHSM materials in Paper 2, considering documented benchmarks for storage efficiency and techno-economic viability?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.34 (low)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The volumetric hydrogen storage capacity achieved by MOF-808-0.5AA-mm is documented as 50 g L−1 under conditions of 77 K and 100 bar, with a techno-economic analysis showing a 45% lower levelized cost of hydrogen storage, reaching 2.34 $ kgH2−1 compared to 4.3 $ kgH2−1 for liquid hydrogen. In contrast, Paper 2&#x27;s descriptor Φ provides a quantitative...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Balancing Nucleation and Growth Kinetics Enables Fully‐Coordinated Acetic Acid‐Tethered Metal–Organic Frameworks for Technoeconomic‐Viable Hydrogen Storage</span><br><span class="pm">Zi Li et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Experimentally Validated Design Principles of D‐Block Transition Metal Single‐Atom Non‐Dissociative Chemisorption Solid‐State Hydrogen Storage Materials</span><br><span class="pm">Qiuyan Yue et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.34</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q33 -->
+      <div class="q-card reveal reveal-d3" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">In the context of preventing impurity gas poisoning in metal hydride hydrogen storage materials, how do specific methodologies such as CeO2 nanocoating compare to broader strategies like composition optimization and nanomaterial modification in terms of effectiveness, cost, and scalability under varied conditions?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>In evaluating prevention methods for impurity gas poisoning in metal hydride hydrogen storage, it is crucial to contrast specific tailored solutions, for instance, the CeO2 nanocoating approach demonstrated in Paper 1, with more extensive and versatile strategies like composition optimization and nanomaterial modification as reviewed in Paper 2. Pa...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Enhanced Poisoning Resistance of TiFe-Based Hydrogen Storage Alloys via CeO2 Nanocoating in Impure Hydrogen Atmospheres.</span><br><span class="pm">Yingxian Zhang et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Poisoning Resistance for Metal Hydride Hydrogen Storage Materials: Mechanism, Strategies, and Challenges</span><br><span class="pm">Hangyan Shi et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q34 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How do the methodologies of manipulating delocalized excitons in donor polymers versus controlling intramolecular noncovalent interactions in π-conjugated polymers compare in optimizing charge-separation efficiencies and under what conditions might one be preferred over the other in organic photovoltaics?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>In comparing the two methodologies, we must first understand the technical processes each employs. Paper 1 employs optical spectroscopy and simulations to explore the role of delocalized excitons in donor polymers, specifically focusing on how these excitons can enhance charge-separation efficiencies in organic photovoltaics (OPVs). This work shows...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Photoluminescent delocalized excitons in donor polymers facilitate efficient charge generation for high-performance organic photovoltaics</span><br><span class="pm">Kui Jiang et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Manipulating the functionality and structures of π-conjugated polymers utilizing intramolecular noncovalent interactions towards efficient organic photovoltaics</span><br><span class="pm">S. Kamimura et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.6</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q35 -->
+      <div class="q-card reveal reveal-d2" data-strategy="literature_synthesis">
+        <div class="q-bar bar-lit"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-lit">文献综合</span>
+            <span class="q-domain">材料科学与化学 / Hydrogen Storage Materials</span>
+          </div>
+          <div class="q-text">Between 2023 and 2025, how do adjustments in structural frameworks and surface modification strategies for catalytic materials, specifically in piezocatalysis and photoelectrochemical applications, compare in terms of charge dynamics optimization, and what are their strengths, weaknesses, and unresolved questions?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To comprehensively address the research question, we must analyze multiple experimental methodologies and theoretical approaches employed between 2023 and 2025 for enhancing catalytic efficiency through surface modifications and structural framework adjustments. A significant focus will be on the structural adjustments in covalent organic framework...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Atomic‐Level Ionic Displacement Polarization Enhanced Piezocatalytic Hydrogen Evolution in Covalent Organic Frameworks</span><br><span class="pm">Ge Yan et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Metallic TiN-mediated interface to boost charge transfer of bismuth vanadate toward enhanced photoelectrochemical water oxidation.</span><br><span class="pm">Huanhuan Sun et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.62</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q36 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How can optimization strategies involving alkyl, fluorinated, and thiophenated chains in organic solar cell polymers be adapted to enhance the efficiency, stability, and geographical adaptability of semitransparent organic photovoltaics used as smart windows in diverse environments?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Bridging the disciplines of polymer optimization and application in semitransparent organic photovoltaics (ST-OPVs) requires an in-depth understanding of how specific material enhancements can be applied to meet the unique challenges of ST-OPVs. This involves examining function-focused optimization from Rahman et al.&#x27;s work with diverse polycyclina...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Semitransparent organic photovoltaics with wide geographical adaptability as sustainable smart windows</span><br><span class="pm">Jiangsheng Yu et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Optimization of Polymers for Organic Solar Cells: Effects of Alkyl, Fluorinated and Thiophenated Chains.</span><br><span class="pm">Md Lutfor Rahman et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.62</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q37 -->
+      <div class="q-card reveal" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How can machine learning models informed by artificially generated failure data be integrated with interfacial engineering innovations to enhance the efficiency and design of organic photovoltaic devices, considering both computational data accuracy challenges and material synthesis constraints?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>Integrating machine learning models, particularly those informed by artificially generated failure data, with interfacial engineering innovations offers promising pathways to enhance the efficiency and design of organic photovoltaic (OPV) devices. Machine learning (ML) approaches, as discussed in Paper 1, have shown potential to improve the predict...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">(Invited) Machine Learning and Fast Experimental Screening-Assisted Development of Organic Solar Cell</span><br><span class="pm">A. Saeki et al., 2023</span></div>
+            <div class="paper-item"><span class="pt">Interfacial Engineering in Organic Photovoltaics: Enhancing Efficiency through Material Innovations</span><br><span class="pm">Xin Xu et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.54</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q38 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">In organic photovoltaics, how do wavy backbone structures compare to highly twisted planar architectures in enhancing polymer efficiency, considering aggregation, molecular ordering, and thermal stability? Under what conditions does each design strategy excel or fail?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The wavy backbone structure, as demonstrated in Paper 1, emphasizes aggregation reduction and improved molecular ordering, leading to higher efficiency in polymer donors. Specifically, the alkoxy-substituted anthra[1,2‐c:5,6‐c′]bis([1,2,5]thiadiazole) structure resulted in a notable power conversion efficiency of 7.94%. The methodology strategicall...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Alkoxy‐Substituted Anthrabis(Thiadiazole)‐Terthiophene Copolymers for Organic Photovoltaics: A Unique Wavy Backbone Enhances Aggregation, Molecular Order, and Device Efficiency</span><br><span class="pm">Yi Yan et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Wide Bandgap Polymer Donors Based on Highly Twisted Biphenyl Imide for Efficient Organic Photovoltaics†</span><br><span class="pm">Weiyi Zhou et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q39 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How can the design of π-conjugated polymers for organic photovoltaics be adapted to incorporate the wavy backbone structure found in alkoxy-substituted anthra[1,2-c:5,6-c&#x27;]bis([1,2,5]thiadiazole) polymers to enhance aggregation control and molecular order for improved device efficiency?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To effectively adapt π-conjugated polymers used in organic photovoltaics with features of the wavy backbone structure found in alkoxy-substituted anthra[1,2-c:5,6-c&#x27;]bis([1,2,5]thiadiazole) polymers, researchers need to address several key areas. First, integrating the unique wavy backbone configuration into π-conjugated polymers requires an unders...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">(Invited) Design and Synthesis of π-Conjugated Polymers for High-Efficiency Organic Photovoltaics</span><br><span class="pm">I. Osaka et al., 2024</span></div>
+            <div class="paper-item"><span class="pt">Alkoxy‐Substituted Anthrabis(Thiadiazole)‐Terthiophene Copolymers for Organic Photovoltaics: A Unique Wavy Backbone Enhances Aggregation, Molecular Order, and Device Efficiency</span><br><span class="pm">Yi Yan et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.56</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q40 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">计算机科学 / Differential Privacy in AI</span>
+          </div>
+          <div class="q-text">Under what conditions do AggNet and HELM-GPT methodologies excel in the analysis and design of protein aggregation versus macrocyclic peptides, and how can experimental evidence from multiple studies inform their application and limitations?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.48 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>AggNet employs predictive modeling based on protein language models and structural data. It excels in scenarios where accurate prediction of protein aggregation is critical, leveraging AlphaFold2&#x27;s ability to capture physicochemical properties of peptides. Its stable performance across secondary structures and interpretability make it ideal for sce...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">AggNet: Advancing protein aggregation analysis through deep learning and protein language model</span><br><span class="pm">Wenjia He et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">HELM-GPT: de novo macrocyclic peptide design using generative pre-trained transformer</span><br><span class="pm">Xiaopeng Xu et al., 2024</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.48</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q41 -->
+      <div class="q-card reveal reveal-d2" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How can the defect passivation techniques used in air-processed hybrid perovskite solar cells be adapted to enhance the stability and efficiency of perovskite-organic tandem solar cells, considering the unique interfacial challenges posed by solution-processed interconnects and varying atmospheric conditions during fabrication?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.64 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>In the pursuit of advancing perovskite-organic tandem solar cells (POTSCs), integrating defect passivation techniques from hybrid perovskite solar cell (PSC) research offers promising opportunities yet faces significant barriers. Paper 1 elucidates that VOC losses in wide-bandgap perovskites can be mitigated by employing a passivation agent for def...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Defect Dynamics and Solution‐Processed Interconnects in Perovskite‐Organic Tandem Solar Cells</span><br><span class="pm">Yi Hu et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Tailoring Crystal Growth Regulation and Dual Passivation for Air‐Processed Efficient Perovskite Solar Cells</span><br><span class="pm">Qianyi Li et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.64</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q42 -->
+      <div class="q-card reveal reveal-d3" data-strategy="cross_domain_bridge">
+        <div class="q-bar bar-cross"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-cross">跨领域桥梁</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">How can the complex thiazole-fused molecular architectures used in organic photovoltaics with high efficiency be adapted for economical commercial production, integrating simplified synthesis methodologies to reduce costs without compromising performance?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.52 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>High-performance organic photovoltaics (OPVs) combine complex molecular architectures, such as thiazole-fused π-conjugated structures, with strategic material synthesis to enhance efficiency metrics such as the power conversion efficiency (PCE) and low voltage losses. Paper 1 introduces such a complex structure, TTBTz, used to achieve high PCEs ove...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">A Novel Thiazole-Fused Building Block for π-Conjugated Polymers Enabling Low Voltage Loss in Organic Photovoltaics</span><br><span class="pm">Mayu Tomita et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">A Strategically Designed Easily‐Synthesized Polymer Donor for Efficient Organic Photovoltaics</span><br><span class="pm">Kodai Yamanaka et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.52</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q43 -->
+      <div class="q-card reveal" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">In energy conversion systems, how do the methodologies of incorporating thiazole-fused π-extended building blocks in organic photovoltaics compare to plasmon resonance hybridization in photothermal nitrogen reduction under varying conditions of light intensity and material composition?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.4 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>To effectively compare the performance and methodologies of thiazole-fused π-extended building blocks for organic photovoltaics (Paper 1) with plasmon resonance hybridization for nitrogen photothermal reduction (Paper 2), researchers must delve into the underlying principles and experimental validations presented in each study. 
+
+The organic photov...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">A Novel Thiazole-Fused Building Block for π-Conjugated Polymers Enabling Low Voltage Loss in Organic Photovoltaics</span><br><span class="pm">Mayu Tomita et al., 2026</span></div>
+            <div class="paper-item"><span class="pt">Synergistic plasmon resonance hybridization of iron‐dispersed MoO3−x/MXene for enhanced nitrogen photothermal reduction</span><br><span class="pm">Ying Tang et al., 2025</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-low">质量分: 0.4</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <!-- Q44 -->
+      <div class="q-card reveal reveal-d2" data-strategy="methodology_debate">
+        <div class="q-bar bar-meth"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-meth">方法论争论</span>
+            <span class="q-domain">材料科学与化学 / Organic Photovoltaics</span>
+          </div>
+          <div class="q-text">Under which experimental conditions do the methods of ESR spectroscopy in polymer solar cells and additive-mediated morphological changes in polymer films provide the most accurate and efficient improvements in charge transport and mobility, and what are the inherent limitations of each approach?</div>
+          <div class="q-meta">
+            <span class="m">源论文: <strong>2 篇</strong></span>
+            <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>参考答案（节选）</h5>
+            <p>The study of charge transport in organic electronics is critical for advancing materials like polymer solar cells and organic electrochemical transistors (OECTs). Two methodologies are notable in this context: electron spin resonance (ESR) spectroscopy combined with organic electrochemical transistor structures, and an additive-mediated morphologic...</p>
+            <h5>源论文</h5>
+            <div class="paper-item"><span class="pt">Operando ESR Elucidation of Charge Accumulation and Molecular Orientation in Ternary Polymer Solar Cell Materials Using Organic Electrochemical Transistor Structures.</span><br><span class="pm">Jiaxi Wang et al., 2025</span></div>
+            <div class="paper-item"><span class="pt">Additive-Induced Morphology Change of Polymer Film Enables Enhanced Charge Mobility and Faster Organic Electrochemical Transistor Switching.</span><br><span class="pm">Yuan-Qiu-Qiang Yi et al., 2026</span></div>
+            <h5>基线评估</h5>
+            <div class="scores">
+              <span class="sc sc-med">质量分: 0.58</span>
+              <span class="sc sc-low">需搜索: Yes</span>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /collapse-content -->
+  </div>
+</section>
+
+<!-- ══════════ OTHER PERSONAS — PROPOSALS ══════════ -->
+<section class="proposals-section" id="proposals">
+  <div class="container">
+    <p class="overline">Other Personas</p>
+    <h2>其他 Persona Pipeline 初步方案</h2>
+    <p class="section-desc">以下 4 个 Persona 的 Pipeline 设计思路，数据源与策略均需领域专家进一步确认。</p>
+
+    <div class="expert-callout reveal">
+      <span class="ec-icon">&#9888;</span>
+      <p>
+        <strong>需要领域专家参与确认：</strong>以下方案涉及工程、金融、医学、法律等专业领域。数据源的可靠性、Query 策略的覆盖面、以及生成问题的专业合理性，均需要邀请相应领域的从业者进行 Review 和补充。下面展示的是初步技术方案，用于讨论。
+      </p>
+    </div>
+
+    <div class="accordion">
+
+      <!-- ────────────────────────────────────────────
+           ENGINEER / PROGRAMMER
+           ──────────────────────────────────────────── -->
+      <div class="acc-item reveal" id="proposal-eng">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot" style="background:#6B8FC2">&#128187;</div>
+          <div class="acc-title">
+            <h4>工程师 / 程序员 <span class="draft-badge">初步方案</span></h4>
+            <p>数据锚点：真实技术问题 + 跨层架构约束</p>
+          </div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+
+          <h5>初步思路</h5>
+          <p style="font-size:.92rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px">
+            目前的想法是从 <strong>GitHub 上查找同一技术领域的高星竞争项目</strong>（如同为时序数据库的 TimescaleDB vs ClickHouse vs QuestDB），抓取它们的 Issues 和 Discussions 中关于性能、局限性和 vs 对比的讨论；同时从 <strong>Stack Overflow 上获取有多种竞争性高赞回答的技术问题</strong>；再结合<strong>大厂工程博客</strong>（Netflix、Uber、Stripe 等）中记录的真实架构决策复盘。通过将"竞争技术"与"真实约束场景"交叉组合，生成需要跨多个系统层做工程判断的 query。
+          </p>
+
+          <h5>数据源</h5>
+          <div class="source-chips">
+            <span class="source-chip">GitHub API <span class="sc-free">免费</span></span>
+            <span class="source-chip">Stack Overflow API <span class="sc-free">免费</span></span>
+            <span class="source-chip">Hacker News API <span class="sc-free">免费</span></span>
+            <span class="source-chip">NVD / CVE 数据库 <span class="sc-free">免费</span></span>
+            <span class="source-chip">技术博客 (Web Fetch) <span class="sc-free">免费</span></span>
+          </div>
+
+          <h5>4 种 Query 策略</h5>
+          <div class="strategy-compact">
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#9881; 技术选型决策</span>
+              <div class="sc-desc">
+                在具体约束条件下比较竞争方案，给出推荐与理由
+                <div class="sc-example">一个日均 5 亿条消息的 IoT 平台，在 TimescaleDB、ClickHouse 和 QuestDB 之间如何选型？需考虑写入吞吐、查询延迟、运维成本和团队 Go 技术栈兼容性</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128269; 跨层问题诊断</span>
+              <div class="sc-desc">
+                从现象追溯到根因，涉及硬件/OS/中间件/应用多个抽象层
+                <div class="sc-example">Kubernetes 集群中 Pod 间 gRPC 调用 P99 延迟周期性飙升到 2s，但 P50 正常。从 CNI 网络、Istio 服务网格、节点调度、GC 四个层面分析可能原因和排查步骤</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128296; 架构迁移评估</span>
+              <div class="sc-desc">
+                评估迁移的收益、风险和分步方案，需要真实案例佐证
+                <div class="sc-example">一个基于 PostgreSQL 单主的电商系统（日均 50 万订单）计划迁移到 CockroachDB 以实现多区域部署。分析数据一致性、事务语义差异、迁移风险和灰度方案</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128736; 端到端系统设计</span>
+              <div class="sc-desc">
+                给定需求约束，做完整的技术方案设计
+                <div class="sc-example">设计一个支持 10 万并发用户的实时协作文档系统，需处理冲突解决（CRDT vs OT）、离线支持、权限控制。给出具体的技术选型和架构方案</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="todo-box">
+            <h5>&#128172; 希望领域专家协助思考</h5>
+            <ul>
+              <li>工程师在实际工作中，最耗时、最依赖深度调研的决策场景有哪些？</li>
+              <li>上述数据源和 query 策略是否覆盖了工程师的核心痛点？有哪些遗漏？</li>
+              <li>在工程领域，有哪些权威且可自动化获取的信息来源推荐？</li>
+              <li>生成的 query 应该具备什么特征，才能真正区分 AI 系统的工程决策能力？</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ────────────────────────────────────────────
+           FINANCIAL ANALYST
+           ──────────────────────────────────────────── -->
+      <div class="acc-item reveal reveal-d1" id="proposal-fin">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot" style="background:#5BA08A">&#128200;</div>
+          <div class="acc-title">
+            <h4>金融分析师 <span class="draft-badge">初步方案</span></h4>
+            <p>数据锚点：真实市场事件 + 多源金融数据</p>
+          </div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+
+          <h5>初步思路</h5>
+          <p style="font-size:.92rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px">
+            目前的想法是从 <strong>SEC EDGAR 中获取近期上市公司的重大事件披露</strong>（8-K 文件，如财报意外、并购公告、管理层变更），结合 <strong>FRED 的宏观经济指标</strong>（利率、CPI、就业数据等）构建"宏观 → 行业 → 个股"的多层推理场景。通过<strong>财经新闻 API 识别近期市场争议性事件</strong>（如估值分歧、监管冲击），再拉取相关公司的实际财务数据（营收、利润率、估值倍数）作为 query 中可验证的定量锚点，确保生成的问题需要多源数据交叉分析才能回答。
+          </p>
+
+          <h5>数据源</h5>
+          <div class="source-chips">
+            <span class="source-chip">SEC EDGAR API <span class="sc-free">免费</span></span>
+            <span class="source-chip">FRED API (美联储) <span class="sc-free">免费</span></span>
+            <span class="source-chip">Alpha Vantage <span class="sc-paid">免费有限</span></span>
+            <span class="source-chip">Finnhub (财经新闻) <span class="sc-paid">免费有限</span></span>
+            <span class="source-chip">Yahoo Finance API <span class="sc-free">免费</span></span>
+          </div>
+
+          <h5>4 种 Query 策略</h5>
+          <div class="strategy-compact">
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128202; 多层漏斗分析</span>
+              <div class="sc-desc">
+                从宏观环境到行业趋势到个股分析的层层推理
+                <div class="sc-example">在美联储维持高利率的背景下，美国数据中心 REITs（如 Equinix、Digital Realty）的估值逻辑是否仍然成立？结合利率环境、AI 算力需求增长和电力成本上升三个维度分析</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#9889; 事件影响评估</span>
+              <div class="sc-desc">
+                分析特定市场事件（财报、政策、并购）的多维连锁反应
+                <div class="sc-example">欧盟《AI 法案》全面生效后，对在欧运营的美国科技公司（Meta、Google、Microsoft）各自的合规成本和业务调整有多大影响？哪家受影响最大？</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128203; 竞品横向对比</span>
+              <div class="sc-desc">
+                同一赛道多家公司的深度比较，需引用具体财务数据
+                <div class="sc-example">比较 Novo Nordisk、Eli Lilly 和 Amgen 在 GLP-1 类药物管线的差异化策略，分析各自在肥胖适应症市场的竞争壁垒、定价策略和 2025 年预期营收</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#127919; 投资论点构建</span>
+              <div class="sc-desc">
+                给出有具体标的和风险收益分析的投资建议
+                <div class="sc-example">如果看好 2025-2026 年东南亚电商渗透率提升的趋势，应该如何构建投资组合？从平台、支付、物流三个环节分析各自的风险收益比</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="todo-box">
+            <h5>&#128172; 希望领域专家协助思考</h5>
+            <ul>
+              <li>金融分析师在日常工作中，最耗时、最需要深度调研的分析场景有哪些？</li>
+              <li>上述数据源和 query 策略是否覆盖了金融分析的核心痛点？有哪些遗漏？</li>
+              <li>在金融领域，有哪些权威且可自动化获取的数据来源推荐（含非美股市场）？</li>
+              <li>什么样的金融问题才能真正区分 AI 系统的深度分析能力，而非表面总结？</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ────────────────────────────────────────────
+           DOCTOR / MEDICAL
+           ──────────────────────────────────────────── -->
+      <div class="acc-item reveal reveal-d2" id="proposal-med">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot" style="background:#C45A3C">&#129657;</div>
+          <div class="acc-title">
+            <h4>医生 / 医疗人员 <span class="draft-badge">初步方案</span></h4>
+            <p>数据锚点：临床试验 + 冲突性指南 + 患者约束</p>
+          </div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+
+          <h5>初步思路</h5>
+          <p style="font-size:.92rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px">
+            目前的想法是从 <strong>PubMed 中搜索近 1-2 年发表的高影响力随机对照试验（RCT）和 Meta 分析</strong>，特别关注那些可能改变临床实践的大型试验；同时从 <strong>FDA/EMA 的审批数据库获取近期新获批药物</strong>（证据仍在积累的窗口期）。关键创新点是<strong>挖掘不同医学学会（如 AHA vs ESC、ADA vs EASD）对同一疾病的指南推荐分歧</strong>，再叠加真实的患者约束条件（合并症、禁忌症、经济因素），生成需要在循证证据与临床现实之间做权衡的 query。
+          </p>
+
+          <h5>数据源</h5>
+          <div class="source-chips">
+            <span class="source-chip">PubMed E-utilities API <span class="sc-free">免费</span></span>
+            <span class="source-chip">ClinicalTrials.gov API <span class="sc-free">免费</span></span>
+            <span class="source-chip">OpenFDA API <span class="sc-free">免费</span></span>
+            <span class="source-chip">WHO / CDC 指南 <span class="sc-free">免费</span></span>
+            <span class="source-chip">Cochrane Library <span class="sc-paid">部分免费</span></span>
+          </div>
+
+          <h5>4 种 Query 策略</h5>
+          <div class="strategy-compact">
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#9878; 指南冲突裁判</span>
+              <div class="sc-desc">
+                分析不同权威指南（ADA vs EASD、AHA vs ESC）对同一问题的分歧原因
+                <div class="sc-example">对于 HbA1c 在 7-8% 之间的 2 型糖尿病患者，ADA 2025 指南推荐的一线联合用药方案与 EASD 的推荐有何不同？对于同时有 CKD Stage 3 的患者，哪个方案更有证据支持？</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128138; 新药循证评估</span>
+              <div class="sc-desc">
+                评估新获批药物的证据质量、临床意义和适用人群
+                <div class="sc-example">Lecanemab（Leqembi）获 FDA 完全批准用于早期阿尔茨海默病。基于 Clarity AD 试验数据，其临床获益是否达到临床意义阈值？ARIA 发生率如何？哪些患者亚群获益最大？</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#129658; 复杂病例决策</span>
+              <div class="sc-desc">
+                在多种合并症/禁忌症约束下制定个体化治疗方案
+                <div class="sc-example">一位 68 岁 2 型糖尿病患者，合并 CKD G3b 期（eGFR 35）和心衰（EF 40%）。根据最新 ADA/KDIGO 指南，如何调整降糖方案？需权衡肾功能保护、心血管获益和低血糖风险</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128200; 试验数据交叉验证</span>
+              <div class="sc-desc">
+                核验具体临床试验的数字、安全性数据和亚组分析结果
+                <div class="sc-example">DAPA-HF、EMPEROR-Reduced 和 DELIVER 三项大型 RCT 中，SGLT2 抑制剂对心衰患者主要终点的风险比分别是多少？不同射血分数分层下结果是否一致？</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="todo-box">
+            <h5>&#128172; 希望领域专家协助思考</h5>
+            <ul>
+              <li>临床医生在实际诊疗中，最依赖深度文献调研的决策场景有哪些？</li>
+              <li>上述数据源和 query 策略是否覆盖了临床决策的核心痛点？有哪些遗漏？</li>
+              <li>在医学领域，有哪些权威且可自动化获取的循证信息来源推荐？</li>
+              <li>什么样的临床问题才能真正区分 AI 系统的循证分析能力，而非泛泛而谈？</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ────────────────────────────────────────────
+           LAWYER / LEGAL
+           ──────────────────────────────────────────── -->
+      <div class="acc-item reveal reveal-d3" id="proposal-law">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot" style="background:#8B7EC8">&#9878;</div>
+          <div class="acc-title">
+            <h4>律师 / 法研人员 <span class="draft-badge">初步方案</span></h4>
+            <p>数据锚点：真实法律争议 + 法源引用链 + 跨法域规则</p>
+          </div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+
+          <h5>初步思路</h5>
+          <p style="font-size:.92rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px">
+            目前的想法是从 <strong>CourtListener 获取近期联邦法院的里程碑判决</strong>，通过引用链追踪找到对同一法律原则存在不同裁判立场的案件（如巡回法院间的 circuit split）；同时从 <strong>congress.gov 和 EUR-Lex 获取近期通过的新立法</strong>（如 AI Act、数据隐私法规），识别法律条文中存在解释空间的模糊条款。关键创新点是<strong>自动挖掘同一法律问题在不同法域（美国/欧盟/中国）的规则差异</strong>，构建需要精确引用法源、做跨法域对比分析的 query。
+          </p>
+
+          <h5>数据源</h5>
+          <div class="source-chips">
+            <span class="source-chip">CourtListener API <span class="sc-free">免费</span></span>
+            <span class="source-chip">congress.gov API <span class="sc-free">免费</span></span>
+            <span class="source-chip">EUR-Lex (欧盟法规) <span class="sc-free">免费</span></span>
+            <span class="source-chip">SEC / FTC 执法记录 <span class="sc-free">免费</span></span>
+            <span class="source-chip">SSRN Legal Papers <span class="sc-free">免费</span></span>
+          </div>
+
+          <h5>4 种 Query 策略</h5>
+          <div class="strategy-compact">
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#127760; 跨法域对比分析</span>
+              <div class="sc-desc">
+                比较不同司法管辖区对同一法律问题的立场，需精确引用法源
+                <div class="sc-example">关于 AI 训练数据的合理使用，美国 Andersen v. Stability AI 案、欧盟 AI Act 第 53 条 TDM 例外规定、以及中国《生成式 AI 管理办法》各自的法律框架有何异同？一家同时在三地运营的 AI 公司应如何合规？</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128279; 判例链追踪</span>
+              <div class="sc-desc">
+                追踪一个法律原则从里程碑判例到当前状态的演变
+                <div class="sc-example">从 Alice Corp. v. CLS Bank (2014) 到 2024 年最新联邦巡回法院判决，美国软件专利的可专利性标准如何演变？哪些类型的 AI 相关专利申请目前更可能通过 101 条审查？</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128221; 法规解释争议</span>
+              <div class="sc-desc">
+                分析法律条文的模糊地带，引用监管机构指南和执法实践
+                <div class="sc-example">GDPR 第 22 条规定的"仅基于自动化处理的决定"权，在 LLM 辅助的信贷审批场景下如何适用？如果人类审核员仅是确认 AI 建议，是否构成"仅基于自动化处理"？引用 EDPB 相关指南</div>
+              </div>
+            </div>
+            <div class="strategy-compact-item">
+              <span class="sc-name">&#128188; 合规方案设计</span>
+              <div class="sc-desc">
+                针对具体业务场景，给出跨法域的合规路径分析
+                <div class="sc-example">一家中国 SaaS 公司计划向欧盟企业客户提供基于 LLM 的客服系统。从数据跨境传输（GDPR 第 46 条）、AI 系统分类（AI Act）和内容责任（DSA）三个维度分析合规要求</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="todo-box">
+            <h5>&#128172; 希望领域专家协助思考</h5>
+            <ul>
+              <li>法律从业者在实际工作中，最耗时、最需要深度检索的法律分析场景有哪些？</li>
+              <li>上述数据源和 query 策略是否覆盖了法律研究的核心痛点？有哪些遗漏？</li>
+              <li>在法律领域，有哪些权威且可自动化获取的法源数据库推荐（含中国法域）？</li>
+              <li>什么样的法律问题才能真正区分 AI 系统的法律推理能力，而非表面检索？</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+
+    </div><!-- /accordion -->
+
+    <!-- ── Comparison Table ── -->
+    <div class="cmp-table-wrap reveal">
+      <h3 style="margin-bottom:16px">五个 Persona Pipeline 对比总览</h3>
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-done">&#128300; 科学家/研究员</th>
+            <th class="col-draft">&#128187; 工程师</th>
+            <th class="col-draft">&#128200; 金融分析师</th>
+            <th class="col-draft">&#129657; 医生</th>
+            <th class="col-draft">&#9878; 律师</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">状态</td>
+            <td class="col-done"><strong style="color:var(--accent)">已完成</strong></td>
+            <td class="col-draft">初步方案</td>
+            <td class="col-draft">初步方案</td>
+            <td class="col-draft">初步方案</td>
+            <td class="col-draft">初步方案</td>
+          </tr>
+          <tr>
+            <td class="row-label">数据锚点</td>
+            <td class="col-done">学术论文 (Semantic Scholar)</td>
+            <td class="col-draft">GitHub Issues + 技术博客 + 基准评测</td>
+            <td class="col-draft">SEC 财报 + 宏观数据 + 财经新闻</td>
+            <td class="col-draft">PubMed 临床试验 + FDA 审批 + 临床指南</td>
+            <td class="col-draft">判例数据库 + 法规文本 + 执法记录</td>
+          </tr>
+          <tr>
+            <td class="row-label">关系类型</td>
+            <td class="col-done">论文间矛盾 / 方法论争论 / 文献综合</td>
+            <td class="col-draft">技术栈层间冲突 / 方案 trade-off</td>
+            <td class="col-draft">事件-数据-判断的多层推理链</td>
+            <td class="col-draft">证据与实践的鸿沟 / 指南冲突</td>
+            <td class="col-draft">法源间解释冲突 / 法域分歧</td>
+          </tr>
+          <tr>
+            <td class="row-label">Query 必须包含</td>
+            <td class="col-done">时间范围 + 明确交付物</td>
+            <td class="col-draft">具体技术栈 + 性能约束</td>
+            <td class="col-draft">具体标的 / 公司 + 财务数字</td>
+            <td class="col-draft">具体患者特征 + 合并症</td>
+            <td class="col-draft">精确法源引用 + 法域</td>
+          </tr>
+          <tr>
+            <td class="row-label">"难"的来源</td>
+            <td class="col-done">论文间的非平凡关系</td>
+            <td class="col-draft">跨层影响难预测</td>
+            <td class="col-draft">多源数据需交叉验证</td>
+            <td class="col-draft">循证与现实约束的张力</td>
+            <td class="col-draft">法源的交叉与竞合</td>
+          </tr>
+          <tr>
+            <td class="row-label">Query 策略数</td>
+            <td class="col-done">5 种</td>
+            <td class="col-draft">4 种</td>
+            <td class="col-draft">4 种</td>
+            <td class="col-draft">4 种</td>
+            <td class="col-draft">4 种</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Next Steps ── -->
+    <div class="next-steps reveal">
+      <span class="ns-icon">&#128204;</span>
+      <p>
+        <strong>下一步：</strong>邀请各领域专家 Review 以上初步方案。重点确认三个问题：（1）数据源的可靠性与可获取性；（2）Query 策略是否覆盖了该领域的核心痛点；（3）生成的示例问题是否具有专业合理性。确认后逐个进入实现阶段。
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-row">
+      <span class="f">LLM: <strong>GPT-4o</strong></span>
+      <span class="f">数据源: <strong>Semantic Scholar API</strong></span>
+      <span class="f">本次产出: <strong>44 queries (2 domains, 10 subdomains)</strong></span>
+      <span class="f">运行时间: <strong>2026-04-06 02:04</strong></span>
+    </div>
+    <p>Researcher Persona Query Generation Pipeline &middot; MiroEval 2.0</p>
+  </div>
+</footer>
+
+<!-- ══════════ JS ══════════ -->
+<script>
+/* Scroll reveal */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+
+/* Counter */
+const cobs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.done) {
+      e.target.dataset.done = '1';
+      const t = +e.target.dataset.target; let c = 0;
+      const iv = setInterval(() => { c++; e.target.textContent = c; if (c >= t) clearInterval(iv) }, 80);
+    }
+  })
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num[data-target]').forEach(el => cobs.observe(el));
+
+/* Accordion */
+function toggleAcc(h) {
+  const item = h.parentElement, body = item.querySelector('.acc-body'), inner = body.querySelector('.acc-inner');
+  document.querySelectorAll('.acc-item.open').forEach(o => {
+    if (o !== item) { o.classList.remove('open'); o.querySelector('.acc-body').style.maxHeight = '0' }
+  });
+  if (item.classList.contains('open')) { item.classList.remove('open'); body.style.maxHeight = '0' }
+  else { item.classList.add('open'); body.style.maxHeight = inner.scrollHeight + 32 + 'px' }
+}
+
+/* Query expand */
+function toggleQ(btn) {
+  const body = btn.closest('.q-body'), det = body.querySelector('.q-detail'),
+        inner = det.querySelector('.q-detail-inner'), chev = btn.querySelector('.chev');
+  if (det.style.maxHeight && det.style.maxHeight !== '0px') {
+    det.style.maxHeight = '0'; chev.style.transform = ''
+  } else {
+    det.style.maxHeight = inner.scrollHeight + 16 + 'px'; chev.style.transform = 'rotate(180deg)'
+  }
+}
+
+/* Phase scroll */
+function scrollToPhase(n) {
+  const el = document.getElementById('phase-' + n);
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const h = el.querySelector('.acc-header');
+    if (h && !el.classList.contains('open')) setTimeout(() => toggleAcc(h), 400)
+  }
+}
+
+/* Query section collapse */
+function toggleQueryCollapse() {
+  const btn = document.getElementById('queryCollapseBtn');
+  const content = document.getElementById('queryCollapseContent');
+  const isOpen = content.classList.contains('open');
+  if (isOpen) {
+    content.classList.remove('open');
+    content.style.maxHeight = '0';
+    content.style.overflow = 'hidden';
+    btn.classList.remove('open');
+    btn.innerHTML = '<span class="ct-chev">&#9660;</span> 展开查看全部 44 条生成结果';
+  } else {
+    content.classList.add('open');
+    content.style.maxHeight = 'none';
+    content.style.overflow = 'visible';
+    btn.classList.add('open');
+    btn.innerHTML = '<span class="ct-chev">&#9660;</span> 收起生成结果';
+  }
+}
+
+/* Query filter */
+function filterQueries(strategy, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('#queryGrid .q-card');
+  let shown = 0;
+  cards.forEach(c => {
+    if (strategy === 'all' || c.dataset.strategy === strategy) {
+      c.classList.remove('hidden-by-filter'); shown++;
+    } else {
+      c.classList.add('hidden-by-filter');
+    }
+  });
+  document.getElementById('filterCount').textContent = '显示 ' + shown + ' / 44';
+}
+
+/* Strategy example expand */
+function toggleSex(btn) {
+  const ex = btn.closest('.s-ex'), det = ex.querySelector('.s-ex-detail'),
+        inner = det.querySelector('.s-ex-detail-inner'), chev = btn.querySelector('.chev');
+  if (det.style.maxHeight && det.style.maxHeight !== '0px') {
+    det.style.maxHeight = '0'; chev.style.transform = ''
+  } else {
+    det.style.maxHeight = inner.scrollHeight + 16 + 'px'; chev.style.transform = 'rotate(180deg)'
+  }
+}
+
+/* Editable notes: save to localStorage, load on page open */
+const notesEl = document.getElementById('editableNotes');
+if (notesEl) {
+  const saved = localStorage.getItem('miroeval_notes');
+  if (saved) notesEl.value = saved;
+}
+function saveNotes(btn) {
+  const val = document.getElementById('editableNotes').value;
+  localStorage.setItem('miroeval_notes', val);
+  btn.textContent = '已保存';
+  btn.classList.add('saved');
+  setTimeout(() => { btn.textContent = '保存'; btn.classList.remove('saved') }, 1500);
+}
+</script>
+</body>
+</html>
