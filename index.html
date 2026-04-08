@@ -278,6 +278,11 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 .q-tag{font-size:.8rem;font-weight:600;padding:4px 14px;border-radius:50px;color:var(--text-inverse)}
 .qt-lit{background:#8B7EC8}.qt-meth{background:#6B8FC2}.qt-contra{background:#C45A3C}
 .qt-quant{background:#5BA08A}.qt-cross{background:#C4903C}
+.qt-prec{background:#8B7EC8}.qt-unprec{background:#C45A3C}.qt-pred{background:#C4903C}
+.bar-prec{background:#8B7EC8}.bar-unprec{background:#C45A3C}.bar-pred{background:#C4903C}
+.q-juris-tag{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border-light)}
+.q-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.q-chip{font-size:.72rem;font-weight:500;padding:3px 10px;border-radius:50px;background:var(--accent-bg);color:var(--accent);border:1px solid rgba(196,90,60,.12)}
 .q-domain{font-size:.88rem;color:var(--text-tertiary)}
 .q-text{font-size:1.05rem;font-weight:500;color:var(--text-primary);line-height:1.8;margin-bottom:16px}
 .q-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px}
@@ -3477,13 +3482,1338 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
   </svg>
 </div>
 
-<!-- ══════════ GENERATED QUERIES PLACEHOLDER ══════════ -->
+<!-- ══════════ GENERATED QUERIES ══════════ -->
 <section class="examples-section" id="l-examples">
   <div class="container">
     <p class="overline">Generated Queries</p>
-    <h2>生成结果</h2>
-    <p class="section-desc">运行完成后将自动填充真实生成的 Query 示例。</p>
-    <div class="examples-note">&#9889; 运行完成后将自动填充真实生成的 Query 示例 &mdash; 目标产出：9 场景 / 6 法域 / 3 问题类型 &rarr; ~50 条最终查询</div>
+    <h2>生成的法律研究问题</h2>
+    <p class="section-desc">本次运行实际产出的全部查询。点击类型标签筛选，点击卡片展开查看详情与法律来源。</p>
+    <div class="examples-note">&#9889; 真实生成数据 &mdash; 9 场景 / 6 法域 / 3 问题类型 &rarr; 50 条最终查询</div>
+
+    <div class="stats-row" style="margin-bottom:36px">
+      <div class="stat"><span class="stat-num">50</span><span class="stat-label">总查询数</span></div>
+      <div class="stat"><span class="stat-num" style="color:#8B7EC8">15</span><span class="stat-label">有先例 Precedent</span></div>
+      <div class="stat"><span class="stat-num" style="color:#C45A3C">19</span><span class="stat-label">无先例 Unprecedented</span></div>
+      <div class="stat"><span class="stat-num" style="color:#C4903C">16</span><span class="stat-label">预测类 Predictive</span></div>
+    </div>
+
+    <div class="collapse-toggle" id="l-queryCollapseBtn" onclick="toggleQueryCollapse('l')">
+      <span class="ct-chev">&#9660;</span> 展开查看全部 50 条生成结果
+    </div>
+
+    <div class="collapse-content" id="l-queryCollapseContent">
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterQueriesL('all',this)">全部 (50)</button>
+      <button class="filter-btn" onclick="filterQueriesL('precedent',this)">有先例 Precedent (15)</button>
+      <button class="filter-btn" onclick="filterQueriesL('unprecedented',this)">无先例 Unprecedented (19)</button>
+      <button class="filter-btn" onclick="filterQueriesL('predictive',this)">预测类 Predictive (16)</button>
+      <span class="filter-count" id="l-filterCount">显示 50 / 50</span>
+    </div>
+
+    <div class="q-grid" id="l-queryGrid">
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">JP</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在美国、日本及欧盟的法律框架下，如何处理一家跨国企业在三地同时开展的AI项目，该项目利用人工智能进行自动化决策，且涉及用户个人数据的收集和使用？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_058</strong></span>
+            <span class="m">法域: <strong>US, JP, EU</strong></span>
+            <span class="m">基线质量: <strong>2.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">source_conflict</span></div>
+            <h5>为什么难</h5>
+            <p>本问题需要深度研究，因为现有法律框架在这类新兴科技情境下的适用性尚不明确，且不同地区对&#x27;轻触式&#x27;监管的解释可能存在显著差异。AI用户个人数据处理的合规性问题尤其复杂，因为它涉及到法律和政策的新发展，以及如何在不同法域的不同解读之间找到平衡。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">European Approach to Artificial Intelligence</span></div><div class="paper-item"><span class="pt">Supporting Innovation through AI Regulatory Sandboxes</span></div><div class="paper-item"><span class="pt">State of the Digital Decade 2024</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">New Government Policy Shows Japan Favors a Light Touch for AI</span></div><div class="paper-item"><span class="pt">Japan&#x27;s New AI Act</span></div><div class="paper-item"><span class="pt">Japan&#x27;s AI Promotion Act</span></div><div class="paper-item"><span class="pt">US AI Policy Framework</span></div><div class="paper-item"><span class="pt">AI Policy: Global Stakes, Local Governance</span></div><div class="paper-item"><span class="pm">...及其他 10 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>AI和数据隐私法律框架的复杂性可能导致模型对法律冲突和合规需求的误解。</li><li>在处理不同司法管辖区的法律法规时，模型可能忽略特定法律条文、时间表或评估标准，尤其是对于欧盟的复杂法规。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">在一个跨国创意项目中，AI生成了一幅数字艺术作品，该作品被指控侵犯了某中国艺术家作品的版权。根据AI LEAD Act和中国人工智能监管新规，美国是否需要遵循中国较为严格的版权保护标准，尤其在AI生成内容的归属权问题上，各法域将如何解释这些法条？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_100</strong></span>
+            <span class="m">法域: <strong>US, CN</strong></span>
+            <span class="m">基线质量: <strong>0.125</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>AI生成内容的法律归属在国际法域中仍是一个未完全解决的开放性问题。不同法域对版权和知识产权的严格程度差异化，尤其在面对实际案例时，法条解读的灰色地带可能引发截然不同的法律判断。此外，近年来相关法律的修订也使得问题更加复杂，需要深入了解法条的演变轨迹。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">AI LEAD Act</span></div><div class="paper-item"><span class="pt">Youth AI Privacy Act</span></div><div class="paper-item"><span class="pt">GUARD Act</span></div><div class="paper-item"><span class="pt">中国人工智能监管新规</span></div><div class="paper-item"><span class="pt">新一代人工智能伦理规范</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Shanghai Court Holds Developers Criminally Liable</span></div><div class="paper-item"><span class="pt">Federal Court Holds AI Chats Are Not Privileged</span></div><div class="paper-item"><span class="pt">US Supreme Court Declines on AI Authorship</span></div><div class="paper-item"><span class="pt">AlienChat涉案AI聊天软件判决</span></div><div class="paper-item"><span class="pt">AI时代“快播案”</span></div><div class="paper-item"><span class="pt">国内首例涉黄AI聊天App二审审判</span></div><div class="paper-item"><span class="pt">最高法加大科技创新知识产权司法保护案例</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">United States: Navigating the Laws of Chatbots and AI Assistants</span></div><div class="paper-item"><span class="pt">Summary of Artificial Intelligence 2025 Legislation</span></div><div class="paper-item"><span class="pt">Chatbot Developers Brace for Impending Wave of State Regulation</span></div><div class="paper-item"><span class="pt">Beyond Section 230: Principles for AI Governance</span></div><div class="paper-item"><span class="pt">Regulating Artificial Intelligence: U.S. and International Approaches</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨国版权法律适用性问题复杂，可能导致误解</li><li>AI内容归属权在不同法域的解读差异较大，容易混淆</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家中国科技公司与一家美国半导体公司发生纠纷，中国公司向美国公司主张标准必要专利（SEP）侵权，并要求在全球范围内签订FRAND许可协议，许可费总额高达20亿美元。中国公司主张的FRAND条款与U.S.和E.U.的解读存在显著分歧，特别是在许可费率和非歧视条款上。问题是：在中国、美国和欧洲是否有类似判例支持中国公司的主张？判例的裁判逻辑是什么？这些判例之间的可比性如何，尤其是在不同法域对FRAND条款的解读有分歧的情况下？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_007</strong></span>
+            <span class="m">法域: <strong>CN, US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.125</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>科技和半导体行业跨国公司之间的法律纠纷，围绕着全球标准必要专利（SEP）和FRAND条款的跨法域解读，涉及大量财务金额。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">source_conflict</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要deep research，因为它涉及跨多个法域的法律文本和判例的详细对比分析。不同法域对FRAND条款的解读差异，以及如何在不同经济体的法律体系中实现协调，为问题的解决增添了复杂性。同时，这也需要对涉案企业在不同行政和司法管辖下的经济和政策背景有深入的了解。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">TCL诉爱立信案</span></div><div class="paper-item"><span class="pt">中兴诉三星案</span></div><div class="paper-item"><span class="pt">(2022)最高法知民终817号判决</span></div><div class="paper-item"><span class="pt">6件司法调解典型案例</span></div><div class="paper-item"><span class="pt">Chinese Patent Litigation Data</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">2025：全球标准必要专利纠纷总览</span></div><div class="paper-item"><span class="pt">全球主要国家和地区的SEP政策解读</span></div><div class="paper-item"><span class="pt">全球标准必要专利政策走向及中国的因应</span></div><div class="paper-item"><span class="pt">标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关</span></div><div class="paper-item"><span class="pt">日本法院制定标准必要专利诉讼指南</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>全球FRAND许可费裁决涉及多法域解释，可能导致不一致信息</li><li>复杂的跨国法律纠纷容易混淆不同法域的司法裁判逻辑</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">某美国科技公司被指控未能妥善保护用户数据，导致上千万用户信息泄露，并因此在美国被罚款1亿美元。在欧盟，该公司面临GDPR调查，并可能遭受更高的罚款。是否有案例分析显示美国和欧盟在此类数据隐私违规行为上的不同处置方式及罚款标准？各法域的判例是否存在裁判逻辑差异？如何评价在此背景下跨法域公司面临的合规挑战？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_023</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.375</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">temporal_evolution</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需深入对比美国和欧盟判例及处罚法规，尤其是在数据保护相关立法发展与跨境监管策略的演变上。裁判者的文化背景、法律传统及当前政策环境会影响判决倾向，需对技术合规与法律责任博弈有深刻理解。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION</span></div><div class="paper-item"><span class="pt">21 CFR Part 21 -- Protection of Privacy</span></div><div class="paper-item"><span class="pt">S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY</span></div><div class="paper-item"><span class="pt">General Data Protection Regulation</span></div><div class="paper-item"><span class="pt">Second Report on the application of the General Data Protection Regulation</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">U.S. Privacy Litigation Update: August 2025 Decisions</span></div><div class="paper-item"><span class="pt">Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split</span></div><div class="paper-item"><span class="pt">CJEU ruling on GDPR Damages</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Data protection laws in the United States</span></div><div class="paper-item"><span class="pt">Year in Review: The Top Ten US Data Privacy Developments from</span></div><div class="paper-item"><span class="pt">Data Protection and Privacy Law: An Introduction</span></div><div class="paper-item"><span class="pt">Retrospective: 2025 in state data privacy law</span></div><div class="paper-item"><span class="pt">The Patchwork of Data Privacy Laws: Recent Developments and Implications</span></div><div class="paper-item"><span class="pm">...及其他 12 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>美国与欧盟的数据保护法具有复杂的法域差异，可能导致混淆判例</li><li>跨法域合规问题因法律变化和不同判例解释可能导致误解</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在美国和欧盟，某家跨国技术企业在开发用于金融分析的AI工具时遭遇数次误判，导致客户资产重大损失（金额超过500万美元），在责任认定上是否存在类似判例？如何看待美国产品责任法与欧盟综合分析下的裁判逻辑差异？不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_105</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>2.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要深度研究，因为其涉及美国和欧盟对AI责任的不同法律解释路径，要求检索复杂跨境判例。AI技术的迅速发展与传统法律理论的冲突，使问题的灰色地带更加复杂，需在多个法律领域交叉分析。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">States&#x27; Right to Regulate AI Act</span></div><div class="paper-item"><span class="pt">AI for America Act</span></div><div class="paper-item"><span class="pt">American Artificial Intelligence Leadership and Uniformity Act</span></div><div class="paper-item"><span class="pt">AI Accountability Act</span></div><div class="paper-item"><span class="pt">AI LEAD Act</span></div><div class="paper-item"><span class="pt">Regulation (EU) 2016/679</span></div><div class="paper-item"><span class="pt">Commission Regulation (EU) 2017/1151</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">California Court&#x27;s Warning on AI</span></div><div class="paper-item"><span class="pt">California Attorney AI Fine Case</span></div><div class="paper-item"><span class="pt">California Supreme Court AI Error Case</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Artificial Intelligence 2025 Legislation Summary</span></div><div class="paper-item"><span class="pt">U.S. State AI Law Tracker</span></div><div class="paper-item"><span class="pt">AI Watch: U.S. Regulatory Tracker</span></div><div class="paper-item"><span class="pt">California AI Privacy Legislation Guide</span></div><div class="paper-item"><span class="pt">New State AI Laws Effective 2026</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>跨法域裁判逻辑差异复杂</li><li>不同法域判例之间的可比性较难评价</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家位于加州的技术公司因使用未经授权的人工智能工具进行大规模数据处理被罚款200万美元，该公司质疑罚款合理性并提出上诉。是否存在类似的判例可以用于参考？这些判例在美国和欧盟的裁判逻辑有何异同？特别是考虑到AI法条的近年变革，哪些法律适用于该场景？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_107</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.375</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要检索两个不同法域的类似判例，并分析判决背后的法律逻辑。同时，追踪AI相关法规的近年修订变化，以确定法律适用性的准确性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">States&#x27; Right to Regulate AI Act</span></div><div class="paper-item"><span class="pt">AI for America Act</span></div><div class="paper-item"><span class="pt">American Artificial Intelligence Leadership and Uniformity Act</span></div><div class="paper-item"><span class="pt">AI Accountability Act</span></div><div class="paper-item"><span class="pt">AI LEAD Act</span></div><div class="paper-item"><span class="pt">Regulation (EU) 2016/679</span></div><div class="paper-item"><span class="pt">Commission Regulation (EU) 2017/1151</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">California Court&#x27;s Warning on AI</span></div><div class="paper-item"><span class="pt">California Attorney AI Fine Case</span></div><div class="paper-item"><span class="pt">California Supreme Court AI Error Case</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Artificial Intelligence 2025 Legislation Summary</span></div><div class="paper-item"><span class="pt">U.S. State AI Law Tracker</span></div><div class="paper-item"><span class="pt">AI Watch: U.S. Regulatory Tracker</span></div><div class="paper-item"><span class="pt">California AI Privacy Legislation Guide</span></div><div class="paper-item"><span class="pt">New State AI Laws Effective 2026</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>AI法条变革较新，缺乏既定先例</li><li>美国与欧盟AI法律在细节和适用上可能存在重大差异</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">JP</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在某跨国公司利用轻触式AI技术争夺市场份额的情况下，考虑US、JP、EU三地监管差异，法院会如何判定AI技术应用导致的竞争不正当性？监管机构可能采取何种行动？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_056</strong></span>
+            <span class="m">法域: <strong>US, JP, EU</strong></span>
+            <span class="m">基线质量: <strong>2.0</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>此问题涉及三个法域的监管差异，且日本和美国的政策导向不如欧盟法律明确，这使得司法解读不一。此外，跨国公司的影响力和政治游说可能影响裁决，需综合考量法律条文与不同法官的理解偏向。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">European Approach to Artificial Intelligence</span></div><div class="paper-item"><span class="pt">Supporting Innovation through AI Regulatory Sandboxes</span></div><div class="paper-item"><span class="pt">State of the Digital Decade 2024</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">New Government Policy Shows Japan Favors a Light Touch for AI</span></div><div class="paper-item"><span class="pt">Japan&#x27;s New AI Act</span></div><div class="paper-item"><span class="pt">Japan&#x27;s AI Promotion Act</span></div><div class="paper-item"><span class="pt">US AI Policy Framework</span></div><div class="paper-item"><span class="pt">AI Policy: Global Stakes, Local Governance</span></div><div class="paper-item"><span class="pm">...及其他 10 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>差异化的监管框架可能产生复杂的法律解释问题</li><li>轻触式AI技术的定义和应用可能未统一，容易导致误解</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">A公司为一家大型科技企业，总部位于中国，主要销售智能手机和其他电子设备。B公司为一家美国专利持有公司，拥有多项标准必要专利（SEP）。双方在中国法院和美国法院就FRAND条款达成的许可费用产生了争议，且涉及金额达数亿美元。A公司认为B公司在谈判中的要求不符合FRAND原则，而B公司则认为A公司的提议未充分考虑其SEP的市场价值。鉴于各法域对FRAND条款的理解和适用存在差异，以及法院对该类纠纷的裁判逻辑不同，需分析中国、美国及欧盟是否有类似判例，这些判例的裁判逻辑是什么，不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_008</strong></span>
+            <span class="m">法域: <strong>CN, US, EU</strong></span>
+            <span class="m">基线质量: <strong>2.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>A公司与B公司的争议涉及中美两国法院，因许可费用的谈判未达成一致，引发多场全球诉讼，且各法域对FRAND原则的适用标准不一致。在判案时，中国法院注重市场经济体制下的竞争政策，而美国法院可能更偏向专利权人的利益。欧盟法院则可能寻求在专利权人与市场竞争之间的平衡。学者和顶尖律师对FRAND条款的解读亦存在明显分歧。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">source_conflict</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入检索并分析不同法域在类似案件中的判例，以理解各法域的裁判逻辑。不同法域的政策环境与司法倾向加大了判例间比较的复杂性。裁判者的主观倾向、法域内的政治环境等非法条因素对判例结果的影响亦需仔细考量。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">TCL诉爱立信案</span></div><div class="paper-item"><span class="pt">中兴诉三星案</span></div><div class="paper-item"><span class="pt">(2022)最高法知民终817号判决</span></div><div class="paper-item"><span class="pt">6件司法调解典型案例</span></div><div class="paper-item"><span class="pt">Chinese Patent Litigation Data</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">2025：全球标准必要专利纠纷总览</span></div><div class="paper-item"><span class="pt">全球主要国家和地区的SEP政策解读</span></div><div class="paper-item"><span class="pt">全球标准必要专利政策走向及中国的因应</span></div><div class="paper-item"><span class="pt">标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关</span></div><div class="paper-item"><span class="pt">日本法院制定标准必要专利诉讼指南</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>不同法域对FRAND原则的解读差异可能导致回答中出现偏颇</li><li>有可能将个别案例的裁判逻辑过度概括或简化</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">SG</span>
+          </div>
+          <div class="q-text">在跨国金融科技公司的跨境支付中，其通过多国云存储服务传输用户数据，涉及金额超过五千万美元，面临合规风险管理问题。探讨在EU和SG法域中是否有类似判例？判例的裁判逻辑是什么？不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_077</strong></span>
+            <span class="m">法域: <strong>EU, SG</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">human_variable</span><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>问题需要比较分析不同法域的数据保护执行力度和判例处理；考察裁判者如何权衡隐私保护与商业利益。另外，不同法域间的法律概念和政策取向存在复杂差异，需要详尽研究两地的实际执行情况和历史判例。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Standard Contractual Clauses for data transfers to Third countries</span></div><div class="paper-item"><span class="pt">Data Transfer Provisions in Regulation (EU) 2016/679</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 2010</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 1998</span></div><div class="paper-item"><span class="pt">Payment Services Regulations 2019</span></div><div class="paper-item"><span class="pt">Payment Services Act 2019</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Unnamed SGCA case</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">International data transfers</span></div><div class="paper-item"><span class="pt">Chapter 13: Cross-Border Data Transfers</span></div><div class="paper-item"><span class="pt">Cross-Border Data Transfers: A Global Guide to Compliance</span></div><div class="paper-item"><span class="pt">Cross-border data transfers in fintech: Navigating post-GDPR</span></div><div class="paper-item"><span class="pt">EU Cross Border Data Transfers Impact Assessment</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>可能无法找到完全类似的判例</li><li>EU和SG若法律条文差异大，比较分析可能出现误导</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在AI生成内容的版权责任问题上，一家专注于生成音乐内容的AI公司在没有明确标注人类创作者情况下生成了大量作品并进行了商业销售，其中涉及金额高达数百万美元。在美国和欧盟法域中是否有类似判例可以参照？这些判例对‘创作者’的定义和AI生成作品的理解是什么？不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_087</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>1.2</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家大型跨国AI公司利用其先进的算法生成音乐内容，并在全球范围内进行商业销售，销售额超过数百万美元；其中没有明确确定人类创作者。该公司的行为引起了业界对AI生成作品版权保护的关注和争议，特别是在不同法域间的版权责任判定。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要deep research因为涉及的法律区域在创作者定义上的理解不同，而且没有明确的国际法律；裁判者对算法创新保护力度的不一致、当地政策环境可能影响裁判倾向，加之商业利益博弈，加剧了案件解决的复杂性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">17 U.S. Code § 501</span></div><div class="paper-item"><span class="pt">European Parliament resolution on intellectual property rights for AI technologies</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Thaler v. Perlmutter</span></div><div class="paper-item"><span class="pt">GEMA v OpenAI</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Copyright and Artificial Intelligence</span></div><div class="paper-item"><span class="pt">Generative Artificial Intelligence and Copyright Law</span></div><div class="paper-item"><span class="pt">Legislation Watch for AI Developers and Registered Copyright Owners</span></div><div class="paper-item"><span class="pt">AI, Copyright, and the Law</span></div><div class="paper-item"><span class="pt">Artificial Intelligence and Copyright</span></div><div class="paper-item"><span class="pm">...及其他 8 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>AI生成内容的版权责任在法律实践中尚不明确，可能导致误导性解读。</li><li>不同法域之间的判例和立法差异可能导致结论不一致或误解。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">某初创公司在美国开发的一款混合量子计算芯片引起了三国的关注，该芯片使用了一种新材料和算法，声称可以显著提高计算效率，该技术是否应受出口管制？如何根据50 U.S. Code § 4817、15 USC Ch. 114、European Commission Proposal on Quantum Technologies及相关文献进行判定？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_082</strong></span>
+            <span class="m">法域: <strong>US, EU, CN</strong></span>
+            <span class="m">基线质量: <strong>2.0</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>初创公司位于美国，同时在美国、中国及欧洲设有实验室，并计划将新芯片出口至欧洲和中国以进一步研发及商业化。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>挑战在于新材料和算法是否符合‘新兴技术’的现有定义，并在美国、欧洲及中国的法律框架下适用。需要仔细权衡量子计算芯片创新与国家安全的利弊，加上各国近年来法律国际间修订趋向不同，加大了解释复杂性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">50 U.S. Code § 4817</span></div><div class="paper-item"><span class="pt">15 USC Ch. 114: National Quantum Initiative</span></div><div class="paper-item"><span class="pt">Implementation of Additional Export Controls</span></div><div class="paper-item"><span class="pt">European Commission Proposal on Quantum Technologies</span></div><div class="paper-item"><span class="pt">European Commission and High Representative Paper</span></div><div class="paper-item"><span class="pt">Regulation on Member States&#x27; Export Policies</span></div><div class="paper-item"><span class="pt">EU Strategy to Enhance European Economic Security</span></div><div class="paper-item"><span class="pt">EU Commission Staff Working Document on Quantum Technologies</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Quantum Computing Laws and Regulations 2026</span></div><div class="paper-item"><span class="pt">Quantum Technology and Export Controls</span></div><div class="paper-item"><span class="pt">U.S. Economic Security</span></div><div class="paper-item"><span class="pt">EU Issues 2025 Update to Dual-Use Control List</span></div><div class="paper-item"><span class="pt">Export controls and quantum technologies: the next strategic frontier</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>多国法律法规的复杂性和差异性</li><li>新兴技术出口管制的动态性和不确定性</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在国际电子商务平台上，跨国公司X计划通过云服务提供商在多个法域之间传输消费者用户数据。X公司在传输数据时，既遵循GDPR Chapter 5的标准合同条款，又进行中国《个人信息保护法》中要求的合规评估。然而，当云服务提供商在第三国设有数据中心时，该第三国既未获得欧盟的充足性决定，也未被中国列为允许传输数据的国家。现有法律框架如何适用于这种情况？中国和欧盟会得出什么不同结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_001</strong></span>
+            <span class="m">法域: <strong>CN, EU</strong></span>
+            <span class="m">基线质量: <strong>0.55</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>跨国公司X利用在第三国的云服务提供商进行国际数据传输，同时受制于欧盟和中国两种数据保护法的相应要求。X需要在遵循不同法域的同时，面临数据中心位于未受充分认可的第三国的挑战。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>此问题难在证明在未获得充足性决定或未被认可为允许数据传输国家的情况下，如何协调兼顾CN和EU的法律要求。此外，由于法域差异，评估一个国家是否构成&#x27;第三国&#x27;的标准和结果可能不同，加大了解释复杂性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">GDPR Chapter 5</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Schrems II案</span></div><div class="paper-item"><span class="pt">广州互联网法院判决</span></div><div class="paper-item"><span class="pt">EU Court Data Privacy Framework Ruling</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">《中华人民共和国个人信息保护法》与欧盟《通用数据保护条例》对比</span></div><div class="paper-item"><span class="pt">出海企业必读之欧盟数据立法综述</span></div><div class="paper-item"><span class="pt">跨境数据传输系列——个人信息如何出境</span></div><div class="paper-item"><span class="pt">论国家机关处理的个人信息跨境流动制度</span></div><div class="paper-item"><span class="pt">十国/地区数据保护法十大合规要点对比</span></div><div class="paper-item"><span class="pm">...及其他 15 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>可能无法准确反映GDPR和PIPL的复杂合规要求，特别是针对未充分认可的第三国。</li><li>不同司法辖区的法律适用和合规评估方法可能被过度简化，容易导致误解。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">US</span>
+          </div>
+          <div class="q-text">在EU和US管辖范围内，一家AI创业公司推出了一款基于AI的招聘平台，该平台可以筛选并推荐候选人。据称，这款AI可能在推荐过程中存在偏见及歧视问题。根据European Parliament resolution on artificial intelligence in criminal law和Texas Responsible Artificial Intelligence Governance Act，这种AI应用是否构成&#x27;滥用&#x27;或&#x27;特定禁用实践&#x27;？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_026</strong></span>
+            <span class="m">法域: <strong>EU, US</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于欧洲的AI公司开发了一款全球招聘平台，使用AI技术自动筛选并推荐候选人。AI系统被发现偏向于推荐某特定族群的候选人而非其他人群，这引起了一些社会组织的投诉。此种偏见在不同法域内是否被视为合规性问题存在争议。EU可能依据其AI法案定义这种偏见为滥用，而在US，Texas Responsible Artificial Intelligence Governance Act并未明确对此类AI偏见进行定义，导致合规性审查存在不确定性。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">source_conflict</span></div>
+            <h5>为什么难</h5>
+            <p>各法域对AI应用中的&#x27;滥用&#x27;和&#x27;特定禁用实践&#x27;的定义存在差异，特别是这些法律定义在边缘案例中的适用性不尽相同。此外，法规原文与学者、法律从业人员的解读之间存在显著差异，导致在偏见是否构成法律意义上的滥用存在争议。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">European Parliament resolution on artificial intelligence in criminal law</span></div><div class="paper-item"><span class="pt">Texas Responsible Artificial Intelligence Governance Act</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Federal Judge Rules on AI-Generated Documents</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">New AI Regulations Come into Play with the Texas Responsible AI Governance Act</span></div><div class="paper-item"><span class="pt">REGULATION - State Bar of Texas</span></div><div class="paper-item"><span class="pt">Texas Signs Responsible AI Governance Act Into Law</span></div><div class="paper-item"><span class="pt">Texas Enacts New AI Law</span></div><div class="paper-item"><span class="pt">Texas Enacts AI Consumer Protection Law</span></div><div class="paper-item"><span class="pm">...及其他 14 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨法域定义不同可能导致理解误差</li><li>AI偏见定义模糊可能引发误解</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">某大型跨国社交媒体平台A在美国和中国均已展开业务，其用户生成了大量AI生成内容。某用户在该平台上发布了一段AI生成的视频，造成了中国某高科技公司的商业损失约500万美元，请问法院可能如何判决？中国的监管机构可能采取哪些措施？美国和中国在判决标准、法官倾向及政治环境等方面会有什么不同？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_094</strong></span>
+            <span class="m">法域: <strong>US, CN</strong></span>
+            <span class="m">基线质量: <strong>0.375</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">factual_constraints</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>问题涉及美国和中国两个截然不同的司法体系和社会背景，需要详细分析法律条文、案例、以及学术观点。平台在不同法域的运营策略、潜在的政治压力和社会价值观对司法结果有重要影响，使得对平台责任的预判变得更加复杂。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Section 230</span></div><div class="paper-item"><span class="pt">中华人民共和国统计法</span></div><div class="paper-item"><span class="pt">最高人民法院发布</span></div><div class="paper-item"><span class="pt">依法妥善审理涉人工智能案件</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">文娱资讯•双周报| 2026年第6期</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Beyond Section 230: Principles for AI Governance</span></div><div class="paper-item"><span class="pt">Beyond the Search Bar: Generative AI&#x27;s Section 230 Tightrope Walk</span></div><div class="paper-item"><span class="pt">Trump America AI Act: sweeping liability, limited preemption</span></div><div class="paper-item"><span class="pt">The Future of Online Expression and Innovation Depends on Robust Section 230 Protections</span></div><div class="paper-item"><span class="pt">Section 230 Immunity and Generative Artificial Intelligence</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>Section 230在美国的适用可能会让模型误认为它可以在中国法律体系下同样适用</li><li>中美两国的法律及政治环境差异复杂，易导致对判决趋势的解读错误</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家总部位于中国的科技公司因收购欧洲一家数据分析企业，需要在两地之间大量传输用户数据，涉及金额达两千万美金。现公司担心欧盟的GDPR罚款风险，以及中国《个人信息保护法》对数据出境的限制。在这种情况下，中国和欧盟是否有类似判例显示数据传输的合法性？判例的裁判逻辑是什么？两地判例在裁判逻辑和执行力度上的异同如何？考虑到GDPR 和《个人信息保护法》的近期修订，这种数据传输行为是否仍有合法路径？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_003</strong></span>
+            <span class="m">法域: <strong>CN, EU</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家中国科技公司需传输数据给其新收购的欧洲数据分析企业，涉及金额两千万美金，担忧两地法律的合规性。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>此问题要求检索中国和欧盟关于跨境数据传输的最新判例和法律修订，评估判例相似性及法律适用性。中欧法律框架的复杂性和近期修订对比增加了研究难度。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">GDPR Chapter 5</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Schrems II案</span></div><div class="paper-item"><span class="pt">广州互联网法院判决</span></div><div class="paper-item"><span class="pt">EU Court Data Privacy Framework Ruling</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">《中华人民共和国个人信息保护法》与欧盟《通用数据保护条例》对比</span></div><div class="paper-item"><span class="pt">出海企业必读之欧盟数据立法综述</span></div><div class="paper-item"><span class="pt">跨境数据传输系列——个人信息如何出境</span></div><div class="paper-item"><span class="pt">论国家机关处理的个人信息跨境流动制度</span></div><div class="paper-item"><span class="pt">十国/地区数据保护法十大合规要点对比</span></div><div class="paper-item"><span class="pm">...及其他 15 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>GDPR和《个人信息保护法》的复杂性以及两者的最新修订可能导致模型忽视细节差异。</li><li>中欧判例的裁判逻辑和执行力度可能不同，模型需全面考虑不同法域的法律文化与实践，但可能忽略。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">某大型科技公司因在线用户数据收集未明确告知用户而被起诉，涉及金额高达1亿美元。在US和EU的不同判例中，是否存在类似案例？这些案件的判决逻辑是什么？US与EU在民事处罚上对于公共与民营企业有何差异？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_021</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.3</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>某大型科技公司在未明确告知用户的情况下收集用户数据，并将数据用于精准广告，导致遭受隐私保护组织的大规模集体诉讼。涉案公司在全球拥有广泛市场影响力，涉及索赔金额约为1亿美元。公司事务主要在美国进行，但也在欧盟有大量业务运营。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">execution_disparity</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要跨法域解析判例，并比较US与EU在民事处罚方面存在的法律适用及案例判决的差异。由于法域间监管文化和法律体系不同，因此需要对多个判例进行深入的比较分析，并结合相关法条的解读，才能给出明确答案。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION</span></div><div class="paper-item"><span class="pt">21 CFR Part 21 -- Protection of Privacy</span></div><div class="paper-item"><span class="pt">S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY</span></div><div class="paper-item"><span class="pt">General Data Protection Regulation</span></div><div class="paper-item"><span class="pt">Second Report on the application of the General Data Protection Regulation</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">U.S. Privacy Litigation Update: August 2025 Decisions</span></div><div class="paper-item"><span class="pt">Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split</span></div><div class="paper-item"><span class="pt">CJEU ruling on GDPR Damages</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Data protection laws in the United States</span></div><div class="paper-item"><span class="pt">Year in Review: The Top Ten US Data Privacy Developments from</span></div><div class="paper-item"><span class="pt">Data Protection and Privacy Law: An Introduction</span></div><div class="paper-item"><span class="pt">Retrospective: 2025 in state data privacy law</span></div><div class="paper-item"><span class="pt">The Patchwork of Data Privacy Laws: Recent Developments and Implications</span></div><div class="paper-item"><span class="pm">...及其他 12 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>US和EU的法律框架差异可能导致误解</li><li>判例检索过程中可能出现不准确的类比</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">JP</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">日本的半导体公司在中国销售其专利产品，遭遇本土公司逆向工程导致潜在侵权，日本公司的法律团队如何在中国提起侵权诉讼？这一问题是否有中国和日本的类似判例以及裁判逻辑？两国之间判例的可比性如何，近期法律规定又有哪些变化？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_050</strong></span>
+            <span class="m">法域: <strong>JP, CN</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家日本半导体公司成功研发并在中国销售新型专利芯片，总价值超过1千万美元。当地公司对该芯片进行逆向工程并生产类似产品，涉嫌侵权；日本公司欲在中国进行法律维权。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>此问题需要核查跨法域的判例及法律变化，例如中日之间的判例如何影响跨境专利侵权案件的处理。判例个数和法律修改需要详细研究，尤其是中国知识产权法在近年来的变化对跨境侵权诉讼的影响。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">日本知识产权高等法院大合议庭判决</span></div><div class="paper-item"><span class="pt">日本最高法院关于服务器系统专利侵权案</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Japan: Supreme Court Decision — Closing a loophole for patent ...</span></div><div class="paper-item"><span class="pt">Patent Infringement by Cross-border Acts</span></div><div class="paper-item"><span class="pt">Japanese Supreme Court&#x27;s key decisions on cross-border patent ...</span></div><div class="paper-item"><span class="pt">Japanese Supreme Court: Building a System That Includes a Server ...</span></div><div class="paper-item"><span class="pt">IP High Court Finds Patent Infringement on Cross-Border Network ...</span></div><div class="paper-item"><span class="pm">...及其他 5 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>缺乏具体的中国相关判例引用</li><li>跨境知识产权纠纷的复杂性导致法律建议可能混淆</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">在美国某公司将其开发的量子计算软件作为开源项目发布至GitHub，供全球开发者免费使用的情况中，美国、欧盟和中国的现有法律框架对这种技术传播的跨境监管如何适用？各法域可能得出什么不同结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_080</strong></span>
+            <span class="m">法域: <strong>US, EU, CN</strong></span>
+            <span class="m">基线质量: <strong>0.43</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>某美国公司开发了一款量子计算软件，并计划以开源许可证的方式发布在GitHub，其代码可能被全球开发者在不同法域内使用甚至进一步发展。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该事实场景落在法条解释的灰色地带，因为开源软件的国际传播不涉及传统意义上的“出口”，但可能被视为技术外泄，全球法律框架对此规范混乱且交叉。需要深入研究各国对技术出口和安全的定义，以及现有立法的解释空间。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">50 U.S. Code § 4817</span></div><div class="paper-item"><span class="pt">15 USC Ch. 114: National Quantum Initiative</span></div><div class="paper-item"><span class="pt">Implementation of Additional Export Controls</span></div><div class="paper-item"><span class="pt">European Commission Proposal on Quantum Technologies</span></div><div class="paper-item"><span class="pt">European Commission and High Representative Paper</span></div><div class="paper-item"><span class="pt">Regulation on Member States&#x27; Export Policies</span></div><div class="paper-item"><span class="pt">EU Strategy to Enhance European Economic Security</span></div><div class="paper-item"><span class="pt">EU Commission Staff Working Document on Quantum Technologies</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Quantum Computing Laws and Regulations 2026</span></div><div class="paper-item"><span class="pt">Quantum Technology and Export Controls</span></div><div class="paper-item"><span class="pt">U.S. Economic Security</span></div><div class="paper-item"><span class="pt">EU Issues 2025 Update to Dual-Use Control List</span></div><div class="paper-item"><span class="pt">Export controls and quantum technologies: the next strategic frontier</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>法律框架跨境适用的复杂性</li><li>各法域对开源技术传播的不同监管要求</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在一项全球性技术标准开发过程中，中国公司A按照中国的严格SEP执行方式，向美国公司B提出专利许可要求。在中国，公司A的要求可能符合《专利法》的规定，而在美国，因缺乏直接法条，可能需依据判例法和政府外部政策解读。如何理解中国严格执行的影响与美国判例的自由裁量权之间的区别？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_005</strong></span>
+            <span class="m">法域: <strong>CN, US, EU</strong></span>
+            <span class="m">基线质量: <strong>2.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>中国公司A参与了国际标准化组织的工作，认为其专利是标准必要专利（SEP）并要求美国公司B支付许可费用。美国公司B并不认同这一要求，认为该标准并不在美国USPTO注册为SEP，且美国法律缺乏明确对SEP的具体执行标准。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>这一问题的难点在于需要对比不同法域的SEP法律框架，深入研究各国的判例与相关法律解释。尤其在美国和EU，如何在缺乏明确法条的情况下，通过判例和政策解读来构建法律论证，是一个需要深入研究的重要问题。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">TCL诉爱立信案</span></div><div class="paper-item"><span class="pt">中兴诉三星案</span></div><div class="paper-item"><span class="pt">(2022)最高法知民终817号判决</span></div><div class="paper-item"><span class="pt">6件司法调解典型案例</span></div><div class="paper-item"><span class="pt">Chinese Patent Litigation Data</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">2025：全球标准必要专利纠纷总览</span></div><div class="paper-item"><span class="pt">全球主要国家和地区的SEP政策解读</span></div><div class="paper-item"><span class="pt">全球标准必要专利政策走向及中国的因应</span></div><div class="paper-item"><span class="pt">标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关</span></div><div class="paper-item"><span class="pt">日本法院制定标准必要专利诉讼指南</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>中美两国法律体系和SEP相关政策的区别可能导致理解上的分歧</li><li>有关SEP的具体执行标准和判例可能因法律解释的不同而产生争议</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">JP</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家公司开发了一款利用AI进行实时数据分析的创新产品，该产品能够根据社交媒体动态实时调整营销策略。该公司希望在EU、US和JP市场上线，但各地的轻触式AI监管框架对其影响有何不同？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_055</strong></span>
+            <span class="m">法域: <strong>US, JP, EU</strong></span>
+            <span class="m">基线质量: <strong>1.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>公司A发布了一款AI驱动的实时社交媒体分析工具，用于动态营销策略调整。其计划在欧盟、美国和日本市场推出，考虑到各法域对轻触式监管的不同规定，该公司的合规策略需如何调整？</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要跨三个法域的法规深入研究，以确定怎样的AI监管条款在各地适用。由于EU有详细规定而US和JP以政策为主，且JP新的AI法律对现有法规形成挑战，使得这些法律条款的解读尤为复杂。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">European Approach to Artificial Intelligence</span></div><div class="paper-item"><span class="pt">Supporting Innovation through AI Regulatory Sandboxes</span></div><div class="paper-item"><span class="pt">State of the Digital Decade 2024</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">New Government Policy Shows Japan Favors a Light Touch for AI</span></div><div class="paper-item"><span class="pt">Japan&#x27;s New AI Act</span></div><div class="paper-item"><span class="pt">Japan&#x27;s AI Promotion Act</span></div><div class="paper-item"><span class="pt">US AI Policy Framework</span></div><div class="paper-item"><span class="pt">AI Policy: Global Stakes, Local Governance</span></div><div class="paper-item"><span class="pm">...及其他 10 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>各地AI监管框架的具体差异可能导致误解</li><li>缺乏对特定市场合规要求的深入分析可能导致不当建议</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">某跨国金融公司在无意中违反反洗钱法规被发现，涉及金额为3000万美元，该公司在美国和欧盟均设有运营机构。请考察在US与EU下是否有类似判例，这些判例的裁判逻辑如何？不同法域判例之间是否存在可比性，尤其是在判罚的力度与合规措施方面的差异？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_032</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>1.0</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家跨国投资公司因信息技术系统漏洞导致不当交易，涉及金额达3000万美元，其在金融服务行业内为中大型企业，并在US和EU均有主要业务运营。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">factual_constraints</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题要求寻找两个法域中关于反洗钱违规的具体判例，并比较其背后的判罚逻辑和合规执行力度。同时需要分析判例裁判者可能受政策环境和企业影响的主观倾向，特别是在执法力度的利弊中进行权衡。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Anti-Money Laundering Act of 2020</span></div><div class="paper-item"><span class="pt">Financial Crimes Enforcement Network Regulations</span></div><div class="paper-item"><span class="pt">CLOUD Act Amendments</span></div><div class="paper-item"><span class="pt">Directive 2021/PN 0423</span></div><div class="paper-item"><span class="pt">Directive (EU) 2024/1640</span></div><div class="paper-item"><span class="pt">Communication from the Commission 2020XC0513</span></div><div class="paper-item"><span class="pt">Proposal 2021/PC0421</span></div><div class="paper-item"><span class="pt">COM(2022) 554 final</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">ECJ Decision on Corporate Fines under AML Directive</span></div><div class="paper-item"><span class="pt">CJEU Ruling on Corporate AML Penalties</span></div><div class="paper-item"><span class="pt">CJEU Ruling on GDPR and AML/CFT</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">United States: the intricacies of money laundering laws</span></div><div class="paper-item"><span class="pt">History of Anti-Money Laundering Laws</span></div><div class="paper-item"><span class="pt">2025 Year-End Developments in Anti-Money Laundering</span></div><div class="paper-item"><span class="pt">Anti Money Laundering Laws and Regulations Report 2025-2026 USA</span></div><div class="paper-item"><span class="pt">Implications and Benefits of Cross-Border Funds Transmittal Reporting</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>跨法域的判例对比需要考虑到监管框架和司法解释的差异</li><li>复杂的合规措施可能导致误解或不完全对比</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家跨国金融科技公司因涉嫌洗钱活动被调查，涉案金额在500万到2000万美元之间。公司在美国和欧盟均有业务运营，国家监管部门对其进行了财务处罚。在这种情况下，美国和欧盟是否有类似的判例可以指导？这些判例的裁判逻辑是什么？不同法域之间的判例是否具有可比性，若有，如何？特别是考虑到美国《Anti-Money Laundering Act of 2020》与欧盟《Directive (EU) 2024/1640》的适用差异。</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_031</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家跨国金融科技公司运营于支付处理行业，其数据系统被发现涉及洗钱活动，影响金额界定在500万到2000万美元之间。该公司在美国和欧盟各被处罚，需研究两法域内是否有相应判例以提供指导。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">factual_constraints</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究，因为涉及复杂的跨国法律框架，以及各法域内对于洗钱行为的合规标准和执法力度的细微差异。必须检索并分析多个法域的真实判例，以理解不同法律系统对于同一事件的裁决逻辑和影响。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Anti-Money Laundering Act of 2020</span></div><div class="paper-item"><span class="pt">Financial Crimes Enforcement Network Regulations</span></div><div class="paper-item"><span class="pt">CLOUD Act Amendments</span></div><div class="paper-item"><span class="pt">Directive 2021/PN 0423</span></div><div class="paper-item"><span class="pt">Directive (EU) 2024/1640</span></div><div class="paper-item"><span class="pt">Communication from the Commission 2020XC0513</span></div><div class="paper-item"><span class="pt">Proposal 2021/PC0421</span></div><div class="paper-item"><span class="pt">COM(2022) 554 final</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">ECJ Decision on Corporate Fines under AML Directive</span></div><div class="paper-item"><span class="pt">CJEU Ruling on Corporate AML Penalties</span></div><div class="paper-item"><span class="pt">CJEU Ruling on GDPR and AML/CFT</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">United States: the intricacies of money laundering laws</span></div><div class="paper-item"><span class="pt">History of Anti-Money Laundering Laws</span></div><div class="paper-item"><span class="pt">2025 Year-End Developments in Anti-Money Laundering</span></div><div class="paper-item"><span class="pt">Anti Money Laundering Laws and Regulations Report 2025-2026 USA</span></div><div class="paper-item"><span class="pt">Implications and Benefits of Cross-Border Funds Transmittal Reporting</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>判例之间的法律适用差异可能导致误解</li><li>不同法律体系下的判例适用性比较复杂</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在欧盟与美国，是否存在类似判例支持或反对跨境专利侵权管辖权的扩张？具体判例的裁判逻辑是什么，不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_041</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>1.3</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于美国的科技公司在欧盟销售其专利保护产品，该产品被指侵权。涉及金额为5千万美元，欧盟法院试图依据《Brussels Convention》对专利有效性进行裁判，但其定义模糊，主流学者认为此类跨境管辖应慎重，而部分欧盟律师支持该管辖权的扩张。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">source_conflict</span></div>
+            <h5>为什么难</h5>
+            <p>问题涉及《Brussels Convention》的模糊解释，与美欧在专利管辖权上的制度差异，加之一方主张扩张而另一方主张谨慎，使得类似判例的检索与理解复杂化，需要对裁判逻辑深度分析。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Brussels Convention</span></div><div class="paper-item"><span class="pt">Directive Proposal on patentability</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Case C-539/03</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">The dawn and rise of the long-arm jurisdiction of the UPC</span></div><div class="paper-item"><span class="pt">European Courts Can Now Weigh In on U.S. Patents</span></div><div class="paper-item"><span class="pt">European Courts Test Enforcement of United States Patents</span></div><div class="paper-item"><span class="pt">A Revival of Cross-border Injunctions in Europe?</span></div><div class="paper-item"><span class="pt">EU courts can overreach in foreign patent disputes</span></div><div class="paper-item"><span class="pm">...及其他 7 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>复杂跨境管辖问题</li><li>不同法域之间的法律解释差异</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">SG</span>
+          </div>
+          <div class="q-text">一家全球金融科技公司在欧洲和新加坡设有分支机构，处理跨境支付数据，金额涉及数十亿欧元。该公司因数据传输过程中未能完全遵循Standard Contractual Clauses而面临不同法域的合规诉讼。在EU和SG，是否存在类似判例来帮助该公司理解裁判的逻辑？这些判例在执行力度和裁判观点上是否具有可比性？不同法域的对比分析包括裁判者的倾向、政策环境、以及各自利益的权衡如何影响判决？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_076</strong></span>
+            <span class="m">法域: <strong>EU, SG</strong></span>
+            <span class="m">基线质量: <strong>0.35</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>公司类型为全球金融科技公司，行为涉及跨境支付数据处理，金额涉及数十亿欧元。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>此问题需要deep research因为涉及多个法域，需深入了解EU和SG的裁判趋势和判例分析。同时，判例的可比性不仅是法律条文，还涉及裁判者的主观看法和背后的政策背景，需全面检索相关资料以提供准确且全面的法律服务。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Standard Contractual Clauses for data transfers to Third countries</span></div><div class="paper-item"><span class="pt">Data Transfer Provisions in Regulation (EU) 2016/679</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 2010</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 1998</span></div><div class="paper-item"><span class="pt">Payment Services Regulations 2019</span></div><div class="paper-item"><span class="pt">Payment Services Act 2019</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Unnamed SGCA case</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">International data transfers</span></div><div class="paper-item"><span class="pt">Chapter 13: Cross-Border Data Transfers</span></div><div class="paper-item"><span class="pt">Cross-Border Data Transfers: A Global Guide to Compliance</span></div><div class="paper-item"><span class="pt">Cross-border data transfers in fintech: Navigating post-GDPR</span></div><div class="paper-item"><span class="pt">EU Cross Border Data Transfers Impact Assessment</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>在跨法域比较中，容易忽略特定司法管辖区内的法律文化和政策导向差异。</li><li>可能没有深入分析每个法域中裁判者倾向和具体法规政策的执行情况。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="precedent">
+        <div class="q-bar bar-prec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-prec">有先例 Precedent</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家总部位于美国的人工智能公司，欲向欧盟出口其研发的智能制造技术，该技术同时用于军事设备生产。该公司预计此笔交易金额将达到500万美元，并可能在商业秘密保护与出口管制政策间产生冲突。各法域是否有关于双重用途技术出口及其对商业秘密保护影响的类似判例？判例的裁判逻辑是什么？不同法域判例之间的可比性如何？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_063</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>美国的一家人工智能公司计划向欧盟出口一种用于智能制造的技术。此技术可以在军事设备中使用，涉及双重用途出口管制和商业秘密保护领域。预计交易金额为500万美元。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>此问题需要深入研究，因为它涉及到不同法域中对双重用途技术出口和商业秘密保护的不同判例及法规。需要跨域查找相关判例与法条，并比较不同法域判例的裁判逻辑及其适用性，尤其是在不同法域对双重用途技术的定义与执行力度上的差异。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Federal Register Notice on Export Controls</span></div><div class="paper-item"><span class="pt">Export Administration Regulations - Definitions</span></div><div class="paper-item"><span class="pt">Delegated Regulation updating the EU dual-use export control list</span></div><div class="paper-item"><span class="pt">European Commission document COM</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Congressional Research Service Report</span></div><div class="paper-item"><span class="pt">CNAS Report on Dual-Use Technology</span></div><div class="paper-item"><span class="pt">Orrick Insight on Export Controls</span></div><div class="paper-item"><span class="pt">Regulatory Review Seminar Article</span></div><div class="paper-item"><span class="pt">Cleary Trade Watch Insight</span></div><div class="paper-item"><span class="pm">...及其他 14 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>复杂的法律交叉领域可能导致混淆</li><li>各法域政策差异可能导致解释不一致</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在某跨境医疗事件中，一名美国女性遭遇生育权利被侵犯，并寻求在中国和欧盟法域下获得保护。现有法律框架尤其是A/HRC/60/7和Gender Equality Strategy 2026-2030如何适用于此新情况？各法域会得出什么不同结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_015</strong></span>
+            <span class="m">法域: <strong>US, CN, EU</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一名美国女性在中国接受医疗过程中，其生育选择被不当限制，声称违反了她在欧盟和国际公约下的生育权。她寻求跨境法律救济，利用欧盟定义的SRHR保护框架，而中国的相关法律在此问题上较模糊。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>这问题需要深入研究，因为各法域对SRHR的法律解释可能存在不一致，并且相关法律文件在近年可能经历修订或解释变化。美国、中国和欧盟在SRHR上的实践与立法差异，使得跨境法律应用具有高度复杂性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">A/HRC/60/7</span></div><div class="paper-item"><span class="pt">Gender Equality Strategy 2026-2030</span></div><div class="paper-item"><span class="pt">Human rights and democracy in the world</span></div><div class="paper-item"><span class="pt">European Parliament resolution on gender-based violence</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Girl v. Guatemala</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Influencing SRHR Law Across Borders</span></div><div class="paper-item"><span class="pt">The State of International Human Rights Law on Sexual and Reproductive Health: An Overview</span></div><div class="paper-item"><span class="pt">US Compliance with International Human Rights Law Obligations</span></div><div class="paper-item"><span class="pt">Beyond Borders: The Global Impact of Violating Reproductive Human Rights</span></div><div class="paper-item"><span class="pt">Need for Compliance with International Human Rights Obligations</span></div><div class="paper-item"><span class="pm">...及其他 18 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨境生育权法律适用的复杂性</li><li>中美欧法律和文化背景差异导致的法律适用不确定性</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">UK</span>
+          </div>
+          <div class="q-text">在当前地缘政治背景下，一家在美国、欧盟和英国均有业务的跨国公司是否需要对因拒绝与受制裁国有交易往来的决定承担法律责任？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_122</strong></span>
+            <span class="m">法域: <strong>US, EU, UK</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家公司同时在美国、欧盟和英国运营。面对对某特定国家的新制裁，该公司暂停与该国家的所有金融交易和货物运输，担心违反 22 USC 9901 或 Commission Implementing Regulation (EU) 2020/1336。美国和英国当局强调国家安全，而欧盟试图平衡成员国合规。公司管理层担心潜在的法律责任和商业影响。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">human_variable</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题涉及法律框架和制裁合规性的交叉叠加效果，各法域对于制裁及其合规要求实施不同且有时矛盾的政策。需要考虑裁判者的倾向、各国利益博弈及公司管理层的商业策略，在新兴背景下审视并推断不同法域可能采取的裁判路径。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">22 USC 9901</span></div><div class="paper-item"><span class="pt">EU Single Harmonised Rules Directive</span></div><div class="paper-item"><span class="pt">NIS 2 Directive Amendment</span></div><div class="paper-item"><span class="pt">Commission Implementing Regulation (EU) 2020/1336</span></div><div class="paper-item"><span class="pt">The Merchant Shipping (Prevention of Air Pollution from Ships)</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Shvidler v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">Shvidler (App) v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">UK Court of Appeal decision concerning UniCredit</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Managing Conflicting Laws Amid National Security And Geopolitical</span></div><div class="paper-item"><span class="pt">Sanctions Primer</span></div><div class="paper-item"><span class="pt">Navigating compliance challenges in US government&#x27;s approach to foreign policy</span></div><div class="paper-item"><span class="pt">Overview of US sanctions laws and regulations</span></div><div class="paper-item"><span class="pt">What Are Economic Sanctions?</span></div><div class="paper-item"><span class="pm">...及其他 16 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>跨国法律协调的复杂性</li><li>制裁法与国家安全法可能产生的潜在冲突</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在一项涉及美国公司向欧盟客户提供跨境金融服务的交易中，该公司通过其技术合作伙伴获取客户数据的行为是否符合CLOUD Act Amendments和Directive (EU) 2024/1640，以满足反洗钱合规要求？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_036</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>美国公司A与欧盟客户B之间进行跨境金融服务交易，公司A通过其位于美国的技术合作伙伴C从客户B处获取相关数据，同时数据处理涉及金融处罚及反洗钱合规。这涉及跨境数据共享与国际协调的复杂交叉问题，且欧盟的法律协调与美国的技术公司数据共享模式存在差异。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>此问题需要深入研究，因为Directive 2021/PN 0423和Directive (EU) 2024/1640在近年来对数据共享进行了修订，对跨境金融处罚和数据隐私有不同的规定。此外，涉及到数据隐私和反洗钱合规两个领域的交叉，常存在解释的灰色地带，且美国与欧盟的法律框架在数据处理和法律协调方面存在基础性差异。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Anti-Money Laundering Act of 2020</span></div><div class="paper-item"><span class="pt">Financial Crimes Enforcement Network Regulations</span></div><div class="paper-item"><span class="pt">CLOUD Act Amendments</span></div><div class="paper-item"><span class="pt">Directive 2021/PN 0423</span></div><div class="paper-item"><span class="pt">Directive (EU) 2024/1640</span></div><div class="paper-item"><span class="pt">Communication from the Commission 2020XC0513</span></div><div class="paper-item"><span class="pt">Proposal 2021/PC0421</span></div><div class="paper-item"><span class="pt">COM(2022) 554 final</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">ECJ Decision on Corporate Fines under AML Directive</span></div><div class="paper-item"><span class="pt">CJEU Ruling on Corporate AML Penalties</span></div><div class="paper-item"><span class="pt">CJEU Ruling on GDPR and AML/CFT</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">United States: the intricacies of money laundering laws</span></div><div class="paper-item"><span class="pt">History of Anti-Money Laundering Laws</span></div><div class="paper-item"><span class="pt">2025 Year-End Developments in Anti-Money Laundering</span></div><div class="paper-item"><span class="pt">Anti Money Laundering Laws and Regulations Report 2025-2026 USA</span></div><div class="paper-item"><span class="pt">Implications and Benefits of Cross-Border Funds Transmittal Reporting</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>复杂法域交叉：问题涉及美国和欧盟的法律协调，可能导致模型混淆。</li><li>法律最新动态：涉及较新的法令和修正案，模型可能缺乏足够的背景知识。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">公司A在US进行银行数据处理并需要向EU的子公司传输数据，涉及敏感国家的客户信息。US法律如CLOUD Act对国家安全有不同要求，而EU依赖GDPR保护。现有法律框架如何适用于这个新情况？两地法律是否会产生不一致结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_071</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            <span class="m">基线质量: <strong>0.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>公司A在US处理涉及敏感数据的银行业务，需要将部分数据传输给在EU的子公司，该数据涉及一些被标记为国家安全关注国家的客户信息。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">source_conflict</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>此问题困难在于需要分析US与EU在跨境数据传输的不同法律要求，尤其是涉及国家安全的敏感数据。此外，需要辨别法条原文与学者解读的分歧，并追踪相关法律近年来的修订，不同法域可能导致相互矛盾的合规要求。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Federal Register Rule</span></div><div class="paper-item"><span class="pt">CLOUD Act</span></div><div class="paper-item"><span class="pt">DOJ Final Rule</span></div><div class="paper-item"><span class="pt">28 CFR Part 202</span></div><div class="paper-item"><span class="pt">Standard Contractual Clauses for data transfers to Third countries</span></div><div class="paper-item"><span class="pt">Data Transfer Provisions in Regulation (EU) 2016/679</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Hintze Law Blog Post</span></div><div class="paper-item"><span class="pt">Daeryun Law Article</span></div><div class="paper-item"><span class="pt">Missouri Law Review Article</span></div><div class="paper-item"><span class="pt">Mayer Brown Legal Update</span></div><div class="paper-item"><span class="pt">Jackson Lewis Article</span></div><div class="paper-item"><span class="pm">...及其他 6 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>复杂的跨国法律适用问题，涉及多个法律框架及其潜在冲突</li><li>缺乏直接先例，容易导致误判或概念混淆</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">公司A通过香港子公司，向中国出口美国管制技术，以支持中国军民融合项目，该行为是否违反《Chinese Military and Surveillance Company Sanctions Act》及中国相关政策？美国和中国法律框架对此行为有何不同的结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_129</strong></span>
+            <span class="m">法域: <strong>US, CN</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>公司A在香港设立子公司，并通过该子公司向中国出口用于军事用途的美国管制技术。该技术的出口是否构成对《Chinese Military and Surveillance Company Sanctions Act》和中国军事政策的违反，因应不同法域对军事用途和经由第三国转运的解释，解决方案或有所不同。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">source_conflict</span></div>
+            <h5>为什么难</h5>
+            <p>法条原文和学者解读对第三国转运的影响以及军事项目界定存在分歧。美国法明确针对中国军事用途，但对香港角色的适用性存在解释空间，而中国仅有政策指导，具体法律缺乏，这导致两国法律框架对交易行为的定性可能实质不同。深入研究需要对比法条与政策性指导的实际适用性以及可能的法律漏洞。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">United States-China Economic and Security Review Commission</span></div><div class="paper-item"><span class="pt">Strategy to Counter Role of the People&#x27;s Republic of China</span></div><div class="paper-item"><span class="pt">Chinese Military and Surveillance Company Sanctions Act</span></div><div class="paper-item"><span class="pt">Economic Sanctions Enforcement Guidelines</span></div><div class="paper-item"><span class="pt">Chinese Military-Industrial Complex Sanctions</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">China&#x27;s Facilitation of Sanctions and Export Control Evasion</span></div><div class="paper-item"><span class="pt">Sanctions Laws and Regulations Report</span></div><div class="paper-item"><span class="pt">U.S. Sanctions Overview</span></div><div class="paper-item"><span class="pt">U.S.-China Trade Relations</span></div><div class="paper-item"><span class="pt">出口管制及经济制裁合规指南</span></div><div class="paper-item"><span class="pm">...及其他 7 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>法律框架的复杂性和多层次性可能导致回答不全面，例如美国和中国法律的不同定义和解释。</li><li>国际贸易合规和出口管制规则的多变性和广泛性，增加了案情的不确定性。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">IN</span>
+          </div>
+          <div class="q-text">在最新修订的U.S.-India Bilateral Understanding中，如何解释对涉及人工智能技术的出口管制？美国强调具体立法，而印度仍通过贸易原则，双方如何处理技术联合开发协议中存在的管制差异？这种解释如何影响项目实施?</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_067</strong></span>
+            <span class="m">法域: <strong>US, IN</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家美国公司准备与印度合作开发人工智能军事应用，双方已签订联合开发协议。尽管U.S.-India Bilateral Understanding: Additional Revisions中涉及人工智能技术的出口管制进行了更新，但印度在相关法律上依旧缺乏具体法规，导致两国在项目实施出现理解差异。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>该问题涉及理解最新法条修订如何影响人工智能技术的跨境合作，而不同法律体系构成的解释差异使法律适用充满不确定性。这不仅需要对法律文本进行详细分析，还需考虑法域之间的政策落差对具体技术项目的潜在影响。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">US-India Defense Technology and Partnership Act 114th Congress</span></div><div class="paper-item"><span class="pt">United States and India Nuclear Cooperation</span></div><div class="paper-item"><span class="pt">U.S.-India Major Defense Partners: Implementation</span></div><div class="paper-item"><span class="pt">U.S.-India Bilateral Understanding: Revisions to U.S. Export and Reexport Controls</span></div><div class="paper-item"><span class="pt">U.S.-India Bilateral Understanding: Additional Revisions</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">U.S.-India Tech Partnership Through the Lens of U.S. Export Controls</span></div><div class="paper-item"><span class="pt">Export Controls: Balancing the Tensions Between U.S. and Indian Priorities</span></div><div class="paper-item"><span class="pt">U.S.-India Relations: A Summary</span></div><div class="paper-item"><span class="pt">The US-India Strategic Partnership: Securing a Free and Open Indo-Pacific</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>双方在协议实施过程中容易因法律理解差异产生误解</li><li>涉及国际贸易和安全问题，法律解读复杂</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在一名美国公民在中国境内遭遇性别暴力后，该事件被社交媒体曝光并引发欧洲非政府组织关注，施压中国政府采取措施的背景下，如何运用EU相关法律框架对各方行为进行评价？US和CN的法律框架对此事件会得出何种不同结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_013</strong></span>
+            <span class="m">法域: <strong>US, CN, EU</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>美国公民在中国遭遇性别暴力，但中国缺乏具体法律框架，该事件在欧洲引发关注，并有组织要求中国采取行动。此事件涉及到三法域：US的法律保护，CN的法律机制以及EU的执法框架。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题涉及跨境法律应用，特别是在不同法律框架之间的冲突和缺失。中国和美国可能因为缺乏具体法规而导致法律观点不一致，使得如何合规地应用EU法律框架来应对事件更加复杂。因此需要深入研究欧美先进的法律和执行机制，以及它们在亚洲国家的作用和影响。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">A/HRC/60/7</span></div><div class="paper-item"><span class="pt">Gender Equality Strategy 2026-2030</span></div><div class="paper-item"><span class="pt">Human rights and democracy in the world</span></div><div class="paper-item"><span class="pt">European Parliament resolution on gender-based violence</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Girl v. Guatemala</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Influencing SRHR Law Across Borders</span></div><div class="paper-item"><span class="pt">The State of International Human Rights Law on Sexual and Reproductive Health: An Overview</span></div><div class="paper-item"><span class="pt">US Compliance with International Human Rights Law Obligations</span></div><div class="paper-item"><span class="pt">Beyond Borders: The Global Impact of Violating Reproductive Human Rights</span></div><div class="paper-item"><span class="pt">Need for Compliance with International Human Rights Obligations</span></div><div class="paper-item"><span class="pm">...及其他 18 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>复杂的多法域问题可能导致错误理解</li><li>缺乏直接先例易引发误导性推断</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">某跨国公司在中国运营并涉及性与生殖健康权（SRHR）的相关业务，该公司在美国驻有分公司，且服务用户主要来自欧盟。此背景下，引发的法律问题是：该公司在不同法域中提供的健康服务和保护措施是否符合当地及国际人权法律框架？各法域的法律适用是否会因对SRHR定议的不明确性而产生冲突？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_014</strong></span>
+            <span class="m">法域: <strong>US, CN, EU</strong></span>
+            <span class="m">基线质量: <strong>1.8</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>跨国公司在中国运营，业务涉及性与生殖健康权，其美国分公司提供与之关联的技术支持，而其服务用户主要为欧盟居民。现有诉讼声称该公司在中国提供的服务违反了SRHR相关国际义务。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>这个问题需要深入研究，因为SRHR在不同法律体系中的定义存在显著差异，导致在跨法域场景中难以明确适用标准。需要特别关注每个区域的立法文本和国际法义务，以及对各国义务的解读，从而评估哪个法律框架最能有效维护相关权利。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">A/HRC/60/7</span></div><div class="paper-item"><span class="pt">Gender Equality Strategy 2026-2030</span></div><div class="paper-item"><span class="pt">Human rights and democracy in the world</span></div><div class="paper-item"><span class="pt">European Parliament resolution on gender-based violence</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Girl v. Guatemala</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Influencing SRHR Law Across Borders</span></div><div class="paper-item"><span class="pt">The State of International Human Rights Law on Sexual and Reproductive Health: An Overview</span></div><div class="paper-item"><span class="pt">US Compliance with International Human Rights Law Obligations</span></div><div class="paper-item"><span class="pt">Beyond Borders: The Global Impact of Violating Reproductive Human Rights</span></div><div class="paper-item"><span class="pt">Need for Compliance with International Human Rights Obligations</span></div><div class="paper-item"><span class="pm">...及其他 18 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>法域间SRHR定义和解读的差异可能导致法律适用上的混淆</li><li>跨国公司运营中的法律冲突和适用问题复杂</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">UK</span>
+          </div>
+          <div class="q-text">一家分别在美国、英国和欧盟运营的跨国公司因与一家受制裁的俄罗斯船运公司签订合同，而通过三地不同的子公司进行财务交易，是否违反22 USC 9901和EU Single Harmonised Rules Directive？各法域在如何裁决此复杂法律景象中是否存在差异？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_121</strong></span>
+            <span class="m">法域: <strong>US, EU, UK</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>跨国公司的美国分支通过与受制裁的俄罗斯公司签订的合同进行支付；英国分公司负责合同所涉及的船舶调度；而欧盟的分公司负责技术支持。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>此问题涉及不同法域对相同事实的不同解释，包括每个法域自身制裁合规规则的严格程度。所有子公司的行为是否集体构成违规，需要对各法域关于金融交易、合同合规和国家安全相关的法条的深度分析与对比。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">22 USC 9901</span></div><div class="paper-item"><span class="pt">EU Single Harmonised Rules Directive</span></div><div class="paper-item"><span class="pt">NIS 2 Directive Amendment</span></div><div class="paper-item"><span class="pt">Commission Implementing Regulation (EU) 2020/1336</span></div><div class="paper-item"><span class="pt">The Merchant Shipping (Prevention of Air Pollution from Ships)</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Shvidler v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">Shvidler (App) v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">UK Court of Appeal decision concerning UniCredit</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Managing Conflicting Laws Amid National Security And Geopolitical</span></div><div class="paper-item"><span class="pt">Sanctions Primer</span></div><div class="paper-item"><span class="pt">Navigating compliance challenges in US government&#x27;s approach to foreign policy</span></div><div class="paper-item"><span class="pt">Overview of US sanctions laws and regulations</span></div><div class="paper-item"><span class="pt">What Are Economic Sanctions?</span></div><div class="paper-item"><span class="pm">...及其他 16 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>法律条文解析涉及不同法域的特定条款，易于误解。</li><li>跨法域制裁合规问题复杂，存在解释空间导致错误解读。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在一家跨国科技公司出口一种被认为是可能用于军事的图像处理软件时，美、中、欧三地法律对其双重用途的定义存在差异。该公司面对三种不同的出口控制政策，可能违反哪些规定？法院可能如何判决？监管机构可能采取哪些行动？尤其是在当前国际政治环境紧张的背景下，各方如何平衡国家安全与技术发展之间的利益？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_061</strong></span>
+            <span class="m">法域: <strong>US, CN, EU</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>跨国科技公司试图将其开发的先进图像处理软件出口到海外市场。该软件具有较高的分析和处理能力，可能被用于军事侦查和监控。在美国，其功能被界定在Export Administration Regulations中；在中国，该软件可能被列入&#x27;中国禁止出口限制出口技术目录&#x27;；而在欧盟，其两用物项管理需查看&#x27;两用物项和技术进出口许可证管理目录&#x27;。公司需要通过三地的出口许可，但各地对软件的军事用途关注程度不同。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>技术出口的法律规定处在快速变化之中，尤其是面对日益复杂的国际关系，各国可能加强对技术应用的监管。同时，双重用途定义的模糊性在不同法域间可能导致不同法律后果，法官个人倾向和地区政治利益都可能影响最终判决。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Federal Register Notice on Export Controls</span></div><div class="paper-item"><span class="pt">Export Administration Regulations - Definitions</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><div class="paper-item"><span class="pt">中华人民共和国两用物项出口管制清单</span></div><div class="paper-item"><span class="pt">两用物项和技术进出口许可证管理目录</span></div><div class="paper-item"><span class="pt">Delegated Regulation updating the EU dual-use export control list</span></div><div class="paper-item"><span class="pt">European Commission document COM</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Congressional Research Service Report</span></div><div class="paper-item"><span class="pt">CNAS Report on Dual-Use Technology</span></div><div class="paper-item"><span class="pt">Orrick Insight on Export Controls</span></div><div class="paper-item"><span class="pt">Regulatory Review Seminar Article</span></div><div class="paper-item"><span class="pt">Cleary Trade Watch Insight</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>不同国家和地区的法律制度差异可能导致错误解释，特别是在军事用途定义和出口许可要求方面。</li><li>当前国际政治紧张的环境下，国家安全考量可能变化，模型可能无法准确预测各国的政策倾向。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">一家欧洲公司希望将其开发的最新量子计算技术出口到中国，美国监管机构要求对技术中涉及到的部分组件实施严格的出口管制。法院可能如何在这起纠纷中进行判决？欧盟和中国的监管机构可能会采取什么样的措施来影响这一出口计划？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_084</strong></span>
+            <span class="m">法域: <strong>US, EU, CN</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家注册在欧盟的高科技公司成功开发了一项颠覆性量子计算技术，其中涉及到若干美国产的关键部件。该公司计划将这项技术出口到中国，但美国已根据50 U.S. Code § 4817加强了对涉及量子技术的出口管制。与此同时，欧盟正在试图在技术创新和出口安全之间寻找平衡，而中国科技法规重点关注国家安全。该公司的出口计划引发了三地的法律和政策争议。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>此问题需要对欧美中三国在量子计算技术出口管制的法律差异进行深入分析，了解各国的安全和创新政策变化。同时，需考虑到各国法院的历史判决倾向，以及当前的政治经济环境对各自法律实施的影响，分析利益相关者的博弈策略。此外，还需追溯近年来相关法条的修订演变，以全面预测可能的法律结果。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">50 U.S. Code § 4817</span></div><div class="paper-item"><span class="pt">15 USC Ch. 114: National Quantum Initiative</span></div><div class="paper-item"><span class="pt">Implementation of Additional Export Controls</span></div><div class="paper-item"><span class="pt">European Commission Proposal on Quantum Technologies</span></div><div class="paper-item"><span class="pt">European Commission and High Representative Paper</span></div><div class="paper-item"><span class="pt">Regulation on Member States&#x27; Export Policies</span></div><div class="paper-item"><span class="pt">EU Strategy to Enhance European Economic Security</span></div><div class="paper-item"><span class="pt">EU Commission Staff Working Document on Quantum Technologies</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Quantum Computing Laws and Regulations 2026</span></div><div class="paper-item"><span class="pt">Quantum Technology and Export Controls</span></div><div class="paper-item"><span class="pt">U.S. Economic Security</span></div><div class="paper-item"><span class="pt">EU Issues 2025 Update to Dual-Use Control List</span></div><div class="paper-item"><span class="pt">Export controls and quantum technologies: the next strategic frontier</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨法域之复杂性可能导致偏颇结论</li><li>涉及到多国法律之间的差异和冲突</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">US</span>
+          </div>
+          <div class="q-text">在一项金额为5亿人民币的通信设备专利交叉许可协议纠纷中，一家注册于中国的中型企业与一家美国大型跨国公司因SEP条款争议诉至法院，涉及域名权与标准必要专利许可的交叉问题。法院可能如何判决？中美监管机构可能采取什么行动？考虑法官的历史判决倾向及两国政治环境影响。</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_012</strong></span>
+            <span class="m">法域: <strong>CN, US</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>中国企业诉美国跨国公司违反SEP条款，主打产品属于通信设备行业，涉嫌过度收费和不合理许可。同时，域名权对该通信设备的市场影响至关重要，企业规模差异明显。近年中国对SEP监管措施逐渐加强，而美国在这类案件上则相对保守，且在TCL诉爱立信案和中兴诉三星案的背景下，两国法院采取不同原则。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">temporal_evolution</span><span class="q-chip">factual_constraints</span><span class="q-chip">interdomain_interaction</span></div>
+            <h5>为什么难</h5>
+            <p>此问题涉及跨境法律体系差异，需详细研究中美两国对SEP案件的不同审判实践及政策变化轨迹。法官倾向尤其重要，因为过去判例可能影响当前判决。此外，政治环境和利益博弈涉及多个层面，需要深度分析利益相关者的互动和政策影响。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">TCL诉爱立信案</span></div><div class="paper-item"><span class="pt">中兴诉三星案</span></div><div class="paper-item"><span class="pt">(2022)最高法知民终817号判决</span></div><div class="paper-item"><span class="pt">6件司法调解典型案例</span></div><div class="paper-item"><span class="pt">Chinese Patent Litigation Data</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">2025：全球标准必要专利纠纷总览</span></div><div class="paper-item"><span class="pt">全球主要国家和地区的SEP政策解读</span></div><div class="paper-item"><span class="pt">全球标准必要专利政策走向及中国的因应</span></div><div class="paper-item"><span class="pt">标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关</span></div><div class="paper-item"><span class="pt">日本法院制定标准必要专利诉讼指南</span></div><div class="paper-item"><span class="pm">...及其他 16 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>模型可能忽略具体的法域差异，导致对两国法院判决可能性的误判</li><li>涉及的域名权问题比较复杂，容易让模型误认为此问题和SEP许可条款之间的法律关系相对简单</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">SG</span>
+          </div>
+          <div class="q-text">一家总部位于新加坡的中型金融科技公司计划向位于欧盟的合作企业传输其客户数据，但在具体保障措施的落实上出现争议。公司依据《Electronic Transactions Act 2010》及欧盟的《Standard Contractual Clauses for data transfers to Third countries》设定了技术和组织措施，但欧盟合作公司认为这些措施未满足《Regulation (EU) 2016/679》的地区保护要求。此情况下，新加坡法院在‘适当保障’的解释上是否会支持当地企业的合规方案？而欧盟的监管机构是否会介入并采取制裁行动？这个判决可能受各法域的政治及经济环境影响，利润的分配如何影响法律适用的判断？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_075</strong></span>
+            <span class="m">法域: <strong>EU, SG</strong></span>
+            <span class="m">基线质量: <strong>0.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>涉案公司为资产规模约2000万新币的中型金融科技企业，计划向欧洲伙伴传输敏感的客户金融数据。在双方协议下，已使用标准合同条款，但对合同条款内技术措施的适当性存异议。欧盟企业拒绝接受其保障措施并威胁终止合约，而新加坡公司则认为这符合当地法律。涉及金额约100万欧元。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span><span class="q-chip">factual_constraints</span></div>
+            <h5>为什么难</h5>
+            <p>问题涉及多个法域间法律及政治环境的交错，例如新加坡倾向于支持本地企业的合规策略，而欧盟则严格保护数据。因此需要深入分析不同法域下的法律解释、判例及对企业影响的评估。利益博弈与技术性复杂性使问题更加困难。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Standard Contractual Clauses for data transfers to Third countries</span></div><div class="paper-item"><span class="pt">Data Transfer Provisions in Regulation (EU) 2016/679</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 2010</span></div><div class="paper-item"><span class="pt">Electronic Transactions Act 1998</span></div><div class="paper-item"><span class="pt">Payment Services Regulations 2019</span></div><div class="paper-item"><span class="pt">Payment Services Act 2019</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Unnamed SGCA case</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">International data transfers</span></div><div class="paper-item"><span class="pt">Chapter 13: Cross-Border Data Transfers</span></div><div class="paper-item"><span class="pt">Cross-Border Data Transfers: A Global Guide to Compliance</span></div><div class="paper-item"><span class="pt">Cross-border data transfers in fintech: Navigating post-GDPR</span></div><div class="paper-item"><span class="pt">EU Cross Border Data Transfers Impact Assessment</span></div><div class="paper-item"><span class="pm">...及其他 11 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>涉及不同法域法律解读的复杂性</li><li>政治和经济环境影响判决的不确定性</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">某中国公司在美国和欧盟持有生产双重用途技术的子公司，其中一种用于人工智能的技术产品，根据《Export Administration Regulations - Definitions》处于出口限制名单，但在《中华人民共和国两用物项出口管制清单》下只需申报即可出口。法院如何判决产品是否违反出口限制规定，以及监管机构可能如何回应？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_060</strong></span>
+            <span class="m">法域: <strong>US, CN, EU</strong></span>
+            <span class="m">基线质量: <strong>0.3</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>中国公司A在中国开发了一种人工智能技术产品，该产品在美国子公司的生产过程中涉及《Export Administration Regulations - Definitions》限制的算法，而在欧盟子公司则考虑《两用物项和技术进出口许可证管理目录》的规定。产品欲销售至第三国但未确立适用出口许可。公司认为此产品不受中国国内严格限制，并提出出口计划。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>不同司法辖区下，法条对双重用途技术的解释存在灰色地带，美国和欧盟的具体法律条文与中国的出口规定存在差异。法官可能偏向本国的政策导向，而监管机构立场可能受政治博弈影响，各国间的关键技术出口监管往往因国家安全及国际关系变化而波动。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">Federal Register Notice on Export Controls</span></div><div class="paper-item"><span class="pt">Export Administration Regulations - Definitions</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><div class="paper-item"><span class="pt">中华人民共和国两用物项出口管制清单</span></div><div class="paper-item"><span class="pt">两用物项和技术进出口许可证管理目录</span></div><div class="paper-item"><span class="pt">Delegated Regulation updating the EU dual-use export control list</span></div><div class="paper-item"><span class="pt">European Commission document COM</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Congressional Research Service Report</span></div><div class="paper-item"><span class="pt">CNAS Report on Dual-Use Technology</span></div><div class="paper-item"><span class="pt">Orrick Insight on Export Controls</span></div><div class="paper-item"><span class="pt">Regulatory Review Seminar Article</span></div><div class="paper-item"><span class="pt">Cleary Trade Watch Insight</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨法域的法律适用复杂性</li><li>缺乏直接先例引导判决</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">在一项跨境量子技术合作中，美国要求严格遵守50 U.S. Code § 4817的出口管制，但欧盟希望鼓励创新自由，依据European Commission Proposal on Quantum Technologies，且中国因国家安全理由加强控制。法院会如何在这些差异中裁定？监管机构会如何协调三方政策？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_083</strong></span>
+            <span class="m">法域: <strong>US, EU, CN</strong></span>
+            <span class="m">基线质量: <strong>2.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家美国公司与欧盟和中国的企业计划合作开发量子计算技术。美国基于50 U.S. Code § 4817与15 USC Ch. 114: National Quantum Initiative意图加强对技术的出口管制，而欧盟则依据European Commission Proposal on Quantum Technologies试图在创新和安全间找到平衡。中国则依据其国家安全策略加强控制。美国法院或国际仲裁将如何处理该争议？</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>这一问题需要深入研究，因为它涉及三个法域都根据其不同利益和政策目标进行管制，这意味着法律适用、利益平衡和政策冲突都需考量。同时，从美国、欧盟到中国，近年来法律政策频繁变动，需要精确追踪这些修订以做出准确预判。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">50 U.S. Code § 4817</span></div><div class="paper-item"><span class="pt">15 USC Ch. 114: National Quantum Initiative</span></div><div class="paper-item"><span class="pt">Implementation of Additional Export Controls</span></div><div class="paper-item"><span class="pt">European Commission Proposal on Quantum Technologies</span></div><div class="paper-item"><span class="pt">European Commission and High Representative Paper</span></div><div class="paper-item"><span class="pt">Regulation on Member States&#x27; Export Policies</span></div><div class="paper-item"><span class="pt">EU Strategy to Enhance European Economic Security</span></div><div class="paper-item"><span class="pt">EU Commission Staff Working Document on Quantum Technologies</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Quantum Computing Laws and Regulations 2026</span></div><div class="paper-item"><span class="pt">Quantum Technology and Export Controls</span></div><div class="paper-item"><span class="pt">U.S. Economic Security</span></div><div class="paper-item"><span class="pt">EU Issues 2025 Update to Dual-Use Control List</span></div><div class="paper-item"><span class="pt">Export controls and quantum technologies: the next strategic frontier</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨境合作中涉及多法域规定，法律协调难度大</li><li>各国对量子技术和出口管制的政策可能快速变化</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">UK</span>
+          </div>
+          <div class="q-text">一家总部位于英国的跨国公司因在乌克兰战争期间与一家被美国制裁的俄罗斯企业继续合作，面临美国制裁合规调查问题。在同一期间，该公司在欧盟按照EU Single Harmonised Rules Directive继续进行相关商务活动。美国制裁机构可能采取何种行动？欧盟和英国的法律系统如何判决企业的合规行为？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_120</strong></span>
+            <span class="m">法域: <strong>US, EU, UK</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>跨国公司涉及多个法域的业务，其中在乌克兰战争期间与被制裁的俄罗斯企业继续合作。美国强调严格的制裁执行，可能视此为违规，而欧盟更关注统一合规和成员国协调，英国则处于两者之间。该企业声称已根据不同法域的指导进行合规操作。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题因涉及多个法域的制裁法律和合规策略的不同而复杂。不同法官的个人倾向、美国和欧盟的政治环境以及跨国企业自身的利益博弈将影响最终判决。企业的操作是否在法律灰色地带展开，以及各法域如何解释和协调冲突法规，也是困难之处。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">22 USC 9901</span></div><div class="paper-item"><span class="pt">EU Single Harmonised Rules Directive</span></div><div class="paper-item"><span class="pt">NIS 2 Directive Amendment</span></div><div class="paper-item"><span class="pt">Commission Implementing Regulation (EU) 2020/1336</span></div><div class="paper-item"><span class="pt">The Merchant Shipping (Prevention of Air Pollution from Ships)</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Shvidler v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">Shvidler (App) v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">UK Court of Appeal decision concerning UniCredit</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Managing Conflicting Laws Amid National Security And Geopolitical</span></div><div class="paper-item"><span class="pt">Sanctions Primer</span></div><div class="paper-item"><span class="pt">Navigating compliance challenges in US government&#x27;s approach to foreign policy</span></div><div class="paper-item"><span class="pt">Overview of US sanctions laws and regulations</span></div><div class="paper-item"><span class="pt">What Are Economic Sanctions?</span></div><div class="paper-item"><span class="pm">...及其他 16 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>可能存在不同法域制裁措施之间的协调和冲突问题，容易产生复杂的法律分析</li><li>跨国公司合规操作是否完全符合每个相关法域的复杂法规和例外，利害攸关且容易出错</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">UK</span>
+          </div>
+          <div class="q-text">假设一家跨国能源企业在英美两地开展业务，同时面对来自EU和美国的制裁压力。该企业试图通过遵循EU Single Harmonised Rules Directive以规避22 USC 9901带来的法律责任。法院可能如何判决其合规策略的有效性？英国和美国的监管机构可能采取哪些不同的行动？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_125</strong></span>
+            <span class="m">法域: <strong>US, EU, UK</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部设在英国的跨国能源企业，其在美国设有分支机构，并与欧盟国家有深度业务往来。在近期针对某特定国家的交易中，该企业面临美国和欧盟的制裁措施冲突。管理方认为依据EU Single Harmonised Rules Directive的操作规程可以避免违反22 USC 9901。然而，美国和欧盟的政治局势正趋于紧张，该企业在英国也遭遇法律诉讼。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">temporal_evolution</span><span class="q-chip">jurisdiction_count</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究不同法域在地缘政治背景下的法律修订，尤其是这些规定如何在国家安全与政治博弈中扮演角色。研究必须考虑政治环境变化对法官倾向和利益相关者决策的影响，以及这些变量如何导致预测结果的不同。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">22 USC 9901</span></div><div class="paper-item"><span class="pt">EU Single Harmonised Rules Directive</span></div><div class="paper-item"><span class="pt">NIS 2 Directive Amendment</span></div><div class="paper-item"><span class="pt">Commission Implementing Regulation (EU) 2020/1336</span></div><div class="paper-item"><span class="pt">The Merchant Shipping (Prevention of Air Pollution from Ships)</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Shvidler v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">Shvidler (App) v Secretary of State for Foreign, Commonwealth and Development Office</span></div><div class="paper-item"><span class="pt">UK Court of Appeal decision concerning UniCredit</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Managing Conflicting Laws Amid National Security And Geopolitical</span></div><div class="paper-item"><span class="pt">Sanctions Primer</span></div><div class="paper-item"><span class="pt">Navigating compliance challenges in US government&#x27;s approach to foreign policy</span></div><div class="paper-item"><span class="pt">Overview of US sanctions laws and regulations</span></div><div class="paper-item"><span class="pt">What Are Economic Sanctions?</span></div><div class="paper-item"><span class="pm">...及其他 16 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>风险点1: 法律系统的复杂交叉可能导致在解释不同司法管辖区法律和指令时产生不准确的理解。</li><li>风险点2: 涉及国际政治和法律冲突，使得合规策略的预测充满不确定性，高度依赖于最新国际关系动态。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在全球标准必要专利(SEP)纠纷中，考虑到中国与美国、欧盟执行标准必要专利的严格程度不同和判例法的影响，法院可能如何在涉及中美欧跨法域专利许可谈判失败的案件中判决？监管机构可能采取怎样的行动来平衡国内产业利益与国际谈判压力？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_006</strong></span>
+            <span class="m">法域: <strong>CN, US, EU</strong></span>
+            <span class="m">基线质量: <strong>1.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家中国公司与一家美国公司以及一家欧盟公司就一种涉及多项标准必要专利的通信技术展开了许可谈判，因定价分歧导致谈判破裂，中国法院在适用国内严格的SEP执行标准时，需要评鉴美国与欧盟宽松的法律态度，并面对国际贸易组织的压力，同时该中国公司正在利用国内政策试制这项技术。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究的是，中国严格的SEP政策和执行环境如何与宽松的美国及欧盟法律体系产生跨法域效应，以及法院在考虑政治环境、贸易关系和技术创新利益时，可能采取哪些法律解释途径并进行不同利益的权衡。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">TCL诉爱立信案</span></div><div class="paper-item"><span class="pt">中兴诉三星案</span></div><div class="paper-item"><span class="pt">(2022)最高法知民终817号判决</span></div><div class="paper-item"><span class="pt">6件司法调解典型案例</span></div><div class="paper-item"><span class="pt">Chinese Patent Litigation Data</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">2025：全球标准必要专利纠纷总览</span></div><div class="paper-item"><span class="pt">全球主要国家和地区的SEP政策解读</span></div><div class="paper-item"><span class="pt">全球标准必要专利政策走向及中国的因应</span></div><div class="paper-item"><span class="pt">标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关</span></div><div class="paper-item"><span class="pt">日本法院制定标准必要专利诉讼指南</span></div><div class="paper-item"><span class="pm">...及其他 21 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>国际法律和政策环境复杂多变，预测性问题在法律适用上具有不确定性。</li><li>不同法域在SEP问题上的处理方式与政策存在显著区别，使得问题容易产生误导性解释。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">在一家拥有量子技术专利的国际公司试图将部分技术转移至欧洲和中国的过程中，美国监管机构是否会依据50 U.S. Code § 4817和15 USC Ch. 114: National Quantum Initiative进行干预，而欧盟和中国分别会如何应对这一行动？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_081</strong></span>
+            <span class="m">法域: <strong>US, EU, CN</strong></span>
+            <span class="m">基线质量: <strong>2.0</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家总部位于美国的公司拥有多项量子计算技术专利，该公司计划通过商业合作将部分技术转让给欧洲的企业并与中国的研究机构展开合作。美国政府对于该领域的出口管制严格，而欧盟的相关法律允许成员国对技术转移具有一定自主权，且中国以国家安全为理由对技术出口有具体限制。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题涉及对多法域不同法律和政策的解释，特别是在量子计算这一高度敏感且迅速发展的领域。每个法域的政治与经济利益都会影响其法律解释和实施路径，增加了对法律后果的预测难度。此外，各法域的监管机构和法官在面对国际合作与技术安全之间的取舍时可能存在不同的倾向，须对这些&#x27;人的变量&#x27;进行深入分析。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">50 U.S. Code § 4817</span></div><div class="paper-item"><span class="pt">15 USC Ch. 114: National Quantum Initiative</span></div><div class="paper-item"><span class="pt">Implementation of Additional Export Controls</span></div><div class="paper-item"><span class="pt">European Commission Proposal on Quantum Technologies</span></div><div class="paper-item"><span class="pt">European Commission and High Representative Paper</span></div><div class="paper-item"><span class="pt">Regulation on Member States&#x27; Export Policies</span></div><div class="paper-item"><span class="pt">EU Strategy to Enhance European Economic Security</span></div><div class="paper-item"><span class="pt">EU Commission Staff Working Document on Quantum Technologies</span></div><div class="paper-item"><span class="pt">中国禁止出口限制出口技术目录</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Quantum Computing Laws and Regulations 2026</span></div><div class="paper-item"><span class="pt">Quantum Technology and Export Controls</span></div><div class="paper-item"><span class="pt">U.S. Economic Security</span></div><div class="paper-item"><span class="pt">EU Issues 2025 Update to Dual-Use Control List</span></div><div class="paper-item"><span class="pt">Export controls and quantum technologies: the next strategic frontier</span></div><div class="paper-item"><span class="pm">...及其他 9 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>跨国技术转移涉及多国法律和监管规定，可能会导致误解</li><li>量子技术的出口管制与国家安全相关，容易混淆各国的具体法律要求</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">CN</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">一家中国企业准备将其欧洲用户的数据迁移到中国服务器，并计划使用本地合作伙伴提供的数据分析服务。在面对欧盟《GDPR Chapter 5》和《中华人民共和国个人信息保护法》的不同要求时，法院可能如何判决？此跨境数据传输是否会引发欧盟监管机构的调查和潜在的罚款？考虑近年来数据安全立法在两个地区的变化，尤其是政治环境和法官对数据隐私的重视程度等因素。</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_004</strong></span>
+            <span class="m">法域: <strong>CN, EU</strong></span>
+            <span class="m">基线质量: <strong>0.625</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>这家中国企业希望通过数据迁移到中国来优化成本和服务，但由于两地区的法律要求不同，尤其是欧盟对跨境数据传输的严格审查，该计划可能面临法律挑战。企业需权衡数据隐私与商业利益之间的关系。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">temporal_evolution</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究，因为它涉及多法域间法律规范的对比分析，并要求评估近年来的立法变化和法官个人倾向在裁决中的作用。此外，政治环境的变化及利益博弈增加了预测结果的复杂性。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">GDPR Chapter 5</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">Schrems II案</span></div><div class="paper-item"><span class="pt">广州互联网法院判决</span></div><div class="paper-item"><span class="pt">EU Court Data Privacy Framework Ruling</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">《中华人民共和国个人信息保护法》与欧盟《通用数据保护条例》对比</span></div><div class="paper-item"><span class="pt">出海企业必读之欧盟数据立法综述</span></div><div class="paper-item"><span class="pt">跨境数据传输系列——个人信息如何出境</span></div><div class="paper-item"><span class="pt">论国家机关处理的个人信息跨境流动制度</span></div><div class="paper-item"><span class="pt">十国/地区数据保护法十大合规要点对比</span></div><div class="paper-item"><span class="pm">...及其他 15 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>不同法域之间的数据隐私法的细节差异可能导致误解</li><li>对跨境数据传输监管变化的解读可能偏差</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">DE</span>
+          </div>
+          <div class="q-text">在一家德国科技公司试图在消费电子领域阻止另一家荷兰公司使用其专利的过程中，CJEU扩大了跨境专利侵权管辖权，而德国缺乏明确的跨境适用规定。在德国法庭是否可能采纳欧盟的全面管辖扩展？两国法官的倾向如何影响判决？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_045</strong></span>
+            <span class="m">法域: <strong>EU, DE</strong></span>
+            <span class="m">基线质量: <strong>0.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>德国科技公司在欧盟单一市场内指控一家荷兰公司侵犯其专利，索求跨境禁令并声称根据CJEU判例应在整个欧盟范围内禁止荷兰公司的相关产品销售。德国尚无明确规定，而荷兰公司表示其行为受限于国内法，且德国法官以往倾向更保守的国内适用。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>德国和欧盟的跨境专利禁令适用规定存在差异，尤其在欧盟逐步扩大小市场的影响力同时，德国法官的保守倾向可能制约外国政策影响。政治压力和市场力量交织，加大预测复杂性。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">BSH Hausgeräte v. Electrolux</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Q&amp;A: How an NPE Is Testing the Limits of BSH v. Electrolux</span></div><div class="paper-item"><span class="pt">CJEU Expands Cross-Border Patent Infringement Jurisdiction</span></div><div class="paper-item"><span class="pt">BSH v Electrolux: Implications of CJEU decision</span></div><div class="paper-item"><span class="pt">CJEU expands possibilities for cross-border patent infringement</span></div><div class="paper-item"><span class="pt">Client Alert: The CJEU&#x27;s BSH Hausgeräte Decision and the UPC&#x27;s ...</span></div><div class="paper-item"><span class="pm">...及其他 3 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>CJEU对跨境专利侵权管辖权扩展的解释可能会被忽视或误解，特别是在具体适用上容易产生混淆。</li><li>德国和荷兰法官的传统倾向可能被过度简化，忽视了复杂的法律文化和具体案件的细节。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">某美国公司因其在华子公司向一家被列入Chinese Military-Industrial Complex Sanctions名单的中国企业提供技术支持，成为了美国制裁的对象。与此同时，中国以其阻断法令，阻止美国制裁在国内执行。问：在这样的法律冲突背景下，美国法院可能如何裁定？美国财政部和中国商务部分别可能采取什么立场和行动？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_126</strong></span>
+            <span class="m">法域: <strong>US, CN</strong></span>
+            <span class="m">基线质量: <strong>0.25</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家美国技术公司通过其中国子公司向一家被列入制裁名单的中国企业提供服务。美国财政部援引Economic Sanctions Enforcement Guidelines对其提起调查，而中国则动用阻断法令阻止美国制裁在中国的执行。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究因为：第一，涉及中美两国法律法规与政策的冲突，特别是在国际贸易和制裁领域缺乏明确法律一致性的背景下；第二，司法和监管行动可能受到当前中美政治关系的强烈影响，包括两国政府间的外交利益博弈。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">United States-China Economic and Security Review Commission</span></div><div class="paper-item"><span class="pt">Strategy to Counter Role of the People&#x27;s Republic of China</span></div><div class="paper-item"><span class="pt">Chinese Military and Surveillance Company Sanctions Act</span></div><div class="paper-item"><span class="pt">Economic Sanctions Enforcement Guidelines</span></div><div class="paper-item"><span class="pt">Chinese Military-Industrial Complex Sanctions</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">China&#x27;s Facilitation of Sanctions and Export Control Evasion</span></div><div class="paper-item"><span class="pt">Sanctions Laws and Regulations Report</span></div><div class="paper-item"><span class="pt">U.S. Sanctions Overview</span></div><div class="paper-item"><span class="pt">U.S.-China Trade Relations</span></div><div class="paper-item"><span class="pt">出口管制及经济制裁合规指南</span></div><div class="paper-item"><span class="pm">...及其他 7 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨境法律冲突可能导致复杂的解释和解答，需要精准辨析不同法域的法律效果。</li><li>预测未来的法律裁定和行政措施存在高度不确定性，尤其涉及国际法与国家主权的问题。</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d3" data-qtype="predictive">
+        <div class="q-bar bar-pred"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-pred">预测类 Predictive</span>
+            <span class="q-juris-tag">US</span><span class="q-juris-tag">EU</span>
+          </div>
+          <div class="q-text">在某跨国公司通过其美国分公司进口一批价值较高的化学原料进入欧盟市场，但未完全满足EUROPEAN COMMISSION COM(2026) 111 final要求的环保标准的情况下，美国海关根据19 U.S. Code § 2171进行审查，并考虑授予临时豁免；但欧盟则因达不到其规定的环保标准，根据EUROPEAN COMMISSION COM(2022) 0730给予高额罚款。法院在各自法域下将如何裁决？两个监管机构可能采取的不同行动有哪些?</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_133</strong></span>
+            <span class="m">法域: <strong>US, EU</strong></span>
+            
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>某跨国公司意图将一批化学原料从美国进口到欧盟，但环保标准符合美国规定的最低要求，却不完全满足欧盟的更严格标准，美国海关可能根据19 U.S. Code § 2171给予临时豁免，以促进贸易便利；而欧盟则坚持执行其环保规定。这样的政策差异导致利益冲突，使得公司可能面临双重合规风险。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题涉及美国和欧盟在贸易合规性上的政策立场不同，且公司面临的绿色合规要求在法律解释上有灰色地带，两地法院和监管机构可能做出完全相反的决策。需要细致分析法条、判例及学者解读以预判可能的法律走向，尤其是法官的个人倾向和政治环境可能影响裁决。</p>
+            <h5>法规 Primary</h5><div class="paper-item"><span class="pt">19 U.S. Code § 2171</span></div><div class="paper-item"><span class="pt">19 USC 2420</span></div><div class="paper-item"><span class="pt">15 CFR Part 30</span></div><div class="paper-item"><span class="pt">EUROPEAN COMMISSION COM(2026) 111 final</span></div><div class="paper-item"><span class="pt">EUROPEAN COMMISSION COM(2022) 0730</span></div><div class="paper-item"><span class="pt">An Open, Sustainable and Assertive Trade Policy</span></div><div class="paper-item"><span class="pt">Taking the Customs Union to the next level</span></div><div class="paper-item"><span class="pt">IMMC.COM(2026)112 final</span></div><div class="paper-item"><span class="pt">EU rights to apply and enforce international trade rules</span></div><h5>判例 Cases</h5><div class="paper-item"><span class="pt">European Court of Justice ruling</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Global Trade Compliance: How to Play by the Rules</span></div><div class="paper-item"><span class="pt">Compliance with International Trade Laws: What you need to know</span></div><div class="paper-item"><span class="pt">The Global Trading System Faces a Historic Change</span></div><div class="paper-item"><span class="pt">Regulations Improving and Strengthening the Enforcement of Trade</span></div><div class="paper-item"><span class="pt">Global trade is changing. Here is how companies can stay ahead</span></div><div class="paper-item"><span class="pm">...及其他 10 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>美国和欧盟的法律和政策体系复杂且不断变化</li><li>两方监管机构可能采取的行动和法律解释不确定</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">EU</span><span class="q-juris-tag">DE</span>
+          </div>
+          <div class="q-text">在A公司于德国市场销售产品时被指控侵犯了B公司在欧盟注册的专利权，该行为是否可以依据CJEU判例在整个欧盟范围内对A公司实施跨境专利禁令，若A公司仅在德国境内开展业务，该禁令在德国的适用是否与欧盟其他成员国不同？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_044</strong></span>
+            <span class="m">法域: <strong>EU, DE</strong></span>
+            <span class="m">基线质量: <strong>0.5</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>A公司在德国执行从第三方采购的产品，销售进入德国市场，但由B公司在欧盟范围内拥有相关专利。法律问题在于，产品销售的行为是否构成欧盟范围内的专利侵权，并且这种侵权行为是否允许在德国施加跨境禁令。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>该问题需要深入研究，因为欧盟与德国的法律框架均不明确德国境内的行为是否可被CJEU判例涵盖。此外，跨境禁令可能因德国缺乏相关明确规定而产生不同结果。在判例与不同法域规则之间的解读可能引发多重法律解析路径。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">BSH Hausgeräte v. Electrolux</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Q&amp;A: How an NPE Is Testing the Limits of BSH v. Electrolux</span></div><div class="paper-item"><span class="pt">CJEU Expands Cross-Border Patent Infringement Jurisdiction</span></div><div class="paper-item"><span class="pt">BSH v Electrolux: Implications of CJEU decision</span></div><div class="paper-item"><span class="pt">CJEU expands possibilities for cross-border patent infringement</span></div><div class="paper-item"><span class="pt">Client Alert: The CJEU&#x27;s BSH Hausgeräte Decision and the UPC&#x27;s ...</span></div><div class="paper-item"><span class="pm">...及其他 3 条来源</span></div>
+            <h5>迷惑性风险 (medium)</h5><ul><li>欧盟专利侵权在单一成员国的适用性</li><li>跨境禁令适用于仅在一国开展业务的情况复杂</li></ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="q-card reveal reveal-d2" data-qtype="unprecedented">
+        <div class="q-bar bar-unprec"></div>
+        <div class="q-body">
+          <div class="q-top">
+            <span class="q-tag qt-unprec">无先例 Unprecedented</span>
+            <span class="q-juris-tag">JP</span><span class="q-juris-tag">CN</span>
+          </div>
+          <div class="q-text">在日本本土使用的VR设备附带的应用程序在中国进行开发并由中国服务器提供对日消费者下载，日本的跨境专利侵权判例能否适用于这种情况？两国法律能得出什么不同结论？</div>
+          <div class="q-meta">
+            <span class="m">ID: <strong>q_046</strong></span>
+            <span class="m">法域: <strong>JP, CN</strong></span>
+            <span class="m">基线质量: <strong>0.375</strong></span>
+          </div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
+          <div class="q-detail"><div class="q-detail-inner">
+            <h5>事实场景</h5>
+            <p>一家中国公司开发并管理一个VR应用程序，该应用程序通过中国服务器提供下载服务。该程序在日本用户中广受欢迎并在日本市场实现盈利。</p>
+            <h5>难化手段</h5>
+            <div class="q-chips"><span class="q-chip">jurisdiction_count</span><span class="q-chip">interpretation_ambiguity</span></div>
+            <h5>为什么难</h5>
+            <p>本案例涉及复杂的跨境专利许可与侵权问题，尤其在地理限制模糊的情况下，适用法律和判例并不是明确的。日本通过判例处理类似情境，但中国尚未形成完善的判例法体系，这意味着需要从根本法原则推导结果。两国法律体系的差异可能导致不同的司法解释。</p>
+            <h5>判例 Cases</h5><div class="paper-item"><span class="pt">日本知识产权高等法院大合议庭判决</span></div><div class="paper-item"><span class="pt">日本最高法院关于服务器系统专利侵权案</span></div><h5>学术/评论 Secondary</h5><div class="paper-item"><span class="pt">Japan: Supreme Court Decision — Closing a loophole for patent ...</span></div><div class="paper-item"><span class="pt">Patent Infringement by Cross-border Acts</span></div><div class="paper-item"><span class="pt">Japanese Supreme Court&#x27;s key decisions on cross-border patent ...</span></div><div class="paper-item"><span class="pt">Japanese Supreme Court: Building a System That Includes a Server ...</span></div><div class="paper-item"><span class="pt">IP High Court Finds Patent Infringement on Cross-Border Network ...</span></div><div class="paper-item"><span class="pm">...及其他 5 条来源</span></div>
+            <h5>迷惑性风险 (high)</h5><ul><li>跨境专利侵权的法律条款复杂且涉及多个法域的法律适用问题</li><li>在不同国家/地区中应用法律先例的难度较高</li></ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </section>
 </div><!-- /content-legal -->
@@ -3596,6 +4926,24 @@ function filterQueriesR(strategy, btn) {
     }
   });
   const counter = document.getElementById('r-filterCount');
+  if (counter) counter.textContent = '显示 ' + shown + ' / 50';
+}
+
+/* ── Query filter (legal) ───────────────────────── */
+function filterQueriesL(qtype, btn) {
+  const container = btn.closest('.collapse-content') || btn.closest('.persona-content');
+  if (container) container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('#l-queryGrid .q-card');
+  let shown = 0;
+  cards.forEach(c => {
+    if (qtype === 'all' || c.dataset.qtype === qtype) {
+      c.classList.remove('hidden-by-filter'); shown++;
+    } else {
+      c.classList.add('hidden-by-filter');
+    }
+  });
+  const counter = document.getElementById('l-filterCount');
   if (counter) counter.textContent = '显示 ' + shown + ' / 50';
 }
 
