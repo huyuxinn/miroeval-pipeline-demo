@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>科研查询自动生成流水线</title>
+<title>查询自动生成流水线 — 多 Persona 总览</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -599,22 +599,107 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 .collapse-toggle.open .ct-chev{transform:rotate(180deg)}
 .collapse-content{max-height:0;overflow:hidden;transition:max-height .5s ease}
 .collapse-content.open{max-height:none;overflow:visible}
+/* ── Scenario grid ─────────────────────────────────── */
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.scenario-group{background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:22px 24px}
+.scenario-group h4{font-size:.95rem;margin-bottom:12px;color:var(--accent)}
+.scenario-group ul{list-style:none;padding:0}
+.scenario-group li{font-size:.88rem;color:var(--text-secondary);padding:6px 0;border-bottom:1px solid var(--border-light);line-height:1.6}
+.scenario-group li:last-child{border-bottom:none}
+.scenario-group li strong{color:var(--text-primary);font-weight:600}
+@media(max-width:768px){.scenario-grid{grid-template-columns:1fr}}
+
+/* ── Difficulty mechanism cards ─────────────────── */
+.diff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:16px}
+.diff-card{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 18px;transition:border-color .2s}
+.diff-card:hover{border-color:var(--border)}
+.diff-card h5{font-size:.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.diff-card p{font-size:.82rem;color:var(--text-tertiary);line-height:1.6}
+
+/* ── Collapsible queries section ─────────────────── */
+.collapse-toggle{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:var(--radius-xs);
+  background:var(--bg-white);border:1px solid var(--border);
+  font-size:.95rem;font-weight:600;color:var(--accent);cursor:pointer;
+  transition:background .15s,box-shadow .15s;margin-bottom:24px;user-select:none
+}
+.collapse-toggle:hover{background:var(--accent-bg);box-shadow:var(--shadow-sm)}
+.collapse-toggle .ct-chev{transition:transform .3s;font-size:.75rem}
+.collapse-toggle.open .ct-chev{transform:rotate(180deg)}
+.collapse-content{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.collapse-content.open{max-height:none;overflow:visible}
+
+/* ══════════════════════════════════════════════════════
+   TAB SWITCHING — persona card selection
+   ══════════════════════════════════════════════════════ */
+.pm-card.pm-clickable{cursor:pointer;user-select:none}
+.pm-card.pm-selected{
+  border-color:var(--accent) !important;
+  box-shadow:0 0 0 2px var(--accent),var(--shadow-lg) !important;
+  transform:translateY(-3px) !important;
+}
+.pm-card.pm-selected::after{
+  content:'';position:absolute;bottom:0;left:12px;right:12px;height:4px;
+  background:var(--accent);border-radius:4px 4px 0 0
+}
+.pm-card.pm-pending{cursor:pointer}
+
+/* Persona content containers */
+.persona-content{transition:opacity .3s ease}
+
+/* Toast notification */
+.pm-toast{
+  position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--text-primary);color:var(--text-inverse);
+  font-size:.88rem;font-weight:500;padding:12px 28px;border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);opacity:0;transition:transform .35s ease,opacity .35s ease;
+  z-index:9999;pointer-events:none;white-space:nowrap
+}
+.pm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Shake animation for pending cards */
+@keyframes pmShake{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-4px)}
+  30%{transform:translateX(4px)}
+  45%{transform:translateX(-3px)}
+  60%{transform:translateX(3px)}
+  75%{transform:translateX(-2px)}
+  90%{transform:translateX(2px)}
+}
+.pm-card.pm-shake{animation:pmShake .5s ease}
 </style>
 </head>
 <body>
+
+<!-- Toast element -->
+<div class="pm-toast" id="pmToast"></div>
+
+<!-- ══════════ FLOATING DOODLES ══════════ -->
+<div class="floating-doodles">
+  <svg class="fd-1 float-anim" width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="12" fill="none" stroke="#D4714E" stroke-width="1.5" opacity=".18"/><circle cx="25" cy="25" r="6" fill="#D4714E" opacity=".08"/></svg>
+  <svg class="fd-2" width="60" height="40" viewBox="0 0 60 40"><ellipse cx="30" cy="20" rx="22" ry="12" fill="none" stroke="#8B9E6B" stroke-width="1.5" opacity=".15"/></svg>
+  <svg class="fd-3 float-anim" width="44" height="44" viewBox="0 0 44 44"><rect x="8" y="8" width="28" height="28" rx="6" fill="none" stroke="#D9D2C9" stroke-width="1.5" opacity=".18" transform="rotate(15 22 22)"/></svg>
+  <svg class="fd-4" width="56" height="56" viewBox="0 0 56 56"><polygon points="28,6 50,44 6,44" fill="none" stroke="#D4714E" stroke-width="1.5" opacity=".12"/></svg>
+  <svg class="fd-5 float-anim" width="48" height="48" viewBox="0 0 48 48"><path d="M24 4 L30 18 L44 20 L34 30 L36 44 L24 38 L12 44 L14 30 L4 20 L18 18Z" fill="none" stroke="#8B9E6B" stroke-width="1.2" opacity=".12"/></svg>
+  <svg class="fd-6" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="#D9D2C9" stroke-width="2" stroke-dasharray="4 3" opacity=".2"/></svg>
+  <svg class="fd-7 float-anim" width="36" height="36" viewBox="0 0 36 36"><path d="M18 4 Q32 12 28 28 Q18 36 8 28 Q0 16 18 4Z" fill="none" stroke="#D4714E" stroke-width="1.2" opacity=".12"/></svg>
+  <svg class="fd-8" width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="18" fill="none" stroke="#8B9E6B" stroke-width="1" opacity=".1"/><circle cx="26" cy="26" r="10" fill="none" stroke="#8B9E6B" stroke-width="1" opacity=".08"/></svg>
+</div>
 
 <!-- ══════════ COVER: Project Overview ══════════ -->
 <section class="cover" id="cover">
   <div class="container">
     <h1 class="reveal reveal-d1">Deep Research 评测<br><span class="highlight">问题自动构造</span></h1>
     <p class="cover-subtitle reveal reveal-d2">
-      我们为 5 个核心 Persona 各设计一条自动化 pipeline：基于该角色的真实痛点，从权威数据源（论文、判例、临床指南等）中挖掘素材，自动生成高难度的开放式研究问题。目前已完成「科学家/研究员」Pipeline 的设计与实现。
+      我们为 5 个核心 Persona 各设计一条自动化 pipeline：基于该角色的真实痛点，从权威数据源（论文、判例、临床指南等）中挖掘素材，自动生成高难度的开放式研究问题。目前已完成「科学家/研究员」和「律师/法研人员」两条 Pipeline 的设计与实现。
     </p>
 
     <!-- 5 Persona Cards -->
     <div class="persona-matrix reveal reveal-d2">
       <!-- 1. Researcher — DONE -->
-      <div class="pm-card pm-active">
+      <div class="pm-card pm-active pm-clickable pm-selected" onclick="switchPersona('researcher', this)">
         <span class="pm-status pm-status-done">已完成</span>
         <span class="pm-icon">&#128300;</span>
         <h4>科学家 / 研究员</h4>
@@ -622,7 +707,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <p class="pm-test"><strong>测什么：</strong>能否基于一手文献做精确论证、能否识别方法论边界</p>
       </div>
       <!-- 2. Engineer — PLANNED -->
-      <div class="pm-card pm-pending">
+      <div class="pm-card pm-pending" onclick="showPending(this)">
         <span class="pm-status pm-status-plan">待开发</span>
         <span class="pm-icon">&#128187;</span>
         <h4>工程师 / 程序员</h4>
@@ -630,7 +715,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <p class="pm-test"><strong>测什么：</strong>能否从硬件到系统做端到端设计、能否给出可落地的工程决策</p>
       </div>
       <!-- 3. Finance — PLANNED -->
-      <div class="pm-card pm-pending">
+      <div class="pm-card pm-pending" onclick="showPending(this)">
         <span class="pm-status pm-status-plan">待开发</span>
         <span class="pm-icon">&#128200;</span>
         <h4>金融分析师</h4>
@@ -638,16 +723,16 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <p class="pm-test"><strong>测什么：</strong>能否做多层漏斗式筛选、能否给出有具体标的的投资建议</p>
       </div>
       <!-- 4. Doctor — PLANNED -->
-      <div class="pm-card pm-pending">
+      <div class="pm-card pm-pending" onclick="showPending(this)">
         <span class="pm-status pm-status-plan">待开发</span>
         <span class="pm-icon">&#129657;</span>
         <h4>医生 / 医疗人员</h4>
         <p class="pm-pain">医学文献更新快、临床决策需要可靠信息来源、AI 幻觉风险极高</p>
         <p class="pm-test"><strong>测什么：</strong>能否引用正确试验数据、能否在循证和现实约束间权衡</p>
       </div>
-      <!-- 5. Lawyer — PLANNED -->
-      <div class="pm-card pm-pending">
-        <span class="pm-status pm-status-plan">待开发</span>
+      <!-- 5. Lawyer — DONE -->
+      <div class="pm-card pm-active pm-clickable" onclick="switchPersona('legal', this)">
+        <span class="pm-status pm-status-done">已完成</span>
         <span class="pm-icon">&#9878;</span>
         <h4>律师 / 法研人员</h4>
         <p class="pm-pain">法律检索耗时、引用错误代价极高、合规分析复杂</p>
@@ -664,22 +749,24 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
       <textarea class="notes-area" id="editableNotes" placeholder="在此记录待讨论的事项、想法、待确认的决策...&#10;&#10;例如：&#10;- 工程师 persona 的数据源用 GitHub + Stack Overflow？&#10;- 金融 persona 是否需要实时行情数据？&#10;- 医疗 persona 的临床指南版本如何确定？"></textarea>
     </div>
 
-    <div class="cover-scroll reveal reveal-d4" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">
+    <div class="cover-scroll reveal reveal-d4" onclick="document.getElementById('pipeline-intro-section').scrollIntoView({behavior:'smooth'})">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
-      查看已完成的「科学家/研究员」Pipeline 详情
+      查看已完成的 Pipeline 详情
     </div>
   </div>
 </section>
 
 <!-- Pipeline intro label -->
-<div class="pipeline-intro">
+<div class="pipeline-intro" id="pipeline-intro-section">
   <div class="container">
-    <span class="pipeline-intro-badge">Pipeline #1</span>
-    <p class="pipeline-intro-text"><strong>科学家 / 研究员</strong> &mdash; 以 Serper (Google Scholar) + Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题</p>
+    <span class="pipeline-intro-badge" id="pipelineIntroBadge">Pipeline #1</span>
+    <p class="pipeline-intro-text" id="pipelineIntroText"><strong>科学家 / 研究员</strong> &mdash; 以 Serper (Google Scholar) + Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题</p>
   </div>
 </div>
 
-<div id="hero"></div>
+<!-- ══════════ RESEARCHER CONTENT ══════════ -->
+<div id="content-researcher" class="persona-content">
+<div id="r-hero"></div>
 
 <!-- Divider: vine -->
 <div class="section-divider divider-vine reveal">
@@ -696,7 +783,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ PIPELINE FLOW ══════════ -->
-<section class="pipeline-section" id="pipeline">
+<section class="pipeline-section" id="r-pipeline">
   <div class="container">
     <p class="overline">Pipeline Overview</p>
     <h2>六阶段流水线全景</h2>
@@ -704,21 +791,21 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 
     <div class="flow-wrap">
       <div class="flow reveal">
-        <div class="flow-node" onclick="scrollToPhase(1)">
+        <div class="flow-node" onclick="scrollToPhase('r',1)">
           <div class="flow-icon fi-1"><span class="flow-num">1</span>&#127981;</div>
           <div class="flow-name">子领域扩展</div>
           <div class="flow-brief">6 大领域 → 细分方向</div>
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">40 子领域</span>&#8594;</div>
 
-        <div class="flow-node" onclick="scrollToPhase(2)">
+        <div class="flow-node" onclick="scrollToPhase('r',2)">
           <div class="flow-icon fi-2"><span class="flow-num">2</span>&#128269;</div>
           <div class="flow-name">论文发现</div>
           <div class="flow-brief">Serper + S2 → 论文 + 作者</div>
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">610 论文</span>&#8594;</div>
 
-        <div class="flow-node" onclick="scrollToPhase(3)">
+        <div class="flow-node" onclick="scrollToPhase('r',3)">
           <div class="flow-icon fi-3"><span class="flow-num">3</span>&#128300;</div>
           <div class="flow-name">知识提取</div>
           <div class="flow-brief">结构化抽取 + 验证</div>
@@ -726,7 +813,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">已验证知识</span>&#8594;</div>
 
-        <div class="flow-node" onclick="scrollToPhase(4)">
+        <div class="flow-node" onclick="scrollToPhase('r',4)">
           <div class="flow-icon fi-4"><span class="flow-num">4</span>&#128279;</div>
           <div class="flow-name">关系挖掘</div>
           <div class="flow-brief">论文间关系识别</div>
@@ -734,7 +821,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">219 关系组</span>&#8594;</div>
 
-        <div class="flow-node" onclick="scrollToPhase(5)">
+        <div class="flow-node" onclick="scrollToPhase('r',5)">
           <div class="flow-icon fi-5"><span class="flow-num">5</span>&#9997;</div>
           <div class="flow-name">查询生成</div>
           <div class="flow-brief">5 种策略生成</div>
@@ -742,7 +829,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">50 queries</span>&#8594;</div>
 
-        <div class="flow-node" onclick="scrollToPhase(6)">
+        <div class="flow-node" onclick="scrollToPhase('r',6)">
           <div class="flow-icon fi-6"><span class="flow-num">6</span>&#128736;</div>
           <div class="flow-name">过滤与质控</div>
           <div class="flow-brief">基线测试 + 去重均衡</div>
@@ -753,7 +840,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </section>
 
 <!-- ══════════ QUERY WALKTHROUGH ══════════ -->
-<section class="walkthrough-section" id="walkthrough">
+<section class="walkthrough-section" id="r-walkthrough">
   <div class="container">
     <p class="overline">Live Example</p>
     <h2>一条 Query 的诞生过程</h2>
@@ -920,7 +1007,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ DOMAINS ══════════ -->
-<section class="domains-section" id="domains">
+<section class="domains-section" id="r-domains">
   <div class="container">
     <p class="overline">Research Domains</p>
     <h2>六大学科领域覆盖</h2>
@@ -979,7 +1066,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ PHASE DETAILS ══════════ -->
-<section class="details-section" id="details">
+<section class="details-section" id="r-details">
   <div class="container">
     <p class="overline">Phase Details</p>
     <h2>各阶段详细设计</h2>
@@ -987,7 +1074,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 
     <div class="accordion">
       <!-- P1 -->
-      <div class="acc-item reveal" id="phase-1">
+      <div class="acc-item reveal" id="r-phase-1">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-1">&#127981;</div>
           <div class="acc-title"><h4>Phase 1: 子领域扩展</h4><p>从 6 大领域生成细分研究方向与搜索关键词</p></div>
@@ -1005,7 +1092,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div></div>
       </div>
       <!-- P2 -->
-      <div class="acc-item reveal reveal-d1" id="phase-2">
+      <div class="acc-item reveal reveal-d1" id="r-phase-2">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-2">&#128269;</div>
           <div class="acc-title"><h4>Phase 2: 论文发现与作者定位</h4><p>通过 Serper (Google Scholar) 搜索论文，Semantic Scholar 补全摘要与元数据</p></div>
@@ -1036,7 +1123,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div></div>
       </div>
       <!-- P3 -->
-      <div class="acc-item reveal reveal-d2" id="phase-3">
+      <div class="acc-item reveal reveal-d2" id="r-phase-3">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-3">&#128300;</div>
           <div class="acc-title"><h4>Phase 3: 知识提取 + Layer 1 验证</h4><p>从论文摘要中提取结构化知识，并验证提取准确性</p></div>
@@ -1061,7 +1148,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div></div>
       </div>
       <!-- P4 -->
-      <div class="acc-item reveal reveal-d3" id="phase-4">
+      <div class="acc-item reveal reveal-d3" id="r-phase-4">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-4">&#128279;</div>
           <div class="acc-title"><h4>Phase 4: 关系挖掘 + Layer 2 验证</h4><p>发现论文间的方法论争论、矛盾、互补等非平凡关系</p></div>
@@ -1086,7 +1173,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div></div>
       </div>
       <!-- P5 -->
-      <div class="acc-item reveal reveal-d4" id="phase-5">
+      <div class="acc-item reveal reveal-d4" id="r-phase-5">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-5">&#9997;</div>
           <div class="acc-title"><h4>Phase 5: 查询生成 + Layer 3 验证</h4><p>基于论文关系生成高难度研究问题</p></div>
@@ -1109,7 +1196,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         </div></div>
       </div>
       <!-- P6 -->
-      <div class="acc-item reveal reveal-d5" id="phase-6">
+      <div class="acc-item reveal reveal-d5" id="r-phase-6">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-6">&#128736;</div>
           <div class="acc-title"><h4>Phase 6: 过滤与质量控制</h4><p>搜索必要性验证 → 难度下限 → 去重 → 策略均衡</p></div>
@@ -1153,7 +1240,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ STRATEGIES ══════════ -->
-<section class="strategies-section" id="strategies">
+<section class="strategies-section" id="r-strategies">
   <div class="container">
     <p class="overline">Generation Strategies</p>
     <h2>五种查询生成策略</h2>
@@ -1322,7 +1409,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ VERIFICATION ══════════ -->
-<section class="verif-section" id="verification">
+<section class="verif-section" id="r-verification">
   <div class="container">
     <p class="overline">Quality Assurance</p>
     <h2>三层交叉验证体系</h2>
@@ -1390,29 +1477,29 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 </div>
 
 <!-- ══════════ EXAMPLE QUERIES ══════════ -->
-<section class="examples-section" id="examples">
+<section class="examples-section" id="r-examples">
   <div class="container">
     <p class="overline">Generated Queries</p>
     <h2>全部生成结果（50 条）</h2>
     <p class="section-desc">本次运行实际产出的全部查询。点击策略标签筛选，点击卡片展开查看详情与源论文。</p>
     <div class="examples-note">&#9889; 真实生成数据 &mdash; Computer Science / 38 个子领域 / 610 篇论文 / 219 组关系 &rarr; 50 条最终查询</div>
 
-    <div class="collapse-toggle" id="queryCollapseBtn" onclick="toggleQueryCollapse()">
+    <div class="collapse-toggle" id="r-queryCollapseBtn" onclick="toggleQueryCollapse('r')">
       <span class="ct-chev">&#9660;</span> 展开查看全部 50 条生成结果
     </div>
 
-    <div class="collapse-content" id="queryCollapseContent">
+    <div class="collapse-content" id="r-queryCollapseContent">
     <!-- Filter bar -->
     <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterQueries('all',this)">全部 (50)</button>
-      <button class="filter-btn" onclick="filterQueries('cross_domain_bridge',this)">跨领域桥梁 (13)</button>
-      <button class="filter-btn" onclick="filterQueries('methodology_debate',this)">方法论争论 (23)</button>
-      <button class="filter-btn" onclick="filterQueries('literature_synthesis',this)">文献综合 (11)</button>
-      <button class="filter-btn" onclick="filterQueries('quantitative_verification',this)">定量验证 (2)</button>
-      <span class="filter-count" id="filterCount">显示 50 / 50</span>
+      <button class="filter-btn active" onclick="filterQueriesR('all',this)">全部 (50)</button>
+      <button class="filter-btn" onclick="filterQueriesR('cross_domain_bridge',this)">跨领域桥梁 (13)</button>
+      <button class="filter-btn" onclick="filterQueriesR('methodology_debate',this)">方法论争论 (23)</button>
+      <button class="filter-btn" onclick="filterQueriesR('literature_synthesis',this)">文献综合 (11)</button>
+      <button class="filter-btn" onclick="filterQueriesR('quantitative_verification',this)">定量验证 (2)</button>
+      <span class="filter-count" id="r-filterCount">显示 50 / 50</span>
     </div>
 
-    <div class="q-grid" id="queryGrid">
+    <div class="q-grid" id="r-queryGrid">
       <!-- Q1 -->
       <div class="q-card reveal" data-strategy="cross_domain_bridge">
         <div class="q-bar bar-cross"></div>
@@ -2725,30 +2812,706 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
       </div>
     </div>
 </section>
+</div><!-- /content-researcher -->
+
+<!-- ══════════ LEGAL CONTENT ══════════ -->
+<div id="content-legal" class="persona-content" style="display:none">
+<div id="l-hero"></div>
+
+<!-- Divider: vine -->
+<div class="section-divider divider-vine reveal">
+  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="vine-line" d="M0 24 Q100 8 200 24 Q300 40 400 24 Q500 8 600 24 Q700 40 800 24" pathLength="1"/>
+    <ellipse class="vine-leaf" cx="150" cy="16" rx="6" ry="4" transform="rotate(-20 150 16)"/>
+    <ellipse class="vine-leaf" cx="350" cy="32" rx="5" ry="3.5" transform="rotate(15 350 32)"/>
+    <ellipse class="vine-leaf" cx="550" cy="14" rx="6" ry="4" transform="rotate(-25 550 14)"/>
+    <ellipse class="vine-leaf" cx="700" cy="34" rx="5" ry="3" transform="rotate(10 700 34)"/>
+    <circle class="vine-dot" cx="250" cy="24" r="2.5"/>
+    <circle class="vine-dot" cx="480" cy="24" r="2"/>
+    <circle class="vine-dot" cx="650" cy="24" r="2.5"/>
+  </svg>
+</div>
+
+<!-- ══════════ PIPELINE FLOW ══════════ -->
+<section class="pipeline-section" id="l-pipeline">
+  <div class="container">
+    <p class="overline">Pipeline Overview</p>
+    <h2>五阶段流水线全景</h2>
+    <p class="section-desc">从律师工作场景到最终法律研究问题，数据经过逐级精炼。每个阶段都有明确的输入、输出与质量门控。</p>
+
+    <div class="flow-wrap">
+      <div class="flow reveal">
+        <div class="flow-node" onclick="scrollToPhase('l',1)">
+          <div class="flow-icon fi-1"><span class="flow-num">1</span>&#128220;</div>
+          <div class="flow-name">议题发现</div>
+          <div class="flow-brief">9 场景 &rarr; ~25 议题</div>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">~25 议题</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase('l',2)">
+          <div class="flow-icon fi-2"><span class="flow-num">2</span>&#128269;</div>
+          <div class="flow-name">法源搜集</div>
+          <div class="flow-brief">Serper + 权威站点 &rarr; 法条/判例/解读</div>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">结构化法源</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase('l',3)">
+          <div class="flow-icon fi-3"><span class="flow-num">3</span>&#128300;</div>
+          <div class="flow-name">差异分析</div>
+          <div class="flow-brief">跨法域对比 &rarr; 结构化差异</div>
+          <span class="flow-badge">核心层</span>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">差异矩阵</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase('l',4)">
+          <div class="flow-icon fi-4"><span class="flow-num">4</span>&#9997;</div>
+          <div class="flow-name">Query 生成</div>
+          <div class="flow-brief">3 类型 &times; 7 难化 &rarr; ~126 候选</div>
+          <span class="flow-badge">生成层</span>
+        </div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">~126 候选</span>&#8594;</div>
+
+        <div class="flow-node" onclick="scrollToPhase('l',5)">
+          <div class="flow-icon fi-5"><span class="flow-num">5</span>&#128736;</div>
+          <div class="flow-name">过滤质控</div>
+          <div class="flow-brief">基线测试 + 去重 &rarr; ~50 queries</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ QUERY WALKTHROUGH ══════════ -->
+<section class="walkthrough-section" id="l-walkthrough">
+  <div class="container">
+    <p class="overline">Live Example</p>
+    <h2>一条法律 Query 的诞生过程</h2>
+    <p class="section-desc">以「AI训练数据的跨法域版权合规」议题为例，完整追踪一条法律研究查询从场景发现到最终输出的五阶段旅程。</p>
+
+    <div class="wt-timeline">
+
+      <!-- ── Phase 1 ── -->
+      <div class="wt-step reveal">
+        <div class="wt-dot wt-dot-1">1</div>
+        <h4>议题发现 <span>Phase 1 &mdash; Serper + LLM</span></h4>
+        <div class="wt-card">
+          <span class="wt-label wt-label-in">INPUT</span>
+          <p>场景模板：<strong>new_tech_compliance</strong>（无先例类 &mdash; 新技术合规）</p>
+          <div class="wt-arrow">&darr; Serper 搜索近期事件 &darr;</div>
+          <span class="wt-label wt-label-out">搜索发现的真实事件</span>
+          <div class="wt-paper">
+            <div class="wt-paper-title">"NYT v. OpenAI copyright lawsuit filed"</div>
+            <div class="wt-paper-meta">2023-12 &bull; 美国纽约南区联邦地区法院</div>
+          </div>
+          <div class="wt-paper">
+            <div class="wt-paper-title">"EU AI Act enters into force"</div>
+            <div class="wt-paper-meta">2024-08 &bull; 欧盟官方公报</div>
+          </div>
+          <div class="wt-paper">
+            <div class="wt-paper-title">"中国生成式AI管理暂行办法实施"</div>
+            <div class="wt-paper-meta">2023-08 &bull; 中国国家互联网信息办公室</div>
+          </div>
+          <div class="wt-arrow">&darr; LLM 提炼议题 &darr;</div>
+          <span class="wt-label wt-label-llm">OUTPUT</span>
+          <dl class="wt-kv">
+            <dt>议题</dt><dd><strong>AI训练数据的跨法域版权合规</strong></dd>
+            <dt>涉及法域</dt><dd>US, EU, CN</dd>
+            <dt>法源类型</dt><dd>statute, case_law, scholarly_commentary</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- ── Phase 2 ── -->
+      <div class="wt-step reveal">
+        <div class="wt-dot wt-dot-2">2</div>
+        <h4>法源搜集 <span>Phase 2 &mdash; Serper + 权威站点</span></h4>
+        <div class="wt-card">
+          <span class="wt-label wt-label-in">INPUT</span>
+          <p>议题 + 法域列表 &rarr; 法域特化搜索</p>
+          <div class="wt-arrow">&darr; 多法域法源采集 &darr;</div>
+          <span class="wt-label wt-label-out">OUTPUT &mdash; 各法域法源</span>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">US: 17 U.S.C. &sect; 107 (Fair Use)</div>
+            <div class="wt-paper-meta">联邦法律 &bull; 现行有效</div>
+            <div class="wt-paper-abstract">四要素测试：使用目的与性质、被使用作品的性质、使用的数量和实质性、对市场价值的影响</div>
+          </div>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">US: NYT v. OpenAI (S.D.N.Y., pending)</div>
+            <div class="wt-paper-meta">判例 &bull; 审理中 &bull; Case No. 1:23-cv-11195</div>
+            <div class="wt-paper-abstract">原告主张 OpenAI 在训练 GPT 模型时大规模复制并使用了纽约时报的版权内容，构成版权侵权</div>
+          </div>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">EU: Directive 2019/790 Art.3-4 (TDM Exception)</div>
+            <div class="wt-paper-meta">欧盟指令 &bull; 现行有效</div>
+            <div class="wt-paper-abstract">Art.3 为科研目的的文本和数据挖掘提供强制性例外；Art.4 为商业目的提供可被权利人声明保留（opt-out）的例外</div>
+          </div>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">CN: 著作权法第24条（合理使用）</div>
+            <div class="wt-paper-meta">中国法律 &bull; 2021年修订版 &bull; 现行有效</div>
+            <div class="wt-paper-abstract">列举12种合理使用情形，但未明确包含AI训练数据使用的情形</div>
+          </div>
+
+          <p style="margin-top:12px;font-size:.85rem;color:var(--text-tertiary)"><span class="wt-verdict wt-pass">&#10003; 交叉验证</span> 来源交叉核对完成，时效性确认：所有法源均为 in_force 状态</p>
+        </div>
+      </div>
+
+      <!-- ── Phase 3 ── -->
+      <div class="wt-step reveal">
+        <div class="wt-dot wt-dot-3">3</div>
+        <h4>差异分析 <span>Phase 3 &mdash; LLM 跨法域对比</span></h4>
+        <div class="wt-card">
+          <span class="wt-label wt-label-llm">LLM CALL &mdash; 立场提炼</span>
+          <p>从各法域法源中提取对同一议题的法律立场：</p>
+          <dl class="wt-kv">
+            <dt>US 立场</dt><dd>依赖 fair use 抗辩（四要素测试），目前无明确立法，NYT v. OpenAI 案将成为重要先例</dd>
+            <dt>EU 立场</dt><dd>Directive 2019/790 Art.3-4 提供明确 TDM 例外条款，区分科研目的（强制例外）和商业目的（可 opt-out）</dd>
+            <dt>CN 立场</dt><dd>著作权法第24条列举合理使用情形，但未明确覆盖 AI 训练数据使用场景</dd>
+          </dl>
+          <div class="wt-arrow">&darr; 差异提炼 &darr;</div>
+          <span class="wt-label wt-label-verify">核心差异</span>
+          <div class="wt-query-box" style="margin:8px 0;font-size:.9rem;font-weight:400">
+            <strong>规则差异：</strong>美国依赖 fair use 抗辩（四要素测试），欧盟有明确 TDM 例外条款，中国合理使用条款未明确覆盖 AI 训练
+          </div>
+          <div class="wt-tags">
+            <span>难度机制: jurisdiction_count (3)</span>
+            <span>难度机制: interpretation_ambiguity</span>
+            <span>难度机制: temporal_evolution</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Phase 4 ── -->
+      <div class="wt-step reveal">
+        <div class="wt-dot wt-dot-4">4</div>
+        <h4>Query 生成 <span>Phase 4 &mdash; unprecedented 类型</span></h4>
+        <div class="wt-card">
+          <span class="wt-label wt-label-llm">LLM CALL &mdash; 问题生成</span>
+          <p>基于已验证的差异分析，按「无先例（unprecedented）」类型生成法律研究问题：</p>
+
+          <div class="wt-query-box" style="margin:12px 0">
+            一家总部位于新加坡的AI公司，使用了从公开网络爬取的中英日三语文本数据训练大语言模型，该模型同时在美国、欧盟和中国市场提供服务。如果版权持有人分别在这三个法域提起侵权诉讼，各法域的法院会如何适用本地版权法中的例外条款（如美国fair use、欧盟TDM例外、中国合理使用）？各法域的裁判结果可能有何不同？
+          </div>
+
+          <div class="wt-tags">
+            <span>问题类型: unprecedented</span>
+            <span>难化手段: multi_jurisdiction</span>
+            <span>难化手段: temporal_evolution</span>
+            <span>法域: US, EU, CN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Phase 5 ── -->
+      <div class="wt-step reveal">
+        <div class="wt-dot wt-dot-5">5</div>
+        <h4>过滤质控 <span>Phase 5 &mdash; 多维过滤</span></h4>
+        <div class="wt-card">
+          <span class="wt-label wt-label-filter">FILTER 1 &mdash; 搜索必要性</span>
+          <p>让 LLM <strong>不搜索</strong>直接回答此问题，然后评估基线质量：</p>
+          <dl class="wt-kv">
+            <dt>基线质量</dt><dd>0.35 &mdash; 模型能给出框架性分析但缺乏具体法条引用和判例细节</dd>
+            <dt>需要搜索?</dt><dd><strong>Yes</strong> &mdash; 涉及进行中的诉讼和多法域最新立法，需要深度搜索</dd>
+          </dl>
+          <p><span class="wt-verdict wt-pass">&#10003; 通过</span> 基线质量不足，确实需要深度搜索</p>
+
+          <div style="margin-top:14px">
+            <span class="wt-label wt-label-filter">FILTER 2 &mdash; 法律专业性检查</span>
+            <dl class="wt-kv">
+              <dt>场景合理性</dt><dd>pass &#10003; &mdash; 真实的跨境 AI 合规场景</dd>
+              <dt>类型一致性</dt><dd>pass &#10003; &mdash; 确认为无先例类问题</dd>
+              <dt>迷惑性风险</dt><dd><strong style="color:var(--accent)">high</strong> &mdash; 模型可能编造不存在的中国 AI 版权判例</dd>
+            </dl>
+            <p><span class="wt-verdict wt-pass">&#10003; 通过</span> 高迷惑性风险反而说明问题质量好（容易暴露模型幻觉）</p>
+          </div>
+
+          <div style="margin-top:14px">
+            <span class="wt-label wt-label-filter">FILTER 3 &mdash; 去重</span>
+            <p>语义去重检查：与已有 queries 无重复 (max similarity &lt; 0.6)</p>
+            <p><span class="wt-verdict wt-pass">&#10003; 通过</span> unique &rarr; 进入最终输出集</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wt-timeline -->
+  </div>
+</section>
+
+<!-- Divider: wave -->
+<div class="section-divider divider-wave reveal">
+  <svg viewBox="0 0 800 32" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="wave-path" d="M0 16 C50 4 100 4 150 16 S250 28 300 16 S400 4 450 16 S550 28 600 16 S700 4 750 16 S800 28 800 16"/>
+  </svg>
+</div>
+
+<!-- ══════════ DOMAINS ══════════ -->
+<section class="domains-section" id="l-domains">
+  <div class="container">
+    <p class="overline">Jurisdictions &amp; Scenarios</p>
+    <h2>法域与工作场景覆盖</h2>
+    <p class="section-desc">覆盖 6 个主要法域和 9 种律师实务场景，确保生成的问题具有真实的跨法域对比价值。</p>
+
+    <div class="domains-grid">
+      <div class="domain-card reveal">
+        <h4>&#127482;&#127480; 美国 (US)</h4>
+        <p>普通法系 &bull; 判例法传统 &bull; 联邦与州双重体系</p>
+        <div class="dtags"><span>知识产权</span><span>数据隐私</span><span>反垄断</span><span>证券监管</span><span>AI合规</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d1">
+        <h4>&#127464;&#127475; 中国 (CN)</h4>
+        <p>大陆法系 &bull; 成文法为主 &bull; 司法解释补充</p>
+        <div class="dtags"><span>数据安全法</span><span>个人信息保护</span><span>反垄断</span><span>知识产权</span><span>跨境合规</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d2">
+        <h4>&#127466;&#127482; 欧盟 (EU)</h4>
+        <p>大陆法系 &bull; 指令与条例并行 &bull; 成员国转化</p>
+        <div class="dtags"><span>GDPR</span><span>AI Act</span><span>数字市场法</span><span>版权指令</span><span>竞争法</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d3">
+        <h4>&#127471;&#127477; 日本 (JP)</h4>
+        <p>大陆法系 &bull; 德国法影响 &bull; 判例实质作用大</p>
+        <div class="dtags"><span>个人信息保护</span><span>著作权</span><span>AI治理</span><span>公司法</span><span>劳动法</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d4">
+        <h4>&#127480;&#127468; 新加坡 (SG)</h4>
+        <p>普通法系 &bull; 英国法传统 &bull; 亚太仲裁枢纽</p>
+        <div class="dtags"><span>数据保护</span><span>金融监管</span><span>知识产权</span><span>国际仲裁</span><span>AI治理</span></div>
+      </div>
+      <div class="domain-card reveal reveal-d5">
+        <h4>&#127468;&#127463; 英国 (UK)</h4>
+        <p>普通法系 &bull; 脱欧后独立发展 &bull; 判例法权威</p>
+        <div class="dtags"><span>数据保护</span><span>金融监管</span><span>竞争法</span><span>知识产权</span><span>AI监管</span></div>
+      </div>
+    </div>
+
+    <!-- 9 Practitioner Scenarios grouped by question type -->
+    <h3 style="margin-top:56px;margin-bottom:8px">9 种律师实务场景</h3>
+    <p class="section-desc" style="margin-bottom:24px">场景按三种问题类型分组，每种类型对应 3 个典型律师工作场景。</p>
+
+    <div class="scenario-grid">
+      <div class="scenario-group reveal">
+        <h4>有先例类 (Precedent)</h4>
+        <ul>
+          <li><strong>cross_border_ma</strong> &mdash; 跨境并购审批</li>
+          <li><strong>ip_infringement</strong> &mdash; 知识产权侵权诉讼</li>
+          <li><strong>regulatory_enforcement</strong> &mdash; 监管执法对比</li>
+        </ul>
+      </div>
+      <div class="scenario-group reveal reveal-d1">
+        <h4>无先例类 (Unprecedented)</h4>
+        <ul>
+          <li><strong>new_tech_compliance</strong> &mdash; 新技术合规</li>
+          <li><strong>data_sovereignty</strong> &mdash; 数据主权冲突</li>
+          <li><strong>climate_liability</strong> &mdash; 气候诉讼责任</li>
+        </ul>
+      </div>
+      <div class="scenario-group reveal reveal-d2">
+        <h4>预测类 (Predictive)</h4>
+        <ul>
+          <li><strong>pending_legislation</strong> &mdash; 待审法案影响</li>
+          <li><strong>judicial_trend</strong> &mdash; 司法趋势预测</li>
+          <li><strong>policy_convergence</strong> &mdash; 政策趋同/分歧</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: dots -->
+<div class="section-divider divider-dots reveal">
+  <svg viewBox="0 0 800 24" fill="none" preserveAspectRatio="xMidYMid meet">
+    <circle class="ddot" cx="100" cy="12" r="5" opacity=".2"/>
+    <circle class="ddot" cx="160" cy="12" r="4" opacity=".17"/>
+    <circle class="ddot" cx="215" cy="12" r="3.5" opacity=".14"/>
+    <circle class="ddot" cx="265" cy="12" r="3" opacity=".12"/>
+    <circle class="ddot" cx="340" cy="12" r="6" opacity=".2"/>
+    <circle class="ddot" cx="400" cy="12" r="4.5" opacity=".17"/>
+    <circle class="ddot" cx="455" cy="12" r="3.5" opacity=".13"/>
+    <circle class="ddot" cx="530" cy="12" r="5.5" opacity=".2"/>
+    <circle class="ddot" cx="590" cy="12" r="4" opacity=".16"/>
+    <circle class="ddot" cx="640" cy="12" r="3" opacity=".12"/>
+    <circle class="ddot" cx="700" cy="12" r="5" opacity=".18"/>
+  </svg>
+</div>
+
+<!-- ══════════ PHASE DETAILS ══════════ -->
+<section class="details-section" id="l-details">
+  <div class="container">
+    <p class="overline">Phase Details</p>
+    <h2>各阶段详细设计</h2>
+    <p class="section-desc">点击展开查看每个阶段的输入、输出、核心逻辑与关键参数。</p>
+
+    <div class="accordion">
+      <!-- P1 -->
+      <div class="acc-item reveal" id="l-phase-1">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-1">&#128220;</div>
+          <div class="acc-title"><h4>Phase 1: 议题发现</h4><p>律师场景模板 + Serper 搜索 + LLM 提炼跨法域法律议题</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>9 个律师实务场景模板<span class="arr">&#8594;</span><strong>输出</strong> ~25 个跨法域法律议题</div>
+          <h5>核心逻辑</h5>
+          <ul>
+            <li>从 9 个预定义的律师工作场景出发（跨境并购、IP侵权、新技术合规等）</li>
+            <li>每个场景通过 <strong>Serper Web/News</strong> 搜索近期真实法律事件和新闻</li>
+            <li>LLM 从搜索结果中提炼具有跨法域对比价值的法律议题</li>
+            <li>每个议题标注涉及的法域（至少 2 个）、法源类型、相关领域</li>
+            <li>议题数量由目标 query 总数反推，确保漏斗产量充足</li>
+          </ul>
+          <h5>关键参数</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">场景数</span><span class="v">9</span></div>
+            <div class="param"><span class="k">议题 / 场景</span><span class="v">~3</span></div>
+            <div class="param"><span class="k">最小法域数</span><span class="v">2</span></div>
+            <div class="param"><span class="k">新闻时效</span><span class="v">24 个月</span></div>
+          </div>
+        </div></div>
+      </div>
+      <!-- P2 -->
+      <div class="acc-item reveal reveal-d1" id="l-phase-2">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-2">&#128269;</div>
+          <div class="acc-title"><h4>Phase 2: 法源搜集</h4><p>法域特化搜索 + 分类提取 + 交叉验证 + 时效性检查</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>议题 + 法域列表<span class="arr">&#8594;</span><strong>输出</strong> 各法域结构化法源</div>
+          <h5>法域特化搜索</h5>
+          <ul>
+            <li>为每个法域构造特化搜索查询（如 <code>site:law.cornell.edu</code>, <code>site:eur-lex.europa.eu</code>）</li>
+            <li>搜索法条（statute）、判例（case_law）、学术评论（scholarly_commentary）三类法源</li>
+            <li>利用 Serper Web API 从权威法律网站采集</li>
+          </ul>
+          <h5>分类提取</h5>
+          <ul>
+            <li>LLM 从搜索结果中提取结构化法源信息：法源名称、条文编号、生效日期、核心内容</li>
+            <li>标注法源类型（statute / case_law / regulation / scholarly_commentary）</li>
+          </ul>
+          <h5>交叉验证 + 时效性检查</h5>
+          <ul>
+            <li><strong>来源可信度</strong>：核实法源出处是否为权威机构/法院</li>
+            <li><strong>内容一致性</strong>：多个来源交叉核对法条内容</li>
+            <li><strong>时效性检查</strong>：确认法源是否仍为 in_force 状态，排除已废止的法规</li>
+          </ul>
+          <h5>关键参数</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">法源 / 法域 / 议题</span><span class="v">3-5</span></div>
+            <div class="param"><span class="k">权威站点</span><span class="v">预定义白名单</span></div>
+            <div class="param"><span class="k">时效检查</span><span class="v">in_force 验证</span></div>
+          </div>
+        </div></div>
+      </div>
+      <!-- P3 -->
+      <div class="acc-item reveal reveal-d2" id="l-phase-3">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-3">&#128300;</div>
+          <div class="acc-title"><h4>Phase 3: 差异分析</h4><p>立场提炼 + 跨法域对比 + 差异可利用性评估</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>各法域结构化法源<span class="arr">&#8594;</span><strong>输出</strong> 结构化差异矩阵</div>
+          <h5>立场提炼</h5>
+          <ul>
+            <li>从每个法域的法源中提取对议题的<strong>法律立场</strong>：明确允许 / 明确禁止 / 灰色地带 / 尚无规定</li>
+            <li>标注立场的法律基础（具体法条/判例）和确定性等级</li>
+          </ul>
+          <h5>跨法域对比</h5>
+          <ul>
+            <li>将各法域立场并排对比，识别 <strong>规则差异</strong>、<strong>解释差异</strong>、<strong>执法差异</strong></li>
+            <li>评估差异的深度和可利用性 &mdash; 是否适合生成有意义的研究问题</li>
+          </ul>
+          <h5>差异可利用性评估</h5>
+          <ul>
+            <li>评估每个差异可触发的<strong>难度机制</strong>数量</li>
+            <li>打分标准：法域数量、解释模糊度、时间演化、现实影响力</li>
+            <li>低分差异直接跳过，不进入生成阶段</li>
+          </ul>
+        </div></div>
+      </div>
+      <!-- P4 -->
+      <div class="acc-item reveal reveal-d3" id="l-phase-4">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-4">&#9997;</div>
+          <div class="acc-title"><h4>Phase 4: Query 生成</h4><p>3 种问题类型 &times; 7 种难化手段 &rarr; ~126 候选问题</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>结构化差异矩阵<span class="arr">&#8594;</span><strong>输出</strong> ~126 候选法律研究问题</div>
+          <h5>三种问题类型</h5>
+          <ul>
+            <li><strong>有先例 (Precedent)</strong> &mdash; 权重 1/3 &mdash; 比较各法域已有判例的裁判逻辑差异</li>
+            <li><strong>无先例 (Unprecedented)</strong> &mdash; 权重 1/3 &mdash; 构造尚无明确判例的新型法律问题</li>
+            <li><strong>预测类 (Predictive)</strong> &mdash; 权重 1/3 &mdash; 预判未来监管走向和判决趋势</li>
+          </ul>
+          <h5>七种难化手段</h5>
+          <ul>
+            <li><strong>multi_jurisdiction</strong> &mdash; 多法域对比（增加法域数量）</li>
+            <li><strong>temporal_evolution</strong> &mdash; 时间维度叠加（法律变迁和待审案件）</li>
+            <li><strong>fact_pattern_complexity</strong> &mdash; 事实模式复杂化（多主体/跨境情景）</li>
+            <li><strong>conflicting_sources</strong> &mdash; 矛盾法源引入（同法域内部冲突）</li>
+            <li><strong>policy_vs_doctrine</strong> &mdash; 政策与法律教义的张力</li>
+            <li><strong>remedies_comparison</strong> &mdash; 救济手段比较（不同法域的救济差异）</li>
+            <li><strong>deception_inducing</strong> &mdash; 诱导幻觉（构造容易让 AI 编造判例的问题）</li>
+          </ul>
+          <p style="margin-top:8px;font-size:.82rem;color:var(--text-tertiary)">每个差异 &times; 每种问题类型 &times; 随机组合 2-3 种难化手段 &rarr; 批量生成候选问题。</p>
+        </div></div>
+      </div>
+      <!-- P5 -->
+      <div class="acc-item reveal reveal-d4" id="l-phase-5">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-dot fi-5">&#128736;</div>
+          <div class="acc-title"><h4>Phase 5: 过滤与质量控制</h4><p>搜索必要性 + 法律专业性 + 去重 + 配额平衡</p></div>
+          <span class="acc-chev">&#9660;</span>
+        </div>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>四道过滤门</h5>
+          <ul>
+            <li><strong>搜索必要性测试</strong> &mdash; LLM 在无搜索条件下回答 &rarr; 评估基线质量 &rarr; 淘汰基线已足够好的问题（quality_score &le; 0.5 才保留）</li>
+            <li><strong>法律专业性检查</strong> &mdash; 场景合理性（是否为真实律师工作场景）+ 类型一致性（问题类型标注是否准确）+ 迷惑性风险评估（是否容易诱导 AI 编造判例/法条）</li>
+            <li><strong>语义去重</strong> &mdash; 基于关键词和法域覆盖的相似度检查，去除高度重叠的问题</li>
+            <li><strong>配额平衡裁剪</strong> &mdash; 按问题类型 1/3 均分配额，按法域覆盖均衡裁剪至目标数量</li>
+          </ul>
+          <h5>基线评估维度</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">法条准确性</span><span class="v">accuracy</span></div>
+            <div class="param"><span class="k">分析完整性</span><span class="v">completeness</span></div>
+            <div class="param"><span class="k">论证深度</span><span class="v">depth</span></div>
+            <div class="param"><span class="k">法源时效</span><span class="v">timeliness</span></div>
+            <div class="param"><span class="k">引用具体性</span><span class="v">specificity</span></div>
+          </div>
+          <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出精准的法律分析 &rarr; 该问题不需要深度搜索 &rarr; 淘汰。高迷惑性风险的问题优先保留。</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: vine 2 -->
+<div class="section-divider divider-vine reveal">
+  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="vine-line" d="M0 24 Q80 40 200 24 Q320 8 400 24 Q480 40 600 24 Q720 8 800 24" pathLength="1"/>
+    <ellipse class="vine-leaf" cx="120" cy="34" rx="5" ry="3.5" transform="rotate(20 120 34)"/>
+    <ellipse class="vine-leaf" cx="300" cy="12" rx="6" ry="4" transform="rotate(-15 300 12)"/>
+    <ellipse class="vine-leaf" cx="520" cy="34" rx="5.5" ry="3.5" transform="rotate(25 520 34)"/>
+    <ellipse class="vine-leaf" cx="750" cy="14" rx="5" ry="3" transform="rotate(-12 750 14)"/>
+    <circle class="vine-dot" cx="200" cy="24" r="2"/>
+    <circle class="vine-dot" cx="420" cy="24" r="2.5"/>
+    <circle class="vine-dot" cx="620" cy="24" r="2"/>
+  </svg>
+</div>
+
+<!-- ══════════ STRATEGIES ══════════ -->
+<section class="strategies-section" id="l-strategies">
+  <div class="container">
+    <p class="overline">Question Types &amp; Difficulty</p>
+    <h2>三种问题类型与七种难化手段</h2>
+    <p class="section-desc">不同的法律议题差异映射到不同问题类型，难度来自真实跨法域差异的复杂性和多种难化手段的组合。</p>
+
+    <div class="strategy-grid">
+
+      <!-- ── 1. Precedent ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-lit"></div>
+        <div class="s-body">
+          <h4>有先例 <span class="en">Precedent</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">比较各法域已有判例的裁判逻辑差异，考验模型能否准确引用真实判例并分析不同法域法院的推理方法。</p>
+          <div class="s-chips"><span>已有判例</span><span>裁判逻辑对比</span><span>多法域</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">一家中国AI公司在欧盟市场推出的面部识别产品被指控违反GDPR数据处理规定。在CJEU和中国法院是否有类似的跨境数据处理侵权判例？各法域判例的裁判逻辑有何差异？</div>
+              <div class="s-ex-meta">场景: ip_infringement &middot; 法域 <strong>EU, CN</strong> &middot; 难化: multi_jurisdiction, conflicting_sources</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. Unprecedented ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-meth"></div>
+        <div class="s-body">
+          <h4>无先例 <span class="en">Unprecedented</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">构造尚无明确判例的新型法律问题，涉及新技术、新商业模式或跨境监管空白。考验模型在法律灰色地带的推理能力。</p>
+          <div class="s-chips"><span>无先例</span><span>新技术合规</span><span>法律灰色地带</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">一家总部位于新加坡的AI公司，使用了从公开网络爬取的中英日三语文本数据训练大语言模型，该模型同时在美国、欧盟和中国市场提供服务。如果版权持有人分别在这三个法域提起侵权诉讼，各法域的法院会如何适用本地版权法中的例外条款（如美国fair use、欧盟TDM例外、中国合理使用）？各法域的裁判结果可能有何不同？</div>
+              <div class="s-ex-meta">场景: new_tech_compliance &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化: multi_jurisdiction, temporal_evolution, fact_pattern_complexity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Predictive ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-contra"></div>
+        <div class="s-body">
+          <h4>预测类 <span class="en">Predictive</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">预判未来监管走向和判决趋势，需要结合法官政策倾向、各法域产业保护立场等软性因素。考验模型的法律推理和趋势分析能力。</p>
+          <div class="s-chips"><span>趋势预测</span><span>政策分析</span><span>司法走向</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">如果OpenAI在NYT v. OpenAI案中败诉，这一判决将如何影响其他AI公司在美国的训练数据使用策略？欧盟和中国的监管机构可能采取什么相应行动？考虑法官的政策倾向和各法域的产业保护立场，最可能的走向是什么？</div>
+              <div class="s-ex-meta">场景: judicial_trend &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化: temporal_evolution, policy_vs_doctrine, deception_inducing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 7 Difficulty Mechanisms -->
+    <h3 style="margin-top:56px;margin-bottom:8px">七种难化手段</h3>
+    <p class="section-desc" style="margin-bottom:24px">每个候选问题随机组合 2-3 种难化手段，确保问题具有足够的深度和区分度。</p>
+
+    <div class="diff-grid">
+      <div class="diff-card reveal">
+        <h5>1. multi_jurisdiction</h5>
+        <p>增加涉及的法域数量（2&rarr;3&rarr;4），要求模型在更多法律体系间做对比分析</p>
+      </div>
+      <div class="diff-card reveal reveal-d1">
+        <h5>2. temporal_evolution</h5>
+        <p>叠加时间维度 &mdash; 引入正在审理的案件、即将生效的法规、或法律变迁历史</p>
+      </div>
+      <div class="diff-card reveal reveal-d2">
+        <h5>3. fact_pattern_complexity</h5>
+        <p>增加事实模式复杂度 &mdash; 多主体、跨境交易、嵌套公司结构等</p>
+      </div>
+      <div class="diff-card reveal reveal-d3">
+        <h5>4. conflicting_sources</h5>
+        <p>引入同一法域内部的矛盾法源 &mdash; 不同法院的相反判例、法条与司法解释的张力</p>
+      </div>
+      <div class="diff-card reveal reveal-d4">
+        <h5>5. policy_vs_doctrine</h5>
+        <p>制造政策目标与法律教义之间的紧张关系 &mdash; 产业政策 vs 权利保护</p>
+      </div>
+      <div class="diff-card reveal reveal-d5">
+        <h5>6. remedies_comparison</h5>
+        <p>要求比较不同法域的救济手段差异 &mdash; 损害赔偿计算方法、禁令范围、惩罚性赔偿</p>
+      </div>
+      <div class="diff-card reveal">
+        <h5>7. deception_inducing</h5>
+        <p>构造容易让 AI 编造不存在的判例或法条的问题 &mdash; 测试模型的诚实性和幻觉倾向</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: wave 2 -->
+<div class="section-divider divider-wave reveal">
+  <svg viewBox="0 0 800 32" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="wave-path" d="M0 16 C60 28 120 28 180 16 S300 4 360 16 S480 28 540 16 S660 4 720 16 S800 28 800 16" stroke="#8B9E6B"/>
+  </svg>
+</div>
+
+<!-- ══════════ VERIFICATION ══════════ -->
+<section class="verif-section" id="l-verification">
+  <div class="container">
+    <p class="overline">Quality Assurance</p>
+    <h2>质量验证体系</h2>
+    <p class="section-desc">在流水线关键节点设置质量门控，确保生成的法律问题基于真实法源、具有实际研究价值。</p>
+
+    <div class="verif-stack">
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn1">V1</div>
+          <h4>交叉验证</h4>
+          <span class="v-phase">Phase 2</span>
+        </div>
+        <p>确保采集的法源信息准确可靠：来源是否为权威机构/法院、不同来源的内容是否一致、法规是否仍在生效。</p>
+        <div class="v-tags">
+          <span class="t t-pass">来源可信度</span>
+          <span class="t t-pass">内容一致性</span>
+          <span class="t t-pass">时效性 in_force</span>
+          <span class="t t-fail">失败 &rarr; 法源移除</span>
+        </div>
+      </div>
+      <div class="v-sep reveal">&#9662; 已验证法源流入</div>
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn2">V2</div>
+          <h4>搜索必要性</h4>
+          <span class="v-phase">Phase 5</span>
+        </div>
+        <p>让 LLM 不搜索直接回答生成的问题，评估基线质量。只保留基线质量不足的问题 &mdash; 确保问题确实需要深度搜索才能回答。</p>
+        <div class="v-tags">
+          <span class="t t-pass">baseline &le; 0.5</span>
+          <span class="t t-pass">需要外部法源</span>
+          <span class="t t-fail">基线过高 &rarr; 淘汰</span>
+        </div>
+      </div>
+      <div class="v-sep reveal">&#9662; 通过基线测试</div>
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn3">V3</div>
+          <h4>法律专业性</h4>
+          <span class="v-phase">Phase 5</span>
+        </div>
+        <p>检查问题是否为真实律师工作场景、问题类型标注是否准确、是否具有足够的迷惑性风险（容易诱导 AI 编造判例/法条）。</p>
+        <div class="v-tags">
+          <span class="t t-pass">场景合理性</span>
+          <span class="t t-pass">类型一致性</span>
+          <span class="t t-pass">迷惑性评估</span>
+          <span class="t t-fail">不合格 &rarr; Query 丢弃</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider: dots 2 -->
+<div class="section-divider divider-dots reveal">
+  <svg viewBox="0 0 800 24" fill="none" preserveAspectRatio="xMidYMid meet">
+    <circle class="ddot" cx="80" cy="12" r="4" opacity=".18" fill="#8B9E6B"/>
+    <circle class="ddot" cx="140" cy="12" r="5.5" opacity=".2" fill="#D4714E"/>
+    <circle class="ddot" cx="210" cy="12" r="3" opacity=".13" fill="#8B9E6B"/>
+    <circle class="ddot" cx="310" cy="12" r="5" opacity=".18" fill="#D9D2C9"/>
+    <circle class="ddot" cx="380" cy="12" r="4" opacity=".15" fill="#D4714E"/>
+    <circle class="ddot" cx="470" cy="12" r="6" opacity=".2" fill="#8B9E6B"/>
+    <circle class="ddot" cx="540" cy="12" r="3.5" opacity=".14" fill="#D4714E"/>
+    <circle class="ddot" cx="620" cy="12" r="4.5" opacity=".17" fill="#D9D2C9"/>
+    <circle class="ddot" cx="710" cy="12" r="5" opacity=".2" fill="#D4714E"/>
+  </svg>
+</div>
+
+<!-- ══════════ GENERATED QUERIES PLACEHOLDER ══════════ -->
+<section class="examples-section" id="l-examples">
+  <div class="container">
+    <p class="overline">Generated Queries</p>
+    <h2>生成结果</h2>
+    <p class="section-desc">运行完成后将自动填充真实生成的 Query 示例。</p>
+    <div class="examples-note">&#9889; 运行完成后将自动填充真实生成的 Query 示例 &mdash; 目标产出：9 场景 / 6 法域 / 3 问题类型 &rarr; ~50 条最终查询</div>
+  </div>
+</section>
+</div><!-- /content-legal -->
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="footer">
   <div class="container">
     <div class="footer-row">
       <span class="f">LLM: <strong>GPT-4o</strong></span>
-      <span class="f">数据源: <strong>Serper + Semantic Scholar API</strong></span>
-      <span class="f">本次产出: <strong>50 queries (2 domains, 10 subdomains)</strong></span>
-      <span class="f">运行时间: <strong>2026-04-06 16:35</strong></span>
+      <span class="f">Pipelines: <strong>#1 科学家/研究员, #2 律师/法研人员</strong></span>
+      <span class="f">目标产出: <strong>~50 queries / persona</strong></span>
     </div>
-    <p>Researcher Persona Query Generation Pipeline &middot; MiroEval 2.0</p>
+    <p>Multi-Persona Query Generation Pipelines &middot; MiroEval 2.0</p>
   </div>
 </footer>
 
 <!-- ══════════ JS ══════════ -->
 <script>
-/* Scroll reveal */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+/* ── Scroll reveal ───────────────────────────────── */
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+initReveal();
 
-
-/* Counter */
+/* ── Counter ─────────────────────────────────────── */
 const cobs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting && !e.target.dataset.done) {
@@ -2760,17 +3523,19 @@ const cobs = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.stat-num[data-target]').forEach(el => cobs.observe(el));
 
-/* Accordion */
+/* ── Accordion ───────────────────────────────────── */
 function toggleAcc(h) {
   const item = h.parentElement, body = item.querySelector('.acc-body'), inner = body.querySelector('.acc-inner');
-  document.querySelectorAll('.acc-item.open').forEach(o => {
+  // Close other open items within the same content container
+  const container = item.closest('.persona-content') || document;
+  container.querySelectorAll('.acc-item.open').forEach(o => {
     if (o !== item) { o.classList.remove('open'); o.querySelector('.acc-body').style.maxHeight = '0' }
   });
   if (item.classList.contains('open')) { item.classList.remove('open'); body.style.maxHeight = '0' }
   else { item.classList.add('open'); body.style.maxHeight = inner.scrollHeight + 32 + 'px' }
 }
 
-/* Query expand */
+/* ── Query expand ────────────────────────────────── */
 function toggleQ(btn) {
   const body = btn.closest('.q-body'), det = body.querySelector('.q-detail'),
         inner = det.querySelector('.q-detail-inner'), chev = btn.querySelector('.chev');
@@ -2781,19 +3546,21 @@ function toggleQ(btn) {
   }
 }
 
-/* Phase scroll */
-function scrollToPhase(n) {
-  const el = document.getElementById('phase-' + n);
-  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+/* ── Phase scroll (persona-aware) ────────────────── */
+function scrollToPhase(prefix, n) {
+  const el = document.getElementById(prefix + '-phase-' + n);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     const h = el.querySelector('.acc-header');
-    if (h && !el.classList.contains('open')) setTimeout(() => toggleAcc(h), 400)
+    if (h && !el.classList.contains('open')) setTimeout(() => toggleAcc(h), 400);
   }
 }
 
-/* Query section collapse */
-function toggleQueryCollapse() {
-  const btn = document.getElementById('queryCollapseBtn');
-  const content = document.getElementById('queryCollapseContent');
+/* ── Query section collapse (researcher) ─────────── */
+function toggleQueryCollapse(prefix) {
+  const btn = document.getElementById(prefix + '-queryCollapseBtn');
+  const content = document.getElementById(prefix + '-queryCollapseContent');
+  if (!btn || !content) return;
   const isOpen = content.classList.contains('open');
   if (isOpen) {
     content.classList.remove('open');
@@ -2810,11 +3577,16 @@ function toggleQueryCollapse() {
   }
 }
 
-/* Query filter */
-function filterQueries(strategy, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+/* ── Query filter (researcher) ───────────────────── */
+function filterQueriesR(strategy, btn) {
+  document.querySelectorAll('#r-queryGrid').forEach(grid => {
+    const filterBar = grid.previousElementSibling;
+  });
+  // Update active button within the researcher filter bar
+  const container = btn.closest('.collapse-content') || btn.closest('.persona-content');
+  if (container) container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const cards = document.querySelectorAll('#queryGrid .q-card');
+  const cards = document.querySelectorAll('#r-queryGrid .q-card');
   let shown = 0;
   cards.forEach(c => {
     if (strategy === 'all' || c.dataset.strategy === strategy) {
@@ -2823,10 +3595,11 @@ function filterQueries(strategy, btn) {
       c.classList.add('hidden-by-filter');
     }
   });
-  document.getElementById('filterCount').textContent = '显示 ' + shown + ' / 50';
+  const counter = document.getElementById('r-filterCount');
+  if (counter) counter.textContent = '显示 ' + shown + ' / 50';
 }
 
-/* Strategy example expand */
+/* ── Strategy example expand ─────────────────────── */
 function toggleSex(btn) {
   const ex = btn.closest('.s-ex'), det = ex.querySelector('.s-ex-detail'),
         inner = det.querySelector('.s-ex-detail-inner'), chev = btn.querySelector('.chev');
@@ -2837,18 +3610,85 @@ function toggleSex(btn) {
   }
 }
 
-/* Editable notes: save to localStorage, load on page open */
+/* ── Editable notes ──────────────────────────────── */
 const notesEl = document.getElementById('editableNotes');
 if (notesEl) {
-  const saved = localStorage.getItem('miroeval_notes');
+  const saved = localStorage.getItem('miroeval_unified_notes');
   if (saved) notesEl.value = saved;
 }
 function saveNotes(btn) {
   const val = document.getElementById('editableNotes').value;
-  localStorage.setItem('miroeval_notes', val);
+  localStorage.setItem('miroeval_unified_notes', val);
   btn.textContent = '已保存';
   btn.classList.add('saved');
   setTimeout(() => { btn.textContent = '保存'; btn.classList.remove('saved') }, 1500);
+}
+
+/* ══════════════════════════════════════════════════════
+   PERSONA TAB SWITCHING
+   ══════════════════════════════════════════════════════ */
+const pipelineIntros = {
+  researcher: {
+    badge: 'Pipeline #1',
+    text: '<strong>科学家 / 研究员</strong> &mdash; 以 Serper (Google Scholar) + Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题'
+  },
+  legal: {
+    badge: 'Pipeline #2',
+    text: '<strong>律师 / 法研人员</strong> &mdash; 以 Serper (Web/News) + 公开法律数据为数据源，通过跨法域差异分析自动生成高难度法律研究问题'
+  }
+};
+
+function switchPersona(personaId, cardEl) {
+  // Hide all content containers
+  document.querySelectorAll('.persona-content').forEach(el => el.style.display = 'none');
+  // Show selected
+  const target = document.getElementById('content-' + personaId);
+  if (target) target.style.display = 'block';
+
+  // Update pipeline intro
+  const intro = pipelineIntros[personaId];
+  if (intro) {
+    document.getElementById('pipelineIntroBadge').textContent = intro.badge;
+    document.getElementById('pipelineIntroText').innerHTML = intro.text;
+  }
+
+  // Update card selected state
+  document.querySelectorAll('.pm-card').forEach(c => c.classList.remove('pm-selected'));
+  if (cardEl) cardEl.classList.add('pm-selected');
+
+  // Re-trigger reveal animations for newly visible content
+  setTimeout(() => {
+    if (target) {
+      target.querySelectorAll('.reveal').forEach(el => {
+        if (!el.classList.contains('visible')) {
+          // Re-observe to trigger animation
+          const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+              if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+            })
+          }, { threshold: 0.08 });
+          obs.observe(el);
+        }
+      });
+    }
+  }, 50);
+}
+
+/* Toast for pending personas */
+let toastTimer = null;
+function showPending(cardEl) {
+  // Shake animation
+  cardEl.classList.remove('pm-shake');
+  void cardEl.offsetWidth; // force reflow
+  cardEl.classList.add('pm-shake');
+  setTimeout(() => cardEl.classList.remove('pm-shake'), 600);
+
+  // Show toast
+  const toast = document.getElementById('pmToast');
+  toast.textContent = '该 Pipeline 待开发';
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
 }
 </script>
 </body>
