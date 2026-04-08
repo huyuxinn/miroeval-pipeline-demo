@@ -675,7 +675,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 <div class="pipeline-intro">
   <div class="container">
     <span class="pipeline-intro-badge">Pipeline #1</span>
-    <p class="pipeline-intro-text"><strong>科学家 / 研究员</strong> &mdash; 以 Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题</p>
+    <p class="pipeline-intro-text"><strong>科学家 / 研究员</strong> &mdash; 以 Serper (Google Scholar) + Semantic Scholar 论文为数据源，通过论文间关系挖掘自动生成高难度研究问题</p>
   </div>
 </div>
 
@@ -714,7 +714,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <div class="flow-node" onclick="scrollToPhase(2)">
           <div class="flow-icon fi-2"><span class="flow-num">2</span>&#128269;</div>
           <div class="flow-name">论文发现</div>
-          <div class="flow-brief">Scholar API → 论文 + 作者</div>
+          <div class="flow-brief">Serper + S2 → 论文 + 作者</div>
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">610 论文</span>&#8594;</div>
 
@@ -737,7 +737,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <div class="flow-node" onclick="scrollToPhase(5)">
           <div class="flow-icon fi-5"><span class="flow-num">5</span>&#9997;</div>
           <div class="flow-name">查询生成</div>
-          <div class="flow-brief">5 策略 + 参考答案</div>
+          <div class="flow-brief">5 种策略生成</div>
           <span class="flow-badge">Layer 3</span>
         </div>
         <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">50 queries</span>&#8594;</div>
@@ -873,7 +873,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 
           <div class="wt-arrow">&darr; 验证 &darr;</div>
           <span class="wt-label wt-label-verify">LLM CALL #2 &mdash; Layer 3 验证</span>
-          <p>逐条核实参考答案中的每个 claim 是否有源论文支撑？是否存在编造的数据或错误归因？</p>
+          <p>逐条核实查询中引用的论文是否真实存在？是否存在编造的数据或错误归因？</p>
           <p><span class="wt-verdict wt-pass">&#10003; PASSED</span> score: 0.88 &mdash; 0 unsupported claims &mdash; 0 external papers cited</p>
         </div>
       </div>
@@ -1008,7 +1008,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
       <div class="acc-item reveal reveal-d1" id="phase-2">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-2">&#128269;</div>
-          <div class="acc-title"><h4>Phase 2: 论文发现与作者定位</h4><p>通过 Semantic Scholar API 找到高引论文和活跃研究者</p></div>
+          <div class="acc-title"><h4>Phase 2: 论文发现与作者定位</h4><p>通过 Serper (Google Scholar) 搜索论文，Semantic Scholar 补全摘要与元数据</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
@@ -1021,9 +1021,11 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           <p style="margin:8px 0;font-size:.82rem;color:var(--text-tertiary)">先用 2-3 年窗口找高引论文（确保引用量充足），提取活跃作者后，再拉取他们近 12-18 个月的最新发表（确保前沿性）。</p>
           <h5>核心逻辑</h5>
           <ul>
+            <li><strong>多策略搜索</strong>：先用组合关键词搜索 → 再用子领域名称 → 最后逐个关键词尝试，确保论文覆盖</li>
+            <li><strong>两步获取</strong>：Serper (Google Scholar) 搜索找到论文列表 → Semantic Scholar 按标题匹配补全完整摘要和结构化作者信息</li>
             <li>按<strong>引用速率</strong>（citations / 论文月龄）排序，避免偏向旧论文</li>
             <li>统计高频出现的作者 → 取 top 5 活跃研究者</li>
-            <li>拉取每位作者的近期发表 → 汇总为子领域论文池</li>
+            <li>拉取每位作者的近期发表（通过 S2 API） → 汇总为子领域论文池</li>
           </ul>
           <h5>关键参数</h5>
           <div class="param-grid">
@@ -1100,7 +1102,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </ul>
           <h5><span class="vbadge" style="background:var(--tag-red-bg);color:var(--tag-red)">Layer 3</span> 验证逻辑</h5>
           <ul>
-            <li>核实参考答案中归因到特定论文的声明是否与论文摘要一致</li>
+            <li>核实查询元数据中归因到特定论文的声明是否与论文摘要一致</li>
             <li>检查是否存在编造的数据、方法或错误归因</li>
             <li>通过条件：<strong>verification_passed = true</strong> 或 <strong>score &ge; 0.6</strong></li>
           </ul>
@@ -1117,7 +1119,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           <h5>四道过滤门</h5>
           <ul>
             <li><strong>搜索必要性测试</strong> &mdash; LLM 在无搜索条件下回答 → 评估基线质量 → 淘汰基线已足够好的问题（quality_score &le; 0.7 才保留）</li>
-            <li><strong>难度下限</strong> &mdash; 需引用论文 &ge; 3 篇，难度因子 &ge; 2 项</li>
+            <li><strong>难度下限</strong> &mdash; 需引用论文 &ge; 2 篇，难度因子 &ge; 2 项</li>
             <li><strong>语义去重</strong> &mdash; Jaccard 相似度 > 0.6 视为重复</li>
             <li><strong>策略均衡裁剪</strong> &mdash; 按权重分配配额，裁剪至目标数量</li>
           </ul>
@@ -1424,10 +1426,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the realm of cross-modal retrieval tasks, synthesizing the principles of audio-image temporal agreement into contrastive language-audio pre-training models represents a cutting-edge approach to enhancing zero-shot inference and transfer learning capabilities. The challenge is to refine methodologies that not only capture the dynamism of audio-im...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Refining Knowledge Transfer on Audio-Image Temporal Agreement for Audio-Text Cross Retrieval</span><br><span class="pm">Shunsuke Tsubaki et al., 2024</span></div>
             <div class="paper-item"><span class="pt">M2D-CLAP: Masked Modeling Duo Meets CLAP for Learning General-purpose Audio-Language Representation</span><br><span class="pm">Daisuke Niizumi et al., 2024</span></div>
@@ -1452,10 +1452,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.65 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Ensemble machine learning methods, known for their ability to achieve superior predictive accuracy, have been effectively applied in various domains, including medical prognosis and transportation systems management. This reference answer explores how these methods, specifically those used for coronary artery disease prediction, can be adapted to e...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">A Study on Different Machine Learning Approaches in Coronary Artery Disease Classification</span><br><span class="pm">Kirubaa.V Kirubaa.V et al., 2025</span></div>
             <div class="paper-item"><span class="pt">An Exploratory and Predictive Analysis of Travel Patterns and Demand in Bike-Sharing Systems</span><br><span class="pm">P. C et al., 2025</span></div>
@@ -1480,10 +1478,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The integration of multi-criteria decision-making frameworks for land suitability assessments with deep learning models for dust detection presents a promising avenue for optimizing site maintenance and efficiency in solar parks. The strategic selection of sites using multi-criteria decision-making (MCDM) frameworks can significantly impact the dep...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Enhancing Solar PV Deployment: Land Suitability Assessment and Site Selection using AHP</span><br><span class="pm">Blessy Tryphena et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Enhancement of Photovoltaic Dust Detection Using Deep Learning Technique</span><br><span class="pm">R. Gracia et al., 2024</span></div>
@@ -1508,12 +1504,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.64 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The adaptation and validation of fairness frameworks and bias mitigation strategies developed for AI in educational settings to address ethical and efficacy challenges in AI-driven healthcare involve a nuanced understanding of the distinct characteristics of these domains and the ethical stakes involved.
-
-The integration of AI technologies in educa...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">AI-driven healthcare: Fairness in AI healthcare: A survey.</span><br><span class="pm">Sribala Vidyadhari Chinta et al., 2025</span></div>
             <div class="paper-item"><span class="pt">FairAIED: Navigating Fairness, Bias, and Ethics in Educational AI Applications</span><br><span class="pm">Sribala Vidyadhari Chinta et al., 2024</span></div>
@@ -1538,10 +1530,8 @@ The integration of AI technologies in educa...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>To address the research question of how methods for Federated Learning and Medical Fog frameworks can be adapted to enhance the security of data transmission in edge-device applications, we must integrate insights from existing research, notably from the papers titled &quot;Predicting Diabetes with Federated Learning: A Digital Twin and Medical Fog-base...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Predicting Diabetes with Federated Learning: A Digital Twin and Medical Fog-based IoT Framework</span><br><span class="pm">Kaushik Mishra et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Executing Mobile Edge Functions in the Cloud-Edge Continuum: Analyzing Threats to Location Integrity</span><br><span class="pm">Philippe Massonet et al., 2025</span></div>
@@ -1566,10 +1556,8 @@ The integration of AI technologies in educa...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Integrating deep learning methodologies in breast MRI with large language models (LLMs) offers a promising direction to enhance predictive diagnostic workflows across multimodal radiology. The convergence of these technologies aims to improve diagnostic accuracy, operational efficiency, and personalized healthcare, while addressing significant chal...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">The Evolution and Clinical Impact of Deep Learning Technologies in Breast MRI</span><br><span class="pm">Tomoyuki Fujioka et al., 2024</span></div>
             <div class="paper-item"><span class="pt">The impact of large language models on radiology: a guide for radiologists on the latest innovations in AI</span><br><span class="pm">Takeshi Nakaura et al., 2024</span></div>
@@ -1594,10 +1582,8 @@ The integration of AI technologies in educa...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Deterministic end-to-end certification methods for neural networks, such as FullCert, offer a promising direction for enhancing the stability and reliability of certified circuits amid training-time and inference-time perturbations while maintaining mechanistic interpretability. The adaptation of such methods can be informed by insights from both c...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Certified Circuits: Stability Guarantees for Mechanistic Circuits</span><br><span class="pm">Alaa Anani et al., 2026</span></div>
             <div class="paper-item"><span class="pt">FullCert: Deterministic End-to-End Certification for Training and Inference of Neural Networks</span><br><span class="pm">Tobias Lorenz et al., 2024</span></div>
@@ -1622,12 +1608,8 @@ The integration of AI technologies in educa...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The comparison between Large Reasoning Models (LRMs) and standard Large Language Models (LLMs) in terms of accuracy and precision in complex reasoning tasks forms the crux of recent research efforts. Two pivotal papers shed light on understanding their dynamics, strengths, and limitations in varied contexts from 2023 to 2025.
-
-Firstly, the paper ti...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models via the Lens of Problem Complexity</span><br><span class="pm">P. Shojaee et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Reasoning&#x27;s Razor: Reasoning Improves Accuracy but Can Hurt Recall at Critical Operating Points in Safety and Hallucination Detection</span><br><span class="pm">Atoosa Malemir Chegini et al., 2025</span></div>
@@ -1652,10 +1634,8 @@ Firstly, the paper ti...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the intersection of semantic segmentation and audio-language representation, the period between 2023 and 2025 witnessed significant methodological advancements addressing challenges with same-class audio sources and enhancing automated audio captioning. This reference synthesis draws from three pivotal papers, each contributing unique methodolog...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Class-Aware Permutation-Invariant Signal-to-Distortion Ratio for Semantic Segmentation of Sound Scene with Same-Class Sources</span><br><span class="pm">Binh Thien Nguyen et al., 2026</span></div>
             <div class="paper-item"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond CLAP</span><br><span class="pm">Daisuke Niizumi et al., 2025</span></div>
@@ -1681,12 +1661,8 @@ Firstly, the paper ti...</p>
             <span class="m">源论文: <strong>4 篇</strong></span>
             <span class="m">基线质量: <strong>0.52 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Between 2023 and 2025, federated learning (FL) models that are decentralized, asynchronous, and blockchain-based have shown advancements and promising results across various domains. These models&#x27; effectiveness can be evaluated on privacy preservation, computational efficiency, and practical implementation.
-
-Privacy preservation remains a crucial o...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">When federated learning meets privacy-preserving computation</span><br><span class="pm">Jingxue Chen et al., 2024</span></div>
             <div class="paper-item"><span class="pt">A Weighted Privacy-Preserving Federated Learning for Proton Exchange Membrane Fuel Cell</span><br><span class="pm">Jingxue Chen et al., 2025</span></div>
@@ -1713,10 +1689,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.55 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Explainable artificial intelligence (XAI) techniques, such as SHapley Additive exPlanations (SHAP), have emerged as pivotal tools in enhancing the interpretability and effectiveness of environmental prediction models between 2023 and 2025. These models have been crucial in domains such as water quality forecasting and landslide susceptibility mappi...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Predicting water quality index using stacked ensemble regression and SHAP based explainable artificial intelligence</span><br><span class="pm">R. Choudhary et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Enhancing landslide susceptibility predictions with XGBoost and SHAP: a data-driven explainable AI method</span><br><span class="pm">Danish Khan et al., 2025</span></div>
@@ -1741,10 +1715,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The evolution of methods for Spatial Semantic Segmentation of Sound Scenes between 2023 and 2025 represents a significant advancement in the field of immersive communication technologies. The primary focus of these developments, as discussed in the source papers, is the effective detection and separation of sound events in spatial sound scenes. The...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Baseline Systems and Evaluation Metrics for Spatial Semantic Segmentation of Sound Scenes</span><br><span class="pm">Binh Thien Nguyen et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Description and Discussion on DCASE 2025 Challenge Task 4: Spatial Semantic Segmentation of Sound Scenes</span><br><span class="pm">Masahiro Yasuda et al., 2025</span></div>
@@ -1769,10 +1741,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.64 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Financial inclusion is a pressing challenge worldwide, particularly for small and medium-sized enterprises (SMEs) and underserved populations. The convergence of FinTech and AI-driven technologies offers innovative solutions to address these challenges from 2023 to 2025. This reference answer explores how these technologies enhance financial inclus...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Global perspectives on FinTech: Empowering SMEs and women in emerging markets for financial inclusion</span><br><span class="pm">Ibrahim Adedeji Adeniran et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Utilizing AI-driven predictive analytics to reduce credit risk and enhance financial inclusion</span><br><span class="pm">Angela Omozele Abhulimen et al., 2024</span></div>
@@ -1798,10 +1768,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Between 2023 and 2025, the application of data-driven HR strategies is perceived to significantly influence workforce efficiency, customer service, and employee engagement. Through an exploration of three core papers, this analysis presents a comparative understanding of varying approaches, their strengths and weaknesses, and the consensus and unre...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Leveraging Data Analytics to Enhance Workforce Efficiency and Customer Service in HR-Driven Organizations</span><br><span class="pm">O. Alabi et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Optimizing Customer Service through Workforce Analytics: The Role of HR in Data-Driven Decision-Making</span><br><span class="pm">O. Alabi et al., 2024</span></div>
@@ -1827,10 +1795,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Security in industrial control systems (ICS) has risen as a focal point of research, especially as the threat landscape increasingly features ransomware and adversarial attacks targeting these critical infrastructures. As such, emerging methodologies developed between 2023 and 2025 present different frameworks and approaches to enhancing security i...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Quantum-Powered Extended Visibility for Zero-Trust-Based Ransomware Detection in Smart Grids</span><br><span class="pm">Muna Al-Hawawreh et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Resilient Intrusion Detection Models for Closed Control-Loop in Cyber-Physical Systems: Combating Adversarial Examples</span><br><span class="pm">Muna Al-Hawawreh et al., 2025</span></div>
@@ -1855,10 +1821,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the landscape of artificial intelligence, ensuring fairness in decision-making processes, particularly within graph-based systems, represents a significant challenge, especially when sensitive or demographic information is limited or unavailable due to privacy or ethical concerns. The years 2023 to 2025 have seen substantial advancements in meth...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Fair Graph Learning with Limited Sensitive Attribute Information</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Graph Fairness via Authentic Counterfactuals: Tackling Structural and Causal Challenges</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
@@ -1884,10 +1848,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.46 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The emergence of multimodal approaches in image generation and editing between 2023 and 2025 represents a transformative advancement in addressing practical user needs, scalability, and the integration of abstract concepts. As articulated in the studies &quot;DreamOmni2: Multimodal Instruction-based Editing and Generation&quot; by Bin Xia, Bohao Peng, Yueche...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">DreamOmni2: Multimodal Instruction-based Editing and Generation</span><br><span class="pm">Bin Xia et al., 2025</span></div>
             <div class="paper-item"><span class="pt">DreamOmni: Unified Image Generation and Editing</span><br><span class="pm">Bin Xia et al., 2024</span></div>
@@ -1912,10 +1874,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.4 (low)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the realm of medical imaging from 2023 to 2025, evaluating different AI models such as PI-NAIM, Grad-CAM, and YOLOv8 reveals diverse approaches and impacts in areas like accuracy, interpretability, and handling missing data. Each model exhibits distinctive strengths and weaknesses, contributing uniquely to medical diagnostics while revealing are...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">PI-NAIM: Path-Integrated Neural Adaptive Imputation Model</span><br><span class="pm">Afifa Khaled et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Grad-CAM (Gradient-weighted Class Activation Mapping): A systematic literature review</span><br><span class="pm">Abdul Muiz Fayyaz et al., 2025</span></div>
@@ -1941,10 +1901,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the field of artificial intelligence, understanding the performance limitations of reasoning models is crucial for advancing their capabilities. Two notable methodologies for assessing these limitations are interactive tool-use benchmarks and problem complexity analysis. Each offers distinct insights into AI systems and presents different advant...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">ASTRA-bench: Evaluating Tool-Use Agent Reasoning and Action Planning with Personal User Context</span><br><span class="pm">Zidi Xiu et al., 2026</span></div>
             <div class="paper-item"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models via the Lens of Problem Complexity</span><br><span class="pm">P. Shojaee et al., 2025</span></div>
@@ -1969,10 +1927,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.52 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question at hand involves understanding how the methodologies of BYOL-A and M2D-CLAP differ in their ability to generate general-purpose audio representations and under what conditions each methodology excels or falls short. This involves a comparative analysis of the two state-of-the-art approaches, as presented in their respective pa...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Byol for audio: Self-supervised learning for general-purpose audio representation</span><br><span class="pm">Daisuke Niizumi et al., 2021</span></div>
             <div class="paper-item"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond CLAP</span><br><span class="pm">Daisuke Niizumi et al., 2025</span></div>
@@ -1997,10 +1953,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the realm of enhancing large language models&#x27; (LLMs) robustness and precision, particularly for applications with demanding false positive rate (FPR) requirements, two notable methodologies have emerged: reasoning-augmented generation and abstract thinking reinforced via reinforcement learning (RL). Each approach brings unique advantages and tra...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Reasoning&#x27;s Razor: Reasoning Improves Accuracy but Can Hurt Recall at Critical Operating Points in Safety and Hallucination Detection</span><br><span class="pm">Atoosa Malemir Chegini et al., 2025</span></div>
             <div class="paper-item"><span class="pt">AbstRaL: Augmenting LLMs&#x27; Reasoning by Reinforcing Abstract Thinking</span><br><span class="pm">Silin Gao et al., 2025</span></div>
@@ -2025,10 +1979,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question posed involves comparing the methodologies of Masked Modeling Duo (M2D) for creating specialized audio representations with general pre-trained audio models, specifically in their efficacy with proprietary or small datasets like those used in heart sound analysis. This comparison is particularly relevant in contexts where data...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Masked Modeling Duo: Towards a Universal Audio Pre-Training Framework</span><br><span class="pm">Daisuke Niizumi et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Exploring Pre-trained General-purpose Audio Representations for Heart Murmur Detection</span><br><span class="pm">Daisuke Niizumi et al., 2024</span></div>
@@ -2053,12 +2005,8 @@ Privacy preservation remains a crucial o...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.4 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Ensuring fairness in machine learning systems, especially when sensitive or demographic information is limited, presents a unique challenge in the field of artificial intelligence. Two novel methodologies, FGLISA and disentangled learning, address these challenges by providing strategies to achieve fairness under such constraints.
-
-The paper titled...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Fair Graph Learning with Limited Sensitive Attribute Information</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Towards Fairness with Limited Demographics via Disentangled Learning</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
@@ -2083,10 +2031,8 @@ The paper titled...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.28 (low)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Graph-based decision-making systems have increasingly been scrutinized for their fairness, particularly when operating under constraints such as limited sensitive information and inherent biases within graph structures. The pursuit to address fairness in these contexts has led to significant research efforts, notably exemplified by the GUIC, FGLISA...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">GUIC: Certified Graph Unlearning with Individual Fairness Guarantees</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Fair Graph Learning with Limited Sensitive Attribute Information</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
@@ -2112,10 +2058,8 @@ The paper titled...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.48 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question concerns the comparative evaluation of disentangled learning methodologies and taxonomy-based approaches in addressing fairness in AI systems with incomplete demographic data. The focus is on their effectiveness, limitations, and applicable scenarios validated by empirical evidence or theoretical analysis. Current literature e...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Towards Fairness with Limited Demographics via Disentangled Learning</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
             <div class="paper-item"><span class="pt">AI Fairness Beyond Complete Demographics: Current Achievements and Future Directions</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
@@ -2140,12 +2084,8 @@ The paper titled...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.42 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In comparing Received Signal Strength (RSS)-based intrusion detection mechanisms with lightweight machine learning models tailored for edge environments, it is vital to identify specific conditions under which each methodology excels or fails, considering factors such as resource constraints and detection accuracy.
-
-The study &quot;Lightweight WebAssemb...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Lightweight WebAssembly-Based Intrusion Detection for Zero Trust Edge Networks</span><br><span class="pm">Jonathan Weber et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Modeling and Extending RSS-based Intrusion Detection Bound via WiFi Signals</span><br><span class="pm">Linqing Gui et al., 2026</span></div>
@@ -2170,10 +2110,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.44 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Graph-based models have gained significant traction in many applications due to their ability to effectively represent and analyze complex relational data. However, fairness in these models, especially when handling sensitive attributes, poses substantial challenges. In this context, two innovative frameworks, GUIC and FGLISA, have been proposed to...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">GUIC: Certified Graph Unlearning with Individual Fairness Guarantees</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Fair Graph Learning with Limited Sensitive Attribute Information</span><br><span class="pm">Zichong Wang et al., 2026</span></div>
@@ -2198,10 +2136,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question focuses on comparing disentangled learning methods for inferring missing demographic data with fairness evaluation strategies for language models, particularly in the context of model internals that are often inaccessible. This question delves into how these methodologies perform and sustain robustness across various datasets ...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Towards Fairness with Limited Demographics via Disentangled Learning</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Fairness in Language Models: A Tutorial</span><br><span class="pm">Zichong Wang et al., 2025</span></div>
@@ -2226,10 +2162,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Accurate volume estimation of fruits with complex geometries is crucial for applications in precision agriculture, such as quality grading, yield prediction, and post-harvest management. The challenge lies in addressing the geometric complexity and variability that characterize both spherical and non-spherical fruits. This discussion delineates the...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Non-Destructive Mangosteen Volume Estimation via Multi-View Instance Segmentation and Hybrid Geometric Modeling</span><br><span class="pm">W. Kurdthongmee et al., 2025</span></div>
             <div class="paper-item"><span class="pt">AGRO-YOLO-V: Hybrid Instance Segmentation and Geometric Modeling for Single-View Orange Volume Estimation</span><br><span class="pm">A. Sukkuea et al., 2026</span></div>
@@ -2254,10 +2188,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The exploration of decentralized blockchain-based resource management and lightweight WebAssembly-based execution environments presents an intriguing avenue for optimizing energy consumption and ensuring real-time security for AI workloads on edge devices. This examination requires a deep dive into contrasting methodologies to identify the conditio...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">BEST: Blockchain-Enabled Sustainable Task Scheduling for Optimizing Large AI Model Workloads at the Edge</span><br><span class="pm">Haoxiang Luo et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Lightweight WebAssembly-Based Intrusion Detection for Zero Trust Edge Networks</span><br><span class="pm">Jonathan Weber et al., 2026</span></div>
@@ -2282,10 +2214,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.5 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Parkinson&#x27;s disease (PD), a debilitating neurodegenerative disorder, is marked by the loss of dopaminergic neurons in the substantia nigra, resulting in motor and non-motor symptoms. Two recent studies independently addressed aspects of PD treatment and diagnosis—the efficacy of induced pluripotent stem (iPS) cells in treating PD and the quantitati...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Integrated evaluation of Nigrosome 1 sign, neuromelanin-sensitive MR and iron deposition</span><br><span class="pm">Yasutaka Fushimi et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Phase I/II trial of iPS-cell-derived dopaminergic cells for Parkinson’s disease</span><br><span class="pm">N. Sawamoto et al., 2025</span></div>
@@ -2310,10 +2240,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question at hand involves comparing the accuracy and energy efficiency of intrusion detection frameworks presented in two distinct papers using the NSL-KDD dataset while cross-referencing independent evaluations. Additionally, it seeks to understand how these metrics vary when the frameworks are applied to the CICIDS2017 dataset, not m...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">A lightweight framework to secure IoT devices with limited resources in cloud environments</span><br><span class="pm">Vivek Kumar Pandey et al., 2025</span></div>
             <div class="paper-item"><span class="pt">An efficient data driven framework for intrusion detection in wireless sensor networks using deep learning</span><br><span class="pm">Priyanshu Sinha et al., 2025</span></div>
@@ -2338,10 +2266,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Intrusion detection in IoT and IoV networks is crucial for ensuring the security of these systems, especially given their widespread use in smart cities and other applications. The inherent contradiction between the lightweight decision tree-based framework for IoT anomaly detection and the robust machine learning model for IoV in terms of scalabil...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">A lightweight framework to secure IoT devices with limited resources in cloud environments</span><br><span class="pm">Vivek Kumar Pandey et al., 2025</span></div>
             <div class="paper-item"><span class="pt">A Secure and Robust Machine Learning Model for Intrusion Detection in Internet of Vehicles</span><br><span class="pm">P. Tiwari et al., 2025</span></div>
@@ -2366,10 +2292,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.52 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The comparative evaluation of the Levy Flight Osprey Optimization Algorithm (LFOOA) and Gaussian Median-based Tunicate Swarm Optimization (GM-TSA) methodologies provides a nuanced understanding of their effectiveness in optimizing task scheduling in cloud computing, particularly under varied system loads and resource demands. Both algorithms aim to...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Levy Flight Osprey Optimization Algorithm for Task Scheduling in Cloud Computing</span><br><span class="pm">Pradeep Chintale et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Optimizing Virtual Machines in Cloud Resources using Gaussian Median based Tunicate Swarm Optimization</span><br><span class="pm">Pradeep Chintale et al., 2024</span></div>
@@ -2394,10 +2318,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>To explore the conditions under which optimized contrastive transformer models outperform federated variational autoencoders for anomaly detection in 5G networks, we must delve into the methodologies and findings presented in the two source papers: “Optimized Contrastive Transformer Models for Self-Supervised 5G Network Intrusion Detection” by S. S...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Optimized Contrastive Transformer Models for Self-Supervised 5G Network Intrusion Detection</span><br><span class="pm">S. Sheikhi et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Federated Variational Autoencoders for Unsupervised Anomaly Detection in Distributed 5G Networks</span><br><span class="pm">S. Sheikhi et al., 2025</span></div>
@@ -2422,10 +2344,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.66 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the realm of few-shot learning, where models must perform well with limited training data, several approaches have been developed to mitigate the challenge of overfitting inherent in deep neural networks (DNNs). Among these, meta-transfer learning (MTL), prototypical networks (ProtoNet), and model agnostic meta-learning (MAML) are prominent. Thi...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Meta-transfer learning for few-shot learning</span><br><span class="pm">Qianru Sun et al., 2018</span></div>
             <div class="paper-item"><span class="pt">Few-shot classification of ultrasound breast cancer images using meta-learning algorithms</span><br><span class="pm">Gültekin Işık et al., 2024</span></div>
@@ -2450,10 +2370,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The evaluation of large language models (LLMs) in radiology is gaining significant interest due to the rapid advancements in artificial intelligence and its potential applications in medical diagnostics. The research question at hand seeks to explore the conditions under which different methodological approaches, such as systematic reviews using ch...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Insufficient reporting quality in large language model studies in the field of radiology</span><br><span class="pm">Pae Sun Suh et al., 2026</span></div>
             <div class="paper-item"><span class="pt">Comparative performance of large language models in structuring head CT radiology reports: multi-institutional validation study in Japan</span><br><span class="pm">H. Takita et al., 2025</span></div>
@@ -2478,10 +2396,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Wireless Sensor Networks (WSNs) are increasingly integral to the functionality of Internet of Things (IoT) devices, yet they present challenges in optimizing energy efficiency and ensuring reliable data transmission due to constraints such as power sources and computational capacity. Diverse strategies, including machine learning models, probabilis...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">An efficient multi-objective framework for wireless sensor network using machine learning</span><br><span class="pm">S. Gupta et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Optimizing energy and latency in edge computing through a Boltzmann driven Bayesian framework for adaptive resource scheduling</span><br><span class="pm">D. Sahu et al., 2025</span></div>
@@ -2507,10 +2423,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>3 篇</strong></span>
             <span class="m">基线质量: <strong>0.54 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Securing environments comprising Internet of Things (IoT) and Wireless Sensor Networks (WSNs) requires robust, efficient, and interpretable methodologies. In comparing decision tree-based approaches and deep learning models, several criteria are paramount, including interpretability, efficiency, robustness, and accuracy. The primary consideration i...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">A lightweight framework to secure IoT devices with limited resources in cloud environments</span><br><span class="pm">Vivek Kumar Pandey et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Selection of Optimal Cluster Head Using MOPSO and Decision Tree for Cluster-Oriented Wireless Sensor Networks</span><br><span class="pm">Rahul Mishra et al., 2025</span></div>
@@ -2536,10 +2450,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.38 (low)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question at hand explores the experimental conditions under which the FSIGenZ and CZSL-SGNSF frameworks optimally reduce computational costs while maintaining classification accuracy in zero-shot learning (ZSL) frameworks, focusing on instance-level variability and feature synthesis methods. This inquiry is particularly pertinent given...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Few-Shot Inspired Generative Zero-Shot Learning</span><br><span class="pm">Md Shakil Ahamed Shohag et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Conventional Zero-Shot Learning with Semantic Graph-Enriched Non-Adversarial Synthetic Features</span><br><span class="pm">Md Shakil Ahamed Shohag et al., 2025</span></div>
@@ -2564,10 +2476,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.42 (low)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Addressing domain shifts within unsupervised domain adaptation (UDA) in decentralized and resource-constrained environments poses considerable challenges. Two recent approaches that promise improvements are discussed in the papers &quot;One-Shot Federated Unsupervised Domain Adaptation with Scaled Entropy Attention and Multi-Source Smoothed Pseudo Label...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">One-Shot Federated Unsupervised Domain Adaptation with Scaled Entropy Attention and Multi-Source Smoothed Pseudo Labeling</span><br><span class="pm">Ali Abedi et al., 2025</span></div>
             <div class="paper-item"><span class="pt">EUDA: An Efficient Unsupervised Domain Adaptation via Self-Supervised Vision Transformer</span><br><span class="pm">Ali Abedi et al., 2024</span></div>
@@ -2592,10 +2502,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.58 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question under consideration aims to explore how the principles of gradient alignment in unsupervised federated domain generalization can be effectively integrated with scaled entropy attention and multi-source pseudo labeling techniques to form a unified framework. This framework should reduce domain shift impacts while maintaining co...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Federated Unsupervised Domain Generalization using Global and Local Alignment of Gradients</span><br><span class="pm">Farhad Pourpanah et al., 2024</span></div>
             <div class="paper-item"><span class="pt">One-Shot Federated Unsupervised Domain Adaptation with Scaled Entropy Attention and Multi-Source Smoothed Pseudo Labeling</span><br><span class="pm">Ali Abedi et al., 2025</span></div>
@@ -2620,10 +2528,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The integration of explainable AI (XAI) techniques with concept foundation models for vision to uncover encoded absences and enhance language-aligned concept understanding presents a promising route for advancing comprehension in AI systems across tasks such as classification, segmentation, and captioning. This approach leverages the theoretical an...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">What is Missing? Explaining Neurons Activated by Absent Concepts</span><br><span class="pm">Robin Hesse et al., 2026</span></div>
             <div class="paper-item"><span class="pt">CFM: Language-aligned Concept Foundation Model for Vision</span><br><span class="pm">Kai Wittenmayer et al., 2026</span></div>
@@ -2648,10 +2554,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.66 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The integration of workforce analytics and data-driven employee engagement strategies is increasingly recognized as a potent means to enhance both employee performance and customer service. This growing recognition underscores the significance of combining analytical tools with strategic HR interventions to foster an environment that boosts organiz...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Data-driven employee engagement: A pathway to superior customer service</span><br><span class="pm">O. Alabi et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Optimizing Customer Service through Workforce Analytics: The Role of HR in Data-Driven Decision-Making</span><br><span class="pm">O. Alabi et al., 2024</span></div>
@@ -2676,10 +2580,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.56 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Federated domain generalization (FDG) is a critical challenge within federated learning, where the aim is to enable generalization across different domains while maintaining privacy and data security. The approaches of FedGaLA and FedSB represent two distinctive methodologies aimed at improving federated domain generalization, each with unique stre...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Federated Unsupervised Domain Generalization using Global and Local Alignment of Gradients</span><br><span class="pm">Farhad Pourpanah et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Federated Domain Generalization with Label Smoothing and Balanced Decentralized Training</span><br><span class="pm">Milad Soltany et al., 2024</span></div>
@@ -2704,10 +2606,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.66 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Adapting design principles from microservices architectures to multi-cloud environments can significantly enhance operational efficiency and fault tolerance while addressing the unique challenges of resource allocation and security across multiple cloud service providers (CSPs). To explore this adaptation, we must draw insights from the core princi...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Building a microservices architecture model for enhanced software delivery, business continuity and operational efficiency</span><br><span class="pm">Omoniyi Babatunde et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Designing multi-cloud architecture models for enterprise scalability and cost reduction</span><br><span class="pm">Omoniyi Babatunde et al., 2024</span></div>
@@ -2732,10 +2632,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.62 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The integration of AI-driven techniques in digital marketing with high-end photo retouching and color grading offers a significant opportunity to enhance the visual storytelling capabilities of small and medium-sized enterprises (SMEs). This integration, while transformative, must navigate the constraints of budget, technological resources, and dat...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Innovative approaches in high-end photo retouching and color grading techniques for enhanced marketing and visual storytelling, including for SMEs</span><br><span class="pm">Oluwaseun Abiola Ajiva et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Research on the Application of Artificial Intelligence in Enterprise Digital Marketing</span><br><span class="pm">Chaoshuo Liu et al., 2025</span></div>
@@ -2760,10 +2658,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.7 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>The research question explores how token-based architectures utilized in omni-modal speech generation can effectively adapt to overcome high-density sampling challenges in long-video tasks, integrating efficient processing of both audio and video in multimodal models while retaining timbre identity and critical visual information integrity. To tack...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">MGM-Omni: Scaling Omni LLMs to Personalized Long-Horizon Speech</span><br><span class="pm">Chengyao Wang et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Does Your Vision-Language Model Get Lost in the Long Video Sampling Dilemma?</span><br><span class="pm">Tianyuan Qu et al., 2025</span></div>
@@ -2788,10 +2684,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.46 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>In the realm of vision-language models (VLMs), enhancing zero-shot performance is pivotal for tasks requiring cross-modal alignment, and two key approaches have been explored to address this challenge—localized alignment as featured in Weighted Visual-Text Cross Alignment (WCA) and dynamic alignment capability as embodied by AlignGPT. These approac...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">Visual-text cross alignment: Refining the similarity score in vision-language models</span><br><span class="pm">Jinhao Li et al., 2024</span></div>
             <div class="paper-item"><span class="pt">Aligngpt: Multi-modal large language models with adaptive alignment capability</span><br><span class="pm">Fei Zhao et al., 2024</span></div>
@@ -2816,10 +2710,8 @@ The study &quot;Lightweight WebAssemb...</p>
             <span class="m">源论文: <strong>2 篇</strong></span>
             <span class="m">基线质量: <strong>0.6 (medium)</strong></span>
           </div>
-          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开参考答案与源论文</div>
+          <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 展开源论文详情</div>
           <div class="q-detail"><div class="q-detail-inner">
-            <h5>参考答案（节选）</h5>
-            <p>Understanding real-time video streams is a complex challenge within the realm of vision-language models (VLMs), particularly when aiming to optimize computational efficiency and latency. Two prominent methodologies—supervised fine-tuning (SFT) and reinforcement learning (RL)—present viable solutions for enhancing real-time video stream understandin...</p>
             <h5>源论文</h5>
             <div class="paper-item"><span class="pt">StreamingVLM: Real-Time Understanding for Infinite Video Streams</span><br><span class="pm">Ruyi Xu et al., 2025</span></div>
             <div class="paper-item"><span class="pt">Scaling RL to Long Videos</span><br><span class="pm">Yukang Chen et al., 2025</span></div>
@@ -2839,7 +2731,7 @@ The study &quot;Lightweight WebAssemb...</p>
   <div class="container">
     <div class="footer-row">
       <span class="f">LLM: <strong>GPT-4o</strong></span>
-      <span class="f">数据源: <strong>Semantic Scholar API</strong></span>
+      <span class="f">数据源: <strong>Serper + Semantic Scholar API</strong></span>
       <span class="f">本次产出: <strong>50 queries (2 domains, 10 subdomains)</strong></span>
       <span class="f">运行时间: <strong>2026-04-06 16:35</strong></span>
     </div>
