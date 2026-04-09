@@ -740,8 +740,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <span class="pm-status pm-status-done">已完成</span>
         <span class="pm-icon">&#9878;</span>
         <h4>律师 / 法研人员</h4>
-        <p class="pm-pain">法律检索耗时、引用错误代价极高、合规分析复杂</p>
-        <p class="pm-test"><strong>测什么：</strong>能否准确引用法源和判例、能否做跨法域对比分析</p>
+        <p class="pm-pain">法条解释无唯一解、AI 对 secondary source 的运用易产出"迷惑性"结果、跨法域对比涉及人的变量（法官倾向、利益博弈）</p>
+        <p class="pm-test"><strong>测什么：</strong>能否区分并追溯 primary/secondary source、能否从法条出发独立推断而非照搬解读、能否在跨法域对比中给出有依据的预判</p>
       </div>
     </div>
 
@@ -1226,182 +1226,6 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出高质量回答 → 该问题不需要深度搜索 → 淘汰。</p>
         </div></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Divider: vine 2 -->
-<div class="section-divider divider-vine reveal">
-  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
-    <path class="vine-line" d="M0 24 Q80 40 200 24 Q320 8 400 24 Q480 40 600 24 Q720 8 800 24" pathLength="1"/>
-    <ellipse class="vine-leaf" cx="120" cy="34" rx="5" ry="3.5" transform="rotate(20 120 34)"/>
-    <ellipse class="vine-leaf" cx="300" cy="12" rx="6" ry="4" transform="rotate(-15 300 12)"/>
-    <ellipse class="vine-leaf" cx="520" cy="34" rx="5.5" ry="3.5" transform="rotate(25 520 34)"/>
-    <ellipse class="vine-leaf" cx="750" cy="14" rx="5" ry="3" transform="rotate(-12 750 14)"/>
-    <circle class="vine-dot" cx="200" cy="24" r="2"/>
-    <circle class="vine-dot" cx="420" cy="24" r="2.5"/>
-    <circle class="vine-dot" cx="620" cy="24" r="2"/>
-  </svg>
-</div>
-
-<!-- ══════════ STRATEGIES ══════════ -->
-<section class="strategies-section" id="r-strategies">
-  <div class="container">
-    <p class="overline">Generation Strategies</p>
-    <h2>五种查询生成策略</h2>
-    <p class="section-desc">不同论文关系类型映射到不同的出题策略，难度来自论文关系的真实复杂性。</p>
-
-    <div class="strategy-grid">
-
-      <!-- ── 1. Literature Synthesis ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-lit"></div>
-        <div class="s-body">
-          <h4>文献综合 <span class="en">Literature Synthesis</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 11 条</span></h4>
-          <p class="desc">综合多篇论文的方法、发现与理论视角，做系统性比较分析。考验模型能否全面覆盖某个研究问题的各个方面。</p>
-          <div class="s-chips"><span>需 3-5 篇论文</span><span>30-80 词</span><span>含时间范围</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">2023&ndash;2025 年间，大推理模型（Large Reasoning Models）与标准大语言模型在复杂推理任务上的准确率和精确度有何差异？各自在哪些任务类型上表现更优、在哪些任务上反而退化？</div>
-              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 系统评估推理模型的能力边界</span></div>
-                <div class="s-ex-paper"><span class="pt">Reasoning's Razor: Reasoning Improves Accuracy but Can Hurt Recall</span><br><span class="pm">Malemir Chegini et al., 2025 &mdash; 发现推理能力提升准确率但损害召回率</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文从不同角度评估推理模型（能力边界 vs 准确率/召回率权衡），构成「同一主题的互补视角」→ 生成要求系统性综合比较各类推理任务上的表现差异</div>
-              </div></div>
-            </div>
-            <div class="s-ex">
-              <div class="s-ex-query">2023&ndash;2025 年间，语义分割和音频&ndash;语言表征学习中的自监督方法有哪些进展？不同方法在通用性、下游任务迁移能力和数据效率上如何对比？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>3 篇</strong> &middot; 基线 <strong>0.50</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">Class-Aware Permutation-Invariant Signal-to-Distortion Ratio for Semantic Segmentation</span><br><span class="pm">Nguyen et al., 2026 &mdash; 语义分割中的排列不变性方法</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 通用音频&ndash;语言表征</span></div>
-                <div class="s-ex-paper"><span class="pt">CLAP-ART: Automated Audio Captioning with Semantic-rich Audio Representations</span><br><span class="pm">Takeuchi et al., 2025 &mdash; 语义丰富的音频表征</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>3 篇论文分别研究视觉/音频两个模态的自监督表征学习，构成「同一方法论在不同模态的应用」关系 → 生成跨模态比较和通用性评估的综合问题</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 2. Methodology Debate ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-meth"></div>
-        <div class="s-body">
-          <h4>方法论争论 <span class="en">Methodology Debate</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 23 条</span></h4>
-          <p class="desc">比较和评价不同的技术方法路线，指出各自的适用条件和局限。考验模型对方法论细节的深度理解。</p>
-          <div class="s-chips"><span>2-3 种方法</span><span>需实验证据</span><span>无显然最优</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">交互式工具使用基准测试（如 ASTRA-bench）和问题复杂度分析（如 The Illusion of Thinking）这两种评估推理模型的方法论，在揭示模型真实推理能力方面各有什么优势和盲区？它们的结论是否一致？</div>
-              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">ASTRA-bench: Evaluating Tool-Use Agent Reasoning and Action Planning</span><br><span class="pm">Xiu et al., 2026 &mdash; 交互式工具使用基准</span></div>
-                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 推理模型能力的系统性分析</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文用完全不同的方法论评估同一目标（推理能力）：一个用工具交互基准，一个用问题复杂度梯度 → 生成要求比较两种评估范式的适用性和局限性</div>
-              </div></div>
-            </div>
-            <div class="s-ex">
-              <div class="s-ex-query">BYOL-A 和 M2D-CLAP 在生成通用音频表征方面的方法论有何根本差异？在不同下游任务（分类、检索、生成）中，哪种方法更具优势？各自对标注数据的依赖程度如何？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.52</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">BYOL for Audio: Self-supervised Learning for General-purpose Audio Representation</span><br><span class="pm">Niizumi et al., 2021 &mdash; 基于 Bootstrap Your Own Latent 的音频自监督方法</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 结合掩码建模和对比学习的音频&ndash;语言表征</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>同一作者团队的两代方法（纯自监督 vs 多模态对比学习），直接对比方法论演进和各自适用场景</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 3. Contradiction Resolution ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-contra"></div>
-        <div class="s-body">
-          <h4>矛盾解决 <span class="en">Contradiction Resolution</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 1 条</span></h4>
-          <p class="desc">聚焦已发表研究中的真实矛盾，要求分析矛盾来源并判断哪个结论更可靠。这是最难的一类策略。</p>
-          <div class="s-chips"><span>真实矛盾</span><span>证据权衡</span><span>需精细分析</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">轻量级决策树框架声称能在资源受限的 IoT 设备上实现高效异常检测，而另一研究则强调需要更复杂的机器学习模型才能达到可靠的入侵检测效果。这两种立场的实验条件和评估指标有何关键差异？哪个结论在实际部署中更可靠？</div>
-              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 主张轻量级决策树足以胜任</span></div>
-                <div class="s-ex-paper"><span class="pt">A Secure and Robust Machine Learning Model for Intrusion Detection</span><br><span class="pm">Tiwari et al., 2025 &mdash; 强调需要更复杂的 ML 模型</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文对「IoT 入侵检测需要多复杂的模型」给出了相反的结论 → 构成真实的学术矛盾 → 生成要求分析实验条件差异和结论可靠性的问题</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 4. Quantitative Verification ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-quant"></div>
-        <div class="s-body">
-          <h4>定量验证 <span class="en">Quantitative Verification</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 2 条</span></h4>
-          <p class="desc">查找、交叉引用和验证具体的量化结果。数字错误在学术场景中代价极高，专门测试精确引用能力。</p>
-          <div class="s-chips"><span>具体数字 / 指标</span><span>多源交叉验证</span><span>区分一手 / 二手</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">对比两个 IoT 入侵检测框架在 NSL-KDD 数据集上报告的检测准确率和能耗效率：轻量级决策树框架 vs 数据驱动无线传感器网络框架，两者的数字差异有多大？各自使用的评测条件是否可比？</div>
-              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.60</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 报告轻量级方案在 NSL-KDD 上的检测率</span></div>
-                <div class="s-ex-paper"><span class="pt">An Efficient Data Driven Framework for Intrusion Detection in Wireless Sensor Networks</span><br><span class="pm">Sinha et al., 2025 &mdash; 报告数据驱动方案在相同基准上的性能</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文在相同基准上报告了具体性能数字，但使用的评测协议可能不完全一致 → 生成要求精确比对数字并判断可比性的定量验证问题</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 5. Cross-Domain Bridge ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-cross"></div>
-        <div class="s-body">
-          <h4>跨领域桥梁 <span class="en">Cross-Domain Bridge</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 13 条</span></h4>
-          <p class="desc">连接不同研究子领域的方法或发现，分析跨域迁移的可行性与障碍。需要同时理解两个领域。</p>
-          <div class="s-chips"><span>跨 2+ 子领域</span><span>理论 + 实践</span><span>非表面类比</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">音频&ndash;图像跨检索框架中的时序对齐原理（temporal agreement），能否被整合到对比学习框架中以提升通用音频&ndash;语言表征的质量？这种跨范式融合在技术上面临哪些核心挑战？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">Refining Knowledge Transfer on Audio-Image Temporal Agreement for Audio-Visual Retrieval</span><br><span class="pm">Tsubaki et al., 2024 &mdash; 音频&ndash;图像跨模态检索中的时序对齐</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Masked Modeling Duo Meets CLAP for Learning General-purpose Audio Representations</span><br><span class="pm">Niizumi et al., 2024 &mdash; 通用音频表征的对比学习框架</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文分属不同的多模态学习范式（跨模态检索 vs 对比学习表征），但核心技术有互补性 → 生成要求评估跨范式融合可行性的问题</div>
-              </div></div>
-            </div>
-            <div class="s-ex">
-              <div class="s-ex-query">用于冠状动脉疾病预测的集成机器学习方法，能否迁移到城市交通需求预测场景中提升预测精度？两个应用场景在数据特征、特征工程和模型可解释性需求上有哪些根本差异？</div>
-              <div class="s-ex-meta">CS / Explainable AI &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.65</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Study on Different Machine Learning Approaches in Coronary Artery Disease Prediction</span><br><span class="pm">Kirubaa et al., 2025 &mdash; 冠状动脉疾病的集成学习预测方法</span></div>
-                <div class="s-ex-paper"><span class="pt">An Exploratory and Predictive Analysis of Travel Patterns and Demand</span><br><span class="pm">P. C et al., 2025 &mdash; 城市交通模式的预测分析</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>医疗预测 × 交通预测，使用相似的集成 ML 方法但面向完全不同的数据分布和可解释性要求 → 生成要求分析方法迁移可行性和领域适配挑战的问题</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -2837,6 +2661,876 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
   </svg>
 </div>
 
+<!-- ══════════ PRACTITIONER NEEDS ══════════ -->
+<section class="details-section" id="l-needs" style="background:var(--bg-primary)">
+  <div class="container">
+    <p class="overline">Practitioner Insights</p>
+    <h2>从律师真实需求到 Pipeline 设计</h2>
+    <p class="section-desc">与科研文献综述不同，法律 Deep Research 的核心特征是<strong>没有唯一解</strong> &mdash; 不同的解释者、不同的定义会推导出不同答案。任务性质更接近推断和预测，而非检索。以下洞察来自与法律从业者的深度访谈。</p>
+
+    <!-- ── 3 Mapping Cards ── -->
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:56px">
+
+      <!-- Card 1: 三段论 -->
+      <div class="s-card reveal" style="overflow:visible">
+        <div class="s-bar" style="background:#5BA08A"></div>
+        <div class="s-body" style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:start">
+          <div>
+            <h4 style="color:var(--tag-green)">&#9878; 工作流：三段论推理</h4>
+            <p class="desc">先定位 <strong>primary source</strong>（政府发布的法律法规），再寻找支撑案例。以中国法律体系为例，遵循三段论 &mdash; 大前提（法条）、小前提（事实）、结论。大前提本身是确定的，但大前提的<strong>解释</strong>才是真正的难点。</p>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.5rem;padding-top:28px">&rarr;</div>
+          <div style="background:var(--accent-bg);border-radius:var(--radius-xs);padding:18px 20px;margin-top:4px">
+            <p style="font-size:.88rem;font-weight:600;color:var(--accent);margin-bottom:6px">Pipeline 设计响应</p>
+            <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.75">Phase 2 严格区分三类法源（primary / case_law / secondary），搜索时优先权威站点；Phase 3 提炼每个法域的"解释空间"作为差异分析的核心维度。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Secondary source 迷惑性 -->
+      <div class="s-card reveal reveal-d1" style="overflow:visible">
+        <div class="s-bar" style="background:#C45A3C"></div>
+        <div class="s-body" style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:start">
+          <div>
+            <h4 style="color:var(--tag-red)">&#9888; 核心担忧：Secondary Source 的迷惑性</h4>
+            <p class="desc">律师、学者的解读（secondary source）本身带有主观性。AI 如果处理不好，产出的结果<strong>"迷惑性很强"</strong> &mdash; 看似合理实则有误。这是法律从业者对 AI 工具最大的担忧。</p>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.5rem;padding-top:28px">&rarr;</div>
+          <div style="background:var(--accent-bg);border-radius:var(--radius-xs);padding:18px 20px;margin-top:4px">
+            <p style="font-size:.88rem;font-weight:600;color:var(--accent);margin-bottom:6px">Pipeline 设计响应</p>
+            <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.75">Phase 2 交叉验证要求 secondary source 必须追溯到 primary source；Phase 4"无先例"类 prompt 明确要求基于 primary source 独立推断，而非照搬解读；Phase 5 评估"迷惑性风险"作为 query 质量的<strong>正向</strong>指标 &mdash; 越容易误导模型的问题越好。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: 三种问题类型 -->
+      <div class="s-card reveal reveal-d2" style="overflow:visible">
+        <div class="s-bar" style="background:#6B8FC2"></div>
+        <div class="s-body" style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:start">
+          <div>
+            <h4 style="color:var(--tag-blue)">&#128218; 三种问题类型各有侧重</h4>
+            <p class="desc"><strong>有先例</strong> &mdash; 找类似 case 作为参照，但案例间的可比性本身就存在争议；<strong>无先例</strong> &mdash; 如 AI 版权争议，没有现成答案，需从法条推断；<strong>预测类</strong> &mdash; 最难也最有价值，核心在于"研究人的行为"：法官倾向、利益考量。</p>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.5rem;padding-top:28px">&rarr;</div>
+          <div style="background:var(--accent-bg);border-radius:var(--radius-xs);padding:18px 20px;margin-top:4px">
+            <p style="font-size:.88rem;font-weight:600;color:var(--accent);margin-bottom:6px">Pipeline 设计响应</p>
+            <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.75">Pipeline 均衡生成三种类型，每种使用专门 prompt 策略。预测类要求考虑"人的变量"，有先例类考察真实案例检索能力（而非编造案例），无先例类考察法条推断能力。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Part 3: 难度上升因素 ── -->
+    <h3 class="reveal" style="margin-bottom:8px">&#128200; 问题难度上升因素</h3>
+    <p class="reveal" style="font-size:.95rem;color:var(--text-tertiary);margin-bottom:28px;max-width:700px;line-height:1.75">律师访谈的关键洞察：难度不是"简单 vs 困难"的二分，而是<strong>通过叠加不同维度的约束让问题逐步变难</strong>。以下是律师指出的关键难度维度，它们被形式化为 Pipeline 的"难化手段"：</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:24px">
+      <div class="reveal" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#127758;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">增加管辖区域</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">从 2 个法域到 4 个，分析量指数级增长</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">jurisdiction_count</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d1" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#128269;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">法条解释的灰色地带</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">同一条文可推出截然不同的结论</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">interpretation_ambiguity</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d2" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#9878;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">一手法源 vs 二手解读冲突</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">法条原文和主流学者解读不一致，模型是否会被误导</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">source_conflict</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d3" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#128197;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">法律修订与演变</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">近年频繁修法，引用已废止法条比编造更危险</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">temporal_evolution</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d4" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#128203;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">具体事实约束</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">增加涉案金额、行业、实体类型等约束，通用回答不再适用</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">factual_constraints</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d5" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#128100;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">人的变量</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">法官倾向、政治环境、利益博弈 &mdash; 法律之外的决定因素</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">human_variable</span>
+        </div>
+      </div>
+      <div class="reveal" style="background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius-xs);padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:1.2rem;flex-shrink:0">&#128279;</span>
+        <div>
+          <p style="font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px">法律领域交叉</p>
+          <p style="font-size:.85rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:6px">版权 + 出口管制、数据隐私 + 金融监管等多领域叠加</p>
+          <span style="font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:50px;background:var(--tag-purple-bg);color:var(--tag-purple)">interdomain_interaction</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="reveal" style="font-size:.88rem;color:var(--text-tertiary);line-height:1.7;padding:12px 18px;border-left:3px solid var(--accent-light);background:var(--accent-bg);border-radius:0 var(--radius-xs) var(--radius-xs) 0">
+      这些难度维度被形式化为下方的"七种难化手段"，在 Query 生成阶段通过<strong>组合叠加</strong>来控制问题复杂度 &mdash; 每条生成的 query 平均叠加 2.3 种难化手段。
+    </p>
+
+  </div>
+</section>
+
+<!-- Divider: vine 2 -->
+<div class="section-divider divider-vine reveal">
+  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
+    <path class="vine-line" d="M0 24 Q80 40 200 24 Q320 8 400 24 Q480 40 600 24 Q720 8 800 24" pathLength="1"/>
+    <ellipse class="vine-leaf" cx="120" cy="34" rx="5" ry="3.5" transform="rotate(20 120 34)"/>
+    <ellipse class="vine-leaf" cx="300" cy="12" rx="6" ry="4" transform="rotate(-15 300 12)"/>
+    <ellipse class="vine-leaf" cx="520" cy="34" rx="5.5" ry="3.5" transform="rotate(25 520 34)"/>
+    <ellipse class="vine-leaf" cx="750" cy="14" rx="5" ry="3" transform="rotate(-12 750 14)"/>
+    <circle class="vine-dot" cx="200" cy="24" r="2"/>
+    <circle class="vine-dot" cx="420" cy="24" r="2.5"/>
+    <circle class="vine-dot" cx="620" cy="24" r="2"/>
+  </svg>
+</div>
+
+<!-- ══════════ STRATEGIES ══════════ -->
+<section class="strategies-section" id="l-strategies">
+  <div class="container">
+    <p class="overline">Question Types &amp; Difficulty</p>
+    <h2>三种问题类型与七种难化手段</h2>
+    <p class="section-desc">不同的法律议题差异映射到不同问题类型，难度来自真实跨法域差异的复杂性和多种难化手段的组合。</p>
+
+    <div class="strategy-grid">
+
+      <!-- ── 1. Precedent ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-lit"></div>
+        <div class="s-body">
+          <h4>有先例 <span class="en">Precedent</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">比较各法域已有判例的裁判逻辑差异，考验模型能否准确引用真实判例并分析不同法域法院的推理方法。</p>
+          <div class="s-chips"><span>已有判例</span><span>裁判逻辑对比</span><span>多法域</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">某美国科技公司被指控未能妥善保护用户数据，导致上千万用户信息泄露，并因此在美国被罚款1亿美元。在欧盟，该公司面临GDPR调查，并可能遭受更高的罚款。是否有案例分析显示美国和欧盟在此类数据隐私违规行为上的不同处置方式及罚款标准？各法域的判例是否存在裁判逻辑差异？如何评价在此背景下跨法域公司面临的合规挑战？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>temporal_evolution</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>该问题需深入对比美国和欧盟判例及处罚法规，尤其是在数据保护相关立法发展与跨境监管策略的演变上。裁判者的文化背景、法律传统及当前政策环境会影响判决倾向，需对技术合规与法律责任博弈有深刻理解。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION; 21 CFR Part 21 -- Protection of Privacy; S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY; General Data Protection Regulation; Second Report on the application of the General Data Protection Regulation<br><strong>判例:</strong> U.S. Privacy Litigation Update: August 2025 Decisions; Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split; CJEU ruling on GDPR Damages<br><strong>学者解读:</strong> Data protection laws in the United States; Year in Review: The Top Ten US Data Privacy Developments from; Data Protection and Privacy Law: An Introduction; Retrospective: 2025 in state data privacy law; The Patchwork of Data Privacy Laws: Recent Developments and Implications</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 美国与欧盟的数据保护法具有复杂的法域差异，可能导致混淆判例; 跨法域合规问题因法律变化和不同判例解释可能导致误解</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在美国和欧盟，某家跨国技术企业在开发用于金融分析的AI工具时遭遇数次误判，导致客户资产重大损失（金额超过500万美元），在责任认定上是否存在类似判例？如何看待美国产品责任法与欧盟综合分析下的裁判逻辑差异？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要深度研究，因为其涉及美国和欧盟对AI责任的不同法律解释路径，要求检索复杂跨境判例。AI技术的迅速发展与传统法律理论的冲突，使问题的灰色地带更加复杂，需在多个法律领域交叉分析。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 跨法域裁判逻辑差异复杂; 不同法域判例之间的可比性较难评价</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家位于加州的技术公司因使用未经授权的人工智能工具进行大规模数据处理被罚款200万美元，该公司质疑罚款合理性并提出上诉。是否存在类似的判例可以用于参考？这些判例在美国和欧盟的裁判逻辑有何异同？特别是考虑到AI法条的近年变革，哪些法律适用于该场景？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要检索两个不同法域的类似判例，并分析判决背后的法律逻辑。同时，追踪AI相关法规的近年修订变化，以确定法律适用性的准确性。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; AI法条变革较新，缺乏既定先例; 美国与欧盟AI法律在细节和适用上可能存在重大差异</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. Unprecedented ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-meth"></div>
+        <div class="s-body">
+          <h4>无先例 <span class="en">Unprecedented</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">构造尚无明确判例的新型法律问题，涉及新技术、新商业模式或跨境监管空白。考验模型在法律灰色地带的推理能力。</p>
+          <div class="s-chips"><span>无先例</span><span>新技术合规</span><span>法律灰色地带</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在美国、日本及欧盟的法律框架下，如何处理一家跨国企业在三地同时开展的AI项目，该项目利用人工智能进行自动化决策，且涉及用户个人数据的收集和使用？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>source_conflict</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>本问题需要深度研究，因为现有法律框架在这类新兴科技情境下的适用性尚不明确，且不同地区对&#x27;轻触式&#x27;监管的解释可能存在显著差异。AI用户个人数据处理的合规性问题尤其复杂，因为它涉及到法律和政策的新发展，以及如何在不同法域的不同解读之间找到平衡。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Approach to Artificial Intelligence; Supporting Innovation through AI Regulatory Sandboxes; State of the Digital Decade 2024<br><strong>学者解读:</strong> New Government Policy Shows Japan Favors a Light Touch for AI; Japan&#x27;s New AI Act; Japan&#x27;s AI Promotion Act; US AI Policy Framework; AI Policy: Global Stakes, Local Governance</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; AI和数据隐私法律框架的复杂性可能导致模型对法律冲突和合规需求的误解。; 在处理不同司法管辖区的法律法规时，模型可能忽略特定法律条文、时间表或评估标准，尤其是对于欧盟的复杂法规。</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在一个跨国创意项目中，AI生成了一幅数字艺术作品，该作品被指控侵犯了某中国艺术家作品的版权。根据AI LEAD Act和中国人工智能监管新规，美国是否需要遵循中国较为严格的版权保护标准，尤其在AI生成内容的归属权问题上，各法域将如何解释这些法条？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>AI生成内容的法律归属在国际法域中仍是一个未完全解决的开放性问题。不同法域对版权和知识产权的严格程度差异化，尤其在面对实际案例时，法条解读的灰色地带可能引发截然不同的法律判断。此外，近年来相关法律的修订也使得问题更加复杂，需要深入了解法条的演变轨迹。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> AI LEAD Act; Youth AI Privacy Act; GUARD Act; 中国人工智能监管新规; 新一代人工智能伦理规范<br><strong>判例:</strong> Shanghai Court Holds Developers Criminally Liable; Federal Court Holds AI Chats Are Not Privileged; US Supreme Court Declines on AI Authorship; AlienChat涉案AI聊天软件判决; AI时代“快播案”<br><strong>学者解读:</strong> United States: Navigating the Laws of Chatbots and AI Assistants; Summary of Artificial Intelligence 2025 Legislation; Chatbot Developers Brace for Impending Wave of State Regulation; Beyond Section 230: Principles for AI Governance; Regulating Artificial Intelligence: U.S. and International Approaches</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨国版权法律适用性问题复杂，可能导致误解; AI内容归属权在不同法域的解读差异较大，容易混淆</p>
+              <h6>基线质量</h6>
+              <p>score: 0.125 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">某初创公司在美国开发的一款混合量子计算芯片引起了三国的关注，该芯片使用了一种新材料和算法，声称可以显著提高计算效率，该技术是否应受出口管制？如何根据50 U.S. Code § 4817、15 USC Ch. 114、European Commission Proposal on Quantum Technologies及相关文献进行判定？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>初创公司位于美国，同时在美国、中国及欧洲设有实验室，并计划将新芯片出口至欧洲和中国以进一步研发及商业化。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>挑战在于新材料和算法是否符合‘新兴技术’的现有定义，并在美国、欧洲及中国的法律框架下适用。需要仔细权衡量子计算芯片创新与国家安全的利弊，加上各国近年来法律国际间修订趋向不同，加大了解释复杂性。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 50 U.S. Code § 4817; 15 USC Ch. 114: National Quantum Initiative; Implementation of Additional Export Controls; European Commission Proposal on Quantum Technologies; European Commission and High Representative Paper<br><strong>学者解读:</strong> Quantum Computing Laws and Regulations 2026; Quantum Technology and Export Controls; U.S. Economic Security; EU Issues 2025 Update to Dual-Use Control List; Export controls and quantum technologies: the next strategic frontier</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 多国法律法规的复杂性和差异性; 新兴技术出口管制的动态性和不确定性</p>
+              <h6>基线质量</h6>
+              <p>score: 2.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Predictive ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-contra"></div>
+        <div class="s-body">
+          <h4>预测类 <span class="en">Predictive</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
+          <p class="desc">预判未来监管走向和判决趋势，需要结合法官政策倾向、各法域产业保护立场等软性因素。考验模型的法律推理和趋势分析能力。</p>
+          <div class="s-chips"><span>趋势预测</span><span>政策分析</span><span>司法走向</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在某跨国公司利用轻触式AI技术争夺市场份额的情况下，考虑US、JP、EU三地监管差异，法院会如何判定AI技术应用导致的竞争不正当性？监管机构可能采取何种行动？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>此问题涉及三个法域的监管差异，且日本和美国的政策导向不如欧盟法律明确，这使得司法解读不一。此外，跨国公司的影响力和政治游说可能影响裁决，需综合考量法律条文与不同法官的理解偏向。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Approach to Artificial Intelligence; Supporting Innovation through AI Regulatory Sandboxes; State of the Digital Decade 2024<br><strong>学者解读:</strong> New Government Policy Shows Japan Favors a Light Touch for AI; Japan&#x27;s New AI Act; Japan&#x27;s AI Promotion Act; US AI Policy Framework; AI Policy: Global Stakes, Local Governance</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 差异化的监管框架可能产生复杂的法律解释问题; 轻触式AI技术的定义和应用可能未统一，容易导致误解</p>
+              <h6>基线质量</h6>
+              <p>score: 2.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">某大型跨国社交媒体平台A在美国和中国均已展开业务，其用户生成了大量AI生成内容。某用户在该平台上发布了一段AI生成的视频，造成了中国某高科技公司的商业损失约500万美元，请问法院可能如何判决？中国的监管机构可能采取哪些措施？美国和中国在判决标准、法官倾向及政治环境等方面会有什么不同？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>factual_constraints</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>问题涉及美国和中国两个截然不同的司法体系和社会背景，需要详细分析法律条文、案例、以及学术观点。平台在不同法域的运营策略、潜在的政治压力和社会价值观对司法结果有重要影响，使得对平台责任的预判变得更加复杂。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Section 230; 中华人民共和国统计法; 最高人民法院发布; 依法妥善审理涉人工智能案件<br><strong>判例:</strong> 文娱资讯•双周报| 2026年第6期<br><strong>学者解读:</strong> Beyond Section 230: Principles for AI Governance; Beyond the Search Bar: Generative AI&#x27;s Section 230 Tightrope Walk; Trump America AI Act: sweeping liability, limited preemption; The Future of Online Expression and Innovation Depends on Robust Section 230 Protections; Section 230 Immunity and Generative Artificial Intelligence</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; Section 230在美国的适用可能会让模型误认为它可以在中国法律体系下同样适用; 中美两国的法律及政治环境差异复杂，易导致对判决趋势的解读错误</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在一家跨国科技公司出口一种被认为是可能用于军事的图像处理软件时，美、中、欧三地法律对其双重用途的定义存在差异。该公司面对三种不同的出口控制政策，可能违反哪些规定？法院可能如何判决？监管机构可能采取哪些行动？尤其是在当前国际政治环境紧张的背景下，各方如何平衡国家安全与技术发展之间的利益？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN, EU</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>跨国科技公司试图将其开发的先进图像处理软件出口到海外市场。该软件具有较高的分析和处理能力，可能被用于军事侦查和监控。在美国，其功能被界定在Export Administration Regulations中；在中国，该软件可能被列入&#x27;中国禁止出口限制出口技术目录&#x27;；而在欧盟，其两用物项管理需查看&#x27;两用物项和技术进出口许可证管理目录&#x27;。公司需要通过三地的出口许可，但各地对软件的军事用途关注程度不同。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>技术出口的法律规定处在快速变化之中，尤其是面对日益复杂的国际关系，各国可能加强对技术应用的监管。同时，双重用途定义的模糊性在不同法域间可能导致不同法律后果，法官个人倾向和地区政治利益都可能影响最终判决。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Federal Register Notice on Export Controls; Export Administration Regulations - Definitions; 中国禁止出口限制出口技术目录; 中华人民共和国两用物项出口管制清单; 两用物项和技术进出口许可证管理目录<br><strong>学者解读:</strong> Congressional Research Service Report; CNAS Report on Dual-Use Technology; Orrick Insight on Export Controls; Regulatory Review Seminar Article; Cleary Trade Watch Insight</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 不同国家和地区的法律制度差异可能导致错误解释，特别是在军事用途定义和出口许可要求方面。; 当前国际政治紧张的环境下，国家安全考量可能变化，模型可能无法准确预测各国的政策倾向。</p>
+              <h6>基线质量</h6>
+              <p>score: 0.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 7+1 Difficulty Mechanisms -->
+    <h3 style="margin-top:56px;margin-bottom:8px">八种难化手段</h3>
+    <p class="section-desc" style="margin-bottom:24px">每个候选问题随机组合 2-3 种难化手段，确保问题具有足够的深度和区分度。点击卡片内「查看详情」展开示例。</p>
+
+    <div class="strategy-grid">
+
+      <div class="s-card reveal">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>1. jurisdiction_count <span class="en">多法域对比</span></h4>
+          <p class="desc">增加涉及的法域数量（2&rarr;3&rarr;4），要求模型在更多法律体系间做对比分析</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在一个跨国创意项目中，AI生成了一幅数字艺术作品，该作品被指控侵犯了某中国艺术家作品的版权。根据AI LEAD Act和中国人工智能监管新规，美国是否需要遵循中国较为严格的版权保护标准，尤其在AI生成内容的归属权问题上，各法域将如何解释这些法条？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>AI生成内容的法律归属在国际法域中仍是一个未完全解决的开放性问题。不同法域对版权和知识产权的严格程度差异化，尤其在面对实际案例时，法条解读的灰色地带可能引发截然不同的法律判断。此外，近年来相关法律的修订也使得问题更加复杂，需要深入了解法条的演变轨迹。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> AI LEAD Act; Youth AI Privacy Act; GUARD Act; 中国人工智能监管新规; 新一代人工智能伦理规范<br><strong>判例:</strong> Shanghai Court Holds Developers Criminally Liable; Federal Court Holds AI Chats Are Not Privileged; US Supreme Court Declines on AI Authorship; AlienChat涉案AI聊天软件判决; AI时代“快播案”<br><strong>学者解读:</strong> United States: Navigating the Laws of Chatbots and AI Assistants; Summary of Artificial Intelligence 2025 Legislation; Chatbot Developers Brace for Impending Wave of State Regulation; Beyond Section 230: Principles for AI Governance; Regulating Artificial Intelligence: U.S. and International Approaches</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨国版权法律适用性问题复杂，可能导致误解; AI内容归属权在不同法域的解读差异较大，容易混淆</p>
+              <h6>基线质量</h6>
+              <p>score: 0.125 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家位于加州的技术公司因使用未经授权的人工智能工具进行大规模数据处理被罚款200万美元，该公司质疑罚款合理性并提出上诉。是否存在类似的判例可以用于参考？这些判例在美国和欧盟的裁判逻辑有何异同？特别是考虑到AI法条的近年变革，哪些法律适用于该场景？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要检索两个不同法域的类似判例，并分析判决背后的法律逻辑。同时，追踪AI相关法规的近年修订变化，以确定法律适用性的准确性。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; AI法条变革较新，缺乏既定先例; 美国与欧盟AI法律在细节和适用上可能存在重大差异</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在某跨国公司利用轻触式AI技术争夺市场份额的情况下，考虑US、JP、EU三地监管差异，法院会如何判定AI技术应用导致的竞争不正当性？监管机构可能采取何种行动？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>此问题涉及三个法域的监管差异，且日本和美国的政策导向不如欧盟法律明确，这使得司法解读不一。此外，跨国公司的影响力和政治游说可能影响裁决，需综合考量法律条文与不同法官的理解偏向。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Approach to Artificial Intelligence; Supporting Innovation through AI Regulatory Sandboxes; State of the Digital Decade 2024<br><strong>学者解读:</strong> New Government Policy Shows Japan Favors a Light Touch for AI; Japan&#x27;s New AI Act; Japan&#x27;s AI Promotion Act; US AI Policy Framework; AI Policy: Global Stakes, Local Governance</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 差异化的监管框架可能产生复杂的法律解释问题; 轻触式AI技术的定义和应用可能未统一，容易导致误解</p>
+              <h6>基线质量</h6>
+              <p>score: 2.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d1">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>2. interpretation_ambiguity <span class="en">解释模糊性</span></h4>
+          <p class="desc">法条用语的模糊地带 &mdash; 不同法域对同一概念的解释存在显著差异，灰色地带多</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在美国、日本及欧盟的法律框架下，如何处理一家跨国企业在三地同时开展的AI项目，该项目利用人工智能进行自动化决策，且涉及用户个人数据的收集和使用？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>source_conflict</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>本问题需要深度研究，因为现有法律框架在这类新兴科技情境下的适用性尚不明确，且不同地区对&#x27;轻触式&#x27;监管的解释可能存在显著差异。AI用户个人数据处理的合规性问题尤其复杂，因为它涉及到法律和政策的新发展，以及如何在不同法域的不同解读之间找到平衡。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Approach to Artificial Intelligence; Supporting Innovation through AI Regulatory Sandboxes; State of the Digital Decade 2024<br><strong>学者解读:</strong> New Government Policy Shows Japan Favors a Light Touch for AI; Japan&#x27;s New AI Act; Japan&#x27;s AI Promotion Act; US AI Policy Framework; AI Policy: Global Stakes, Local Governance</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; AI和数据隐私法律框架的复杂性可能导致模型对法律冲突和合规需求的误解。; 在处理不同司法管辖区的法律法规时，模型可能忽略特定法律条文、时间表或评估标准，尤其是对于欧盟的复杂法规。</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在一个跨国创意项目中，AI生成了一幅数字艺术作品，该作品被指控侵犯了某中国艺术家作品的版权。根据AI LEAD Act和中国人工智能监管新规，美国是否需要遵循中国较为严格的版权保护标准，尤其在AI生成内容的归属权问题上，各法域将如何解释这些法条？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>AI生成内容的法律归属在国际法域中仍是一个未完全解决的开放性问题。不同法域对版权和知识产权的严格程度差异化，尤其在面对实际案例时，法条解读的灰色地带可能引发截然不同的法律判断。此外，近年来相关法律的修订也使得问题更加复杂，需要深入了解法条的演变轨迹。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> AI LEAD Act; Youth AI Privacy Act; GUARD Act; 中国人工智能监管新规; 新一代人工智能伦理规范<br><strong>判例:</strong> Shanghai Court Holds Developers Criminally Liable; Federal Court Holds AI Chats Are Not Privileged; US Supreme Court Declines on AI Authorship; AlienChat涉案AI聊天软件判决; AI时代“快播案”<br><strong>学者解读:</strong> United States: Navigating the Laws of Chatbots and AI Assistants; Summary of Artificial Intelligence 2025 Legislation; Chatbot Developers Brace for Impending Wave of State Regulation; Beyond Section 230: Principles for AI Governance; Regulating Artificial Intelligence: U.S. and International Approaches</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨国版权法律适用性问题复杂，可能导致误解; AI内容归属权在不同法域的解读差异较大，容易混淆</p>
+              <h6>基线质量</h6>
+              <p>score: 0.125 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在美国和欧盟，某家跨国技术企业在开发用于金融分析的AI工具时遭遇数次误判，导致客户资产重大损失（金额超过500万美元），在责任认定上是否存在类似判例？如何看待美国产品责任法与欧盟综合分析下的裁判逻辑差异？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要深度研究，因为其涉及美国和欧盟对AI责任的不同法律解释路径，要求检索复杂跨境判例。AI技术的迅速发展与传统法律理论的冲突，使问题的灰色地带更加复杂，需在多个法律领域交叉分析。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 跨法域裁判逻辑差异复杂; 不同法域判例之间的可比性较难评价</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d2">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>3. source_conflict <span class="en">法源冲突</span></h4>
+          <p class="desc">引入同一法域内部的矛盾法源 &mdash; 不同法院的相反判例、法条与司法解释的张力</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在美国、日本及欧盟的法律框架下，如何处理一家跨国企业在三地同时开展的AI项目，该项目利用人工智能进行自动化决策，且涉及用户个人数据的收集和使用？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>source_conflict</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>本问题需要深度研究，因为现有法律框架在这类新兴科技情境下的适用性尚不明确，且不同地区对&#x27;轻触式&#x27;监管的解释可能存在显著差异。AI用户个人数据处理的合规性问题尤其复杂，因为它涉及到法律和政策的新发展，以及如何在不同法域的不同解读之间找到平衡。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Approach to Artificial Intelligence; Supporting Innovation through AI Regulatory Sandboxes; State of the Digital Decade 2024<br><strong>学者解读:</strong> New Government Policy Shows Japan Favors a Light Touch for AI; Japan&#x27;s New AI Act; Japan&#x27;s AI Promotion Act; US AI Policy Framework; AI Policy: Global Stakes, Local Governance</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; AI和数据隐私法律框架的复杂性可能导致模型对法律冲突和合规需求的误解。; 在处理不同司法管辖区的法律法规时，模型可能忽略特定法律条文、时间表或评估标准，尤其是对于欧盟的复杂法规。</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家中国科技公司与一家美国半导体公司发生纠纷，中国公司向美国公司主张标准必要专利（SEP）侵权，并要求在全球范围内签订FRAND许可协议，许可费总额高达20亿美元。中国公司主张的FRAND条款与U.S.和E.U.的解读存在显著分歧，特别是在许可费率和非歧视条款上。问题是：在中国、美国和欧洲是否有类似判例支持中国公司的主张？判例的裁判逻辑是什么？这些判例之间的可比性如何，尤其是在不同法域对FRAND条款的解读有分歧的情况下？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>CN, US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>科技和半导体行业跨国公司之间的法律纠纷，围绕着全球标准必要专利（SEP）和FRAND条款的跨法域解读，涉及大量财务金额。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>source_conflict</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要deep research，因为它涉及跨多个法域的法律文本和判例的详细对比分析。不同法域对FRAND条款的解读差异，以及如何在不同经济体的法律体系中实现协调，为问题的解决增添了复杂性。同时，这也需要对涉案企业在不同行政和司法管辖下的经济和政策背景有深入的了解。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>判例:</strong> TCL诉爱立信案; 中兴诉三星案; (2022)最高法知民终817号判决; 6件司法调解典型案例; Chinese Patent Litigation Data<br><strong>学者解读:</strong> 2025：全球标准必要专利纠纷总览; 全球主要国家和地区的SEP政策解读; 全球标准必要专利政策走向及中国的因应; 标准必要专利持有人迫使欧洲统一专利法院与英国等法院展开有关; 日本法院制定标准必要专利诉讼指南</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 全球FRAND许可费裁决涉及多法域解释，可能导致不一致信息; 复杂的跨国法律纠纷容易混淆不同法域的司法裁判逻辑</p>
+              <h6>基线质量</h6>
+              <p>score: 0.125 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在EU和US管辖范围内，一家AI创业公司推出了一款基于AI的招聘平台，该平台可以筛选并推荐候选人。据称，这款AI可能在推荐过程中存在偏见及歧视问题。根据European Parliament resolution on artificial intelligence in criminal law和Texas Responsible Artificial Intelligence Governance Act，这种AI应用是否构成&#x27;滥用&#x27;或&#x27;特定禁用实践&#x27;？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>EU, US</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于欧洲的AI公司开发了一款全球招聘平台，使用AI技术自动筛选并推荐候选人。AI系统被发现偏向于推荐某特定族群的候选人而非其他人群，这引起了一些社会组织的投诉。此种偏见在不同法域内是否被视为合规性问题存在争议。EU可能依据其AI法案定义这种偏见为滥用，而在US，Texas Responsible Artificial Intelligence Governance Act并未明确对此类AI偏见进行定义，导致合规性审查存在不确定性。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>source_conflict</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>各法域对AI应用中的&#x27;滥用&#x27;和&#x27;特定禁用实践&#x27;的定义存在差异，特别是这些法律定义在边缘案例中的适用性不尽相同。此外，法规原文与学者、法律从业人员的解读之间存在显著差异，导致在偏见是否构成法律意义上的滥用存在争议。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> European Parliament resolution on artificial intelligence in criminal law; Texas Responsible Artificial Intelligence Governance Act<br><strong>判例:</strong> Federal Judge Rules on AI-Generated Documents<br><strong>学者解读:</strong> New AI Regulations Come into Play with the Texas Responsible AI Governance Act; REGULATION - State Bar of Texas; Texas Signs Responsible AI Governance Act Into Law; Texas Enacts New AI Law; Texas Enacts AI Consumer Protection Law</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨法域定义不同可能导致理解误差; AI偏见定义模糊可能引发误解</p>
+              <h6>基线质量</h6>
+              <p>score: 0.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d3">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>4. temporal_evolution <span class="en">时间演化</span></h4>
+          <p class="desc">叠加时间维度 &mdash; 引入正在审理的案件、即将生效的法规、或法律变迁历史</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在一个跨国创意项目中，AI生成了一幅数字艺术作品，该作品被指控侵犯了某中国艺术家作品的版权。根据AI LEAD Act和中国人工智能监管新规，美国是否需要遵循中国较为严格的版权保护标准，尤其在AI生成内容的归属权问题上，各法域将如何解释这些法条？</div>
+              <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>AI生成内容的法律归属在国际法域中仍是一个未完全解决的开放性问题。不同法域对版权和知识产权的严格程度差异化，尤其在面对实际案例时，法条解读的灰色地带可能引发截然不同的法律判断。此外，近年来相关法律的修订也使得问题更加复杂，需要深入了解法条的演变轨迹。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> AI LEAD Act; Youth AI Privacy Act; GUARD Act; 中国人工智能监管新规; 新一代人工智能伦理规范<br><strong>判例:</strong> Shanghai Court Holds Developers Criminally Liable; Federal Court Holds AI Chats Are Not Privileged; US Supreme Court Declines on AI Authorship; AlienChat涉案AI聊天软件判决; AI时代“快播案”<br><strong>学者解读:</strong> United States: Navigating the Laws of Chatbots and AI Assistants; Summary of Artificial Intelligence 2025 Legislation; Chatbot Developers Brace for Impending Wave of State Regulation; Beyond Section 230: Principles for AI Governance; Regulating Artificial Intelligence: U.S. and International Approaches</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨国版权法律适用性问题复杂，可能导致误解; AI内容归属权在不同法域的解读差异较大，容易混淆</p>
+              <h6>基线质量</h6>
+              <p>score: 0.125 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">某美国科技公司被指控未能妥善保护用户数据，导致上千万用户信息泄露，并因此在美国被罚款1亿美元。在欧盟，该公司面临GDPR调查，并可能遭受更高的罚款。是否有案例分析显示美国和欧盟在此类数据隐私违规行为上的不同处置方式及罚款标准？各法域的判例是否存在裁判逻辑差异？如何评价在此背景下跨法域公司面临的合规挑战？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>temporal_evolution</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>该问题需深入对比美国和欧盟判例及处罚法规，尤其是在数据保护相关立法发展与跨境监管策略的演变上。裁判者的文化背景、法律传统及当前政策环境会影响判决倾向，需对技术合规与法律责任博弈有深刻理解。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION; 21 CFR Part 21 -- Protection of Privacy; S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY; General Data Protection Regulation; Second Report on the application of the General Data Protection Regulation<br><strong>判例:</strong> U.S. Privacy Litigation Update: August 2025 Decisions; Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split; CJEU ruling on GDPR Damages<br><strong>学者解读:</strong> Data protection laws in the United States; Year in Review: The Top Ten US Data Privacy Developments from; Data Protection and Privacy Law: An Introduction; Retrospective: 2025 in state data privacy law; The Patchwork of Data Privacy Laws: Recent Developments and Implications</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 美国与欧盟的数据保护法具有复杂的法域差异，可能导致混淆判例; 跨法域合规问题因法律变化和不同判例解释可能导致误解</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家位于加州的技术公司因使用未经授权的人工智能工具进行大规模数据处理被罚款200万美元，该公司质疑罚款合理性并提出上诉。是否存在类似的判例可以用于参考？这些判例在美国和欧盟的裁判逻辑有何异同？特别是考虑到AI法条的近年变革，哪些法律适用于该场景？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>temporal_evolution</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要检索两个不同法域的类似判例，并分析判决背后的法律逻辑。同时，追踪AI相关法规的近年修订变化，以确定法律适用性的准确性。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; AI法条变革较新，缺乏既定先例; 美国与欧盟AI法律在细节和适用上可能存在重大差异</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d4">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>5. factual_constraints <span class="en">事实约束</span></h4>
+          <p class="desc">增加事实模式复杂度 &mdash; 具体金额、多主体、跨境交易、嵌套公司结构等</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">某大型跨国社交媒体平台A在美国和中国均已展开业务，其用户生成了大量AI生成内容。某用户在该平台上发布了一段AI生成的视频，造成了中国某高科技公司的商业损失约500万美元，请问法院可能如何判决？中国的监管机构可能采取哪些措施？美国和中国在判决标准、法官倾向及政治环境等方面会有什么不同？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>factual_constraints</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>问题涉及美国和中国两个截然不同的司法体系和社会背景，需要详细分析法律条文、案例、以及学术观点。平台在不同法域的运营策略、潜在的政治压力和社会价值观对司法结果有重要影响，使得对平台责任的预判变得更加复杂。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Section 230; 中华人民共和国统计法; 最高人民法院发布; 依法妥善审理涉人工智能案件<br><strong>判例:</strong> 文娱资讯•双周报| 2026年第6期<br><strong>学者解读:</strong> Beyond Section 230: Principles for AI Governance; Beyond the Search Bar: Generative AI&#x27;s Section 230 Tightrope Walk; Trump America AI Act: sweeping liability, limited preemption; The Future of Online Expression and Innovation Depends on Robust Section 230 Protections; Section 230 Immunity and Generative Artificial Intelligence</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; Section 230在美国的适用可能会让模型误认为它可以在中国法律体系下同样适用; 中美两国的法律及政治环境差异复杂，易导致对判决趋势的解读错误</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家总部位于新加坡的中型金融科技公司计划向位于欧盟的合作企业传输其客户数据，但在具体保障措施的落实上出现争议。公司依据《Electronic Transactions Act 2010》及欧盟的《Standard Contractual Clauses for data transfers to Third countries》设定了技术和组织措施，但欧盟合作公司认为这些措施未满足《Regulation (EU) 2016/679》的地区保护要求。此情况下，新加坡法院在‘适当保障’的解释上是否会支持当地企业的合规方案？而欧盟的监管机构是否会介入并采取制裁行动？这个判决可能受各法域的政治及经济环境影响，利润的分配如何影响法律适用的判断？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>涉案公司为资产规模约2000万新币的中型金融科技企业，计划向欧洲伙伴传输敏感的客户金融数据。在双方协议下，已使用标准合同条款，但对合同条款内技术措施的适当性存异议。欧盟企业拒绝接受其保障措施并威胁终止合约，而新加坡公司则认为这符合当地法律。涉及金额约100万欧元。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>interpretation_ambiguity</span><span>factual_constraints</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>问题涉及多个法域间法律及政治环境的交错，例如新加坡倾向于支持本地企业的合规策略，而欧盟则严格保护数据。因此需要深入分析不同法域下的法律解释、判例及对企业影响的评估。利益博弈与技术性复杂性使问题更加困难。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Standard Contractual Clauses for data transfers to Third countries; Data Transfer Provisions in Regulation (EU) 2016/679; Electronic Transactions Act 2010; Electronic Transactions Act 1998; Payment Services Regulations 2019<br><strong>判例:</strong> Unnamed SGCA case<br><strong>学者解读:</strong> International data transfers; Chapter 13: Cross-Border Data Transfers; Cross-Border Data Transfers: A Global Guide to Compliance; Cross-border data transfers in fintech: Navigating post-GDPR; EU Cross Border Data Transfers Impact Assessment</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 涉及不同法域法律解读的复杂性; 政治和经济环境影响判决的不确定性</p>
+              <h6>基线质量</h6>
+              <p>score: 0.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家跨国金融科技公司因涉嫌洗钱活动被调查，涉案金额在500万到2000万美元之间。公司在美国和欧盟均有业务运营，国家监管部门对其进行了财务处罚。在这种情况下，美国和欧盟是否有类似的判例可以指导？这些判例的裁判逻辑是什么？不同法域之间的判例是否具有可比性，若有，如何？特别是考虑到美国《Anti-Money Laundering Act of 2020》与欧盟《Directive (EU) 2024/1640》的适用差异。</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家跨国金融科技公司运营于支付处理行业，其数据系统被发现涉及洗钱活动，影响金额界定在500万到2000万美元之间。该公司在美国和欧盟各被处罚，需研究两法域内是否有相应判例以提供指导。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>factual_constraints</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>该问题需要深入研究，因为涉及复杂的跨国法律框架，以及各法域内对于洗钱行为的合规标准和执法力度的细微差异。必须检索并分析多个法域的真实判例，以理解不同法律系统对于同一事件的裁决逻辑和影响。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Anti-Money Laundering Act of 2020; Financial Crimes Enforcement Network Regulations; CLOUD Act Amendments; Directive 2021/PN 0423; Directive (EU) 2024/1640<br><strong>判例:</strong> ECJ Decision on Corporate Fines under AML Directive; CJEU Ruling on Corporate AML Penalties; CJEU Ruling on GDPR and AML/CFT<br><strong>学者解读:</strong> United States: the intricacies of money laundering laws; History of Anti-Money Laundering Laws; 2025 Year-End Developments in Anti-Money Laundering; Anti Money Laundering Laws and Regulations Report 2025-2026 USA; Implications and Benefits of Cross-Border Funds Transmittal Reporting</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 判例之间的法律适用差异可能导致误解; 不同法律体系下的判例适用性比较复杂</p>
+              <h6>基线质量</h6>
+              <p>score: 0.25 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d5">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>6. human_variable <span class="en">人为变量</span></h4>
+          <p class="desc">裁判者主观因素 &mdash; 法官政策倾向、文化背景、当地政治环境对判决的影响</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">某美国科技公司被指控未能妥善保护用户数据，导致上千万用户信息泄露，并因此在美国被罚款1亿美元。在欧盟，该公司面临GDPR调查，并可能遭受更高的罚款。是否有案例分析显示美国和欧盟在此类数据隐私违规行为上的不同处置方式及罚款标准？各法域的判例是否存在裁判逻辑差异？如何评价在此背景下跨法域公司面临的合规挑战？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>temporal_evolution</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>该问题需深入对比美国和欧盟判例及处罚法规，尤其是在数据保护相关立法发展与跨境监管策略的演变上。裁判者的文化背景、法律传统及当前政策环境会影响判决倾向，需对技术合规与法律责任博弈有深刻理解。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION; 21 CFR Part 21 -- Protection of Privacy; S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY; General Data Protection Regulation; Second Report on the application of the General Data Protection Regulation<br><strong>判例:</strong> U.S. Privacy Litigation Update: August 2025 Decisions; Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split; CJEU ruling on GDPR Damages<br><strong>学者解读:</strong> Data protection laws in the United States; Year in Review: The Top Ten US Data Privacy Developments from; Data Protection and Privacy Law: An Introduction; Retrospective: 2025 in state data privacy law; The Patchwork of Data Privacy Laws: Recent Developments and Implications</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 美国与欧盟的数据保护法具有复杂的法域差异，可能导致混淆判例; 跨法域合规问题因法律变化和不同判例解释可能导致误解</p>
+              <h6>基线质量</h6>
+              <p>score: 0.375 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在跨国金融科技公司的跨境支付中，其通过多国云存储服务传输用户数据，涉及金额超过五千万美元，面临合规风险管理问题。探讨在EU和SG法域中是否有类似判例？判例的裁判逻辑是什么？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>human_variable</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>问题需要比较分析不同法域的数据保护执行力度和判例处理；考察裁判者如何权衡隐私保护与商业利益。另外，不同法域间的法律概念和政策取向存在复杂差异，需要详尽研究两地的实际执行情况和历史判例。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Standard Contractual Clauses for data transfers to Third countries; Data Transfer Provisions in Regulation (EU) 2016/679; Electronic Transactions Act 2010; Electronic Transactions Act 1998; Payment Services Regulations 2019<br><strong>判例:</strong> Unnamed SGCA case<br><strong>学者解读:</strong> International data transfers; Chapter 13: Cross-Border Data Transfers; Cross-Border Data Transfers: A Global Guide to Compliance; Cross-border data transfers in fintech: Navigating post-GDPR; EU Cross Border Data Transfers Impact Assessment</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 可能无法找到完全类似的判例; EU和SG若法律条文差异大，比较分析可能出现误导</p>
+              <h6>基线质量</h6>
+              <p>score: 0.25 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在AI生成内容的版权责任问题上，一家专注于生成音乐内容的AI公司在没有明确标注人类创作者情况下生成了大量作品并进行了商业销售，其中涉及金额高达数百万美元。在美国和欧盟法域中是否有类似判例可以参照？这些判例对‘创作者’的定义和AI生成作品的理解是什么？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家大型跨国AI公司利用其先进的算法生成音乐内容，并在全球范围内进行商业销售，销售额超过数百万美元；其中没有明确确定人类创作者。该公司的行为引起了业界对AI生成作品版权保护的关注和争议，特别是在不同法域间的版权责任判定。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>human_variable</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要deep research因为涉及的法律区域在创作者定义上的理解不同，而且没有明确的国际法律；裁判者对算法创新保护力度的不一致、当地政策环境可能影响裁判倾向，加之商业利益博弈，加剧了案件解决的复杂性。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 17 U.S. Code § 501; European Parliament resolution on intellectual property rights for AI technologies<br><strong>判例:</strong> Thaler v. Perlmutter; GEMA v OpenAI<br><strong>学者解读:</strong> Copyright and Artificial Intelligence; Generative Artificial Intelligence and Copyright Law; Legislation Watch for AI Developers and Registered Copyright Owners; AI, Copyright, and the Law; Artificial Intelligence and Copyright</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; AI生成内容的版权责任在法律实践中尚不明确，可能导致误导性解读。; 不同法域之间的判例和立法差异可能导致结论不一致或误解。</p>
+              <h6>基线质量</h6>
+              <p>score: 1.2 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal reveal-d6">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>7. interdomain_interaction <span class="en">跨域交互</span></h4>
+          <p class="desc">要求同时分析多个法律领域的交叉 &mdash; 知识产权+数据保护、金融监管+AI合规等</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">在美国和欧盟，某家跨国技术企业在开发用于金融分析的AI工具时遭遇数次误判，导致客户资产重大损失（金额超过500万美元），在责任认定上是否存在类似判例？如何看待美国产品责任法与欧盟综合分析下的裁判逻辑差异？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>interpretation_ambiguity</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要深度研究，因为其涉及美国和欧盟对AI责任的不同法律解释路径，要求检索复杂跨境判例。AI技术的迅速发展与传统法律理论的冲突，使问题的灰色地带更加复杂，需在多个法律领域交叉分析。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> States&#x27; Right to Regulate AI Act; AI for America Act; American Artificial Intelligence Leadership and Uniformity Act; AI Accountability Act; AI LEAD Act<br><strong>判例:</strong> California Court&#x27;s Warning on AI; California Attorney AI Fine Case; California Supreme Court AI Error Case<br><strong>学者解读:</strong> Artificial Intelligence 2025 Legislation Summary; U.S. State AI Law Tracker; AI Watch: U.S. Regulatory Tracker; California AI Privacy Legislation Guide; New State AI Laws Effective 2026</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 跨法域裁判逻辑差异复杂; 不同法域判例之间的可比性较难评价</p>
+              <h6>基线质量</h6>
+              <p>score: 2.5 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">在跨国金融科技公司的跨境支付中，其通过多国云存储服务传输用户数据，涉及金额超过五千万美元，面临合规风险管理问题。探讨在EU和SG法域中是否有类似判例？判例的裁判逻辑是什么？不同法域判例之间的可比性如何？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>human_variable</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>问题需要比较分析不同法域的数据保护执行力度和判例处理；考察裁判者如何权衡隐私保护与商业利益。另外，不同法域间的法律概念和政策取向存在复杂差异，需要详尽研究两地的实际执行情况和历史判例。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> Standard Contractual Clauses for data transfers to Third countries; Data Transfer Provisions in Regulation (EU) 2016/679; Electronic Transactions Act 2010; Electronic Transactions Act 1998; Payment Services Regulations 2019<br><strong>判例:</strong> Unnamed SGCA case<br><strong>学者解读:</strong> International data transfers; Chapter 13: Cross-Border Data Transfers; Cross-Border Data Transfers: A Global Guide to Compliance; Cross-border data transfers in fintech: Navigating post-GDPR; EU Cross Border Data Transfers Impact Assessment</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; 可能无法找到完全类似的判例; EU和SG若法律条文差异大，比较分析可能出现误导</p>
+              <h6>基线质量</h6>
+              <p>score: 0.25 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">一家欧洲公司希望将其开发的最新量子计算技术出口到中国，美国监管机构要求对技术中涉及到的部分组件实施严格的出口管制。法院可能如何在这起纠纷中进行判决？欧盟和中国的监管机构可能会采取什么样的措施来影响这一出口计划？</div>
+              <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化 <strong>3种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>一家注册在欧盟的高科技公司成功开发了一项颠覆性量子计算技术，其中涉及到若干美国产的关键部件。该公司计划将这项技术出口到中国，但美国已根据50 U.S. Code § 4817加强了对涉及量子技术的出口管制。与此同时，欧盟正在试图在技术创新和出口安全之间寻找平衡，而中国科技法规重点关注国家安全。该公司的出口计划引发了三地的法律和政策争议。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>temporal_evolution</span><span>interdomain_interaction</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>此问题需要对欧美中三国在量子计算技术出口管制的法律差异进行深入分析，了解各国的安全和创新政策变化。同时，需考虑到各国法院的历史判决倾向，以及当前的政治经济环境对各自法律实施的影响，分析利益相关者的博弈策略。此外，还需追溯近年来相关法条的修订演变，以全面预测可能的法律结果。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 50 U.S. Code § 4817; 15 USC Ch. 114: National Quantum Initiative; Implementation of Additional Export Controls; European Commission Proposal on Quantum Technologies; European Commission and High Representative Paper<br><strong>学者解读:</strong> Quantum Computing Laws and Regulations 2026; Quantum Technology and Export Controls; U.S. Economic Security; EU Issues 2025 Update to Dual-Use Control List; Export controls and quantum technologies: the next strategic frontier</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>high</strong> &mdash; 跨法域之复杂性可能导致偏颇结论; 涉及到多国法律之间的差异和冲突</p>
+              <h6>基线质量</h6>
+              <p>score: 0.0 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-card reveal">
+        <div class="s-bar" style="background:linear-gradient(135deg,var(--accent),#8B9E6B)"></div>
+        <div class="s-body">
+          <h4>8. execution_disparity <span class="en">执行落差</span></h4>
+          <p class="desc">不同法域在法律执行力度上的显著差异 &mdash; 相同条文但判罚力度、合规要求截然不同</p>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">某大型科技公司因在线用户数据收集未明确告知用户而被起诉，涉及金额高达1亿美元。在US和EU的不同判例中，是否存在类似案例？这些案件的判决逻辑是什么？US与EU在民事处罚上对于公共与民营企业有何差异？</div>
+              <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>事实场景</h6>
+              <p>某大型科技公司在未明确告知用户的情况下收集用户数据，并将数据用于精准广告，导致遭受隐私保护组织的大规模集体诉讼。涉案公司在全球拥有广泛市场影响力，涉及索赔金额约为1亿美元。公司事务主要在美国进行，但也在欧盟有大量业务运营。</p>
+              <h6>难化手段</h6>
+              <div class="s-chips"><span>jurisdiction_count</span><span>execution_disparity</span></div>
+              <h6>为什么需要 Deep Research</h6>
+              <p>这个问题需要跨法域解析判例，并比较US与EU在民事处罚方面存在的法律适用及案例判决的差异。由于法域间监管文化和法律体系不同，因此需要对多个判例进行深入的比较分析，并结合相关法条的解读，才能给出明确答案。</p>
+              <h6>相关法源</h6>
+              <div style="margin-bottom:4px"><strong>法条:</strong> 44 USC Ch. 35: COORDINATION OF FEDERAL INFORMATION; 21 CFR Part 21 -- Protection of Privacy; S. Rept. 111-110 - PERSONAL DATA PRIVACY AND SECURITY; General Data Protection Regulation; Second Report on the application of the General Data Protection Regulation<br><strong>判例:</strong> U.S. Privacy Litigation Update: August 2025 Decisions; Supreme Court Review of FCC CPNI Fines Sought Amid Circuit Split; CJEU ruling on GDPR Damages<br><strong>学者解读:</strong> Data protection laws in the United States; Year in Review: The Top Ten US Data Privacy Developments from; Data Protection and Privacy Law: An Introduction; Retrospective: 2025 in state data privacy law; The Patchwork of Data Privacy Laws: Recent Developments and Implications</div>
+              <h6>迷惑性风险</h6>
+              <p><strong>medium</strong> &mdash; US和EU的法律框架差异可能导致误解; 判例检索过程中可能出现不准确的类比</p>
+              <h6>基线质量</h6>
+              <p>score: 0.3 &middot; requires_deep_research: yes</p>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ PIPELINE FLOW ══════════ -->
 <section class="pipeline-section" id="l-pipeline">
   <div class="container">
@@ -3290,116 +3984,6 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出精准的法律分析 &rarr; 该问题不需要深度搜索 &rarr; 淘汰。高迷惑性风险的问题优先保留。</p>
         </div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Divider: vine 2 -->
-<div class="section-divider divider-vine reveal">
-  <svg viewBox="0 0 800 48" fill="none" preserveAspectRatio="xMidYMid meet">
-    <path class="vine-line" d="M0 24 Q80 40 200 24 Q320 8 400 24 Q480 40 600 24 Q720 8 800 24" pathLength="1"/>
-    <ellipse class="vine-leaf" cx="120" cy="34" rx="5" ry="3.5" transform="rotate(20 120 34)"/>
-    <ellipse class="vine-leaf" cx="300" cy="12" rx="6" ry="4" transform="rotate(-15 300 12)"/>
-    <ellipse class="vine-leaf" cx="520" cy="34" rx="5.5" ry="3.5" transform="rotate(25 520 34)"/>
-    <ellipse class="vine-leaf" cx="750" cy="14" rx="5" ry="3" transform="rotate(-12 750 14)"/>
-    <circle class="vine-dot" cx="200" cy="24" r="2"/>
-    <circle class="vine-dot" cx="420" cy="24" r="2.5"/>
-    <circle class="vine-dot" cx="620" cy="24" r="2"/>
-  </svg>
-</div>
-
-<!-- ══════════ STRATEGIES ══════════ -->
-<section class="strategies-section" id="l-strategies">
-  <div class="container">
-    <p class="overline">Question Types &amp; Difficulty</p>
-    <h2>三种问题类型与七种难化手段</h2>
-    <p class="section-desc">不同的法律议题差异映射到不同问题类型，难度来自真实跨法域差异的复杂性和多种难化手段的组合。</p>
-
-    <div class="strategy-grid">
-
-      <!-- ── 1. Precedent ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-lit"></div>
-        <div class="s-body">
-          <h4>有先例 <span class="en">Precedent</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
-          <p class="desc">比较各法域已有判例的裁判逻辑差异，考验模型能否准确引用真实判例并分析不同法域法院的推理方法。</p>
-          <div class="s-chips"><span>已有判例</span><span>裁判逻辑对比</span><span>多法域</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">一家中国AI公司在欧盟市场推出的面部识别产品被指控违反GDPR数据处理规定。在CJEU和中国法院是否有类似的跨境数据处理侵权判例？各法域判例的裁判逻辑有何差异？</div>
-              <div class="s-ex-meta">场景: ip_infringement &middot; 法域 <strong>EU, CN</strong> &middot; 难化: multi_jurisdiction, conflicting_sources</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 2. Unprecedented ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-meth"></div>
-        <div class="s-body">
-          <h4>无先例 <span class="en">Unprecedented</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
-          <p class="desc">构造尚无明确判例的新型法律问题，涉及新技术、新商业模式或跨境监管空白。考验模型在法律灰色地带的推理能力。</p>
-          <div class="s-chips"><span>无先例</span><span>新技术合规</span><span>法律灰色地带</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">一家总部位于新加坡的AI公司，使用了从公开网络爬取的中英日三语文本数据训练大语言模型，该模型同时在美国、欧盟和中国市场提供服务。如果版权持有人分别在这三个法域提起侵权诉讼，各法域的法院会如何适用本地版权法中的例外条款（如美国fair use、欧盟TDM例外、中国合理使用）？各法域的裁判结果可能有何不同？</div>
-              <div class="s-ex-meta">场景: new_tech_compliance &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化: multi_jurisdiction, temporal_evolution, fact_pattern_complexity</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 3. Predictive ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-contra"></div>
-        <div class="s-body">
-          <h4>预测类 <span class="en">Predictive</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">权重 1/3</span></h4>
-          <p class="desc">预判未来监管走向和判决趋势，需要结合法官政策倾向、各法域产业保护立场等软性因素。考验模型的法律推理和趋势分析能力。</p>
-          <div class="s-chips"><span>趋势预测</span><span>政策分析</span><span>司法走向</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">如果OpenAI在NYT v. OpenAI案中败诉，这一判决将如何影响其他AI公司在美国的训练数据使用策略？欧盟和中国的监管机构可能采取什么相应行动？考虑法官的政策倾向和各法域的产业保护立场，最可能的走向是什么？</div>
-              <div class="s-ex-meta">场景: judicial_trend &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化: temporal_evolution, policy_vs_doctrine, deception_inducing</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- 7 Difficulty Mechanisms -->
-    <h3 style="margin-top:56px;margin-bottom:8px">七种难化手段</h3>
-    <p class="section-desc" style="margin-bottom:24px">每个候选问题随机组合 2-3 种难化手段，确保问题具有足够的深度和区分度。</p>
-
-    <div class="diff-grid">
-      <div class="diff-card reveal">
-        <h5>1. multi_jurisdiction</h5>
-        <p>增加涉及的法域数量（2&rarr;3&rarr;4），要求模型在更多法律体系间做对比分析</p>
-      </div>
-      <div class="diff-card reveal reveal-d1">
-        <h5>2. temporal_evolution</h5>
-        <p>叠加时间维度 &mdash; 引入正在审理的案件、即将生效的法规、或法律变迁历史</p>
-      </div>
-      <div class="diff-card reveal reveal-d2">
-        <h5>3. fact_pattern_complexity</h5>
-        <p>增加事实模式复杂度 &mdash; 多主体、跨境交易、嵌套公司结构等</p>
-      </div>
-      <div class="diff-card reveal reveal-d3">
-        <h5>4. conflicting_sources</h5>
-        <p>引入同一法域内部的矛盾法源 &mdash; 不同法院的相反判例、法条与司法解释的张力</p>
-      </div>
-      <div class="diff-card reveal reveal-d4">
-        <h5>5. policy_vs_doctrine</h5>
-        <p>制造政策目标与法律教义之间的紧张关系 &mdash; 产业政策 vs 权利保护</p>
-      </div>
-      <div class="diff-card reveal reveal-d5">
-        <h5>6. remedies_comparison</h5>
-        <p>要求比较不同法域的救济手段差异 &mdash; 损害赔偿计算方法、禁令范围、惩罚性赔偿</p>
-      </div>
-      <div class="diff-card reveal">
-        <h5>7. deception_inducing</h5>
-        <p>构造容易让 AI 编造不存在的判例或法条的问题 &mdash; 测试模型的诚实性和幻觉倾向</p>
       </div>
     </div>
   </div>
