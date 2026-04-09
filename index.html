@@ -720,8 +720,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
         <p class="pm-test"><strong>测什么：</strong>能否从硬件到系统做端到端设计、能否给出可落地的工程决策</p>
       </div>
       <!-- 3. Finance — PLANNED -->
-      <div class="pm-card pm-pending" onclick="showPending(this)">
-        <span class="pm-status pm-status-plan">待开发</span>
+      <div class="pm-card pm-active">
+        <span class="pm-status pm-status-done">已完成</span>
         <span class="pm-icon">&#128200;</span>
         <h4>金融分析师</h4>
         <p class="pm-pain">市场研究耗时、信息来源分散、分析报告质量参差不齐</p>
@@ -1226,6 +1226,168 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出高质量回答 → 该问题不需要深度搜索 → 淘汰。</p>
         </div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ STRATEGIES ══════════ -->
+<section class="strategies-section" id="r-strategies">
+  <div class="container">
+    <p class="overline">Generation Strategies</p>
+    <h2>五种查询生成策略</h2>
+    <p class="section-desc">不同论文关系类型映射到不同的出题策略，难度来自论文关系的真实复杂性。</p>
+
+    <div class="strategy-grid">
+
+      <!-- ── 1. Literature Synthesis ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-lit"></div>
+        <div class="s-body">
+          <h4>文献综合 <span class="en">Literature Synthesis</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 11 条</span></h4>
+          <p class="desc">综合多篇论文的方法、发现与理论视角，做系统性比较分析。考验模型能否全面覆盖某个研究问题的各个方面。</p>
+          <div class="s-chips"><span>需 3-5 篇论文</span><span>30-80 词</span><span>含时间范围</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">2023&ndash;2025 年间，大推理模型（Large Reasoning Models）与标准大语言模型在复杂推理任务上的准确率和精确度有何差异？各自在哪些任务类型上表现更优、在哪些任务上反而退化？</div>
+              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 系统评估推理模型的能力边界</span></div>
+                <div class="s-ex-paper"><span class="pt">Reasoning's Razor: Reasoning Improves Accuracy but Can Hurt Recall</span><br><span class="pm">Malemir Chegini et al., 2025 &mdash; 发现推理能力提升准确率但损害召回率</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文从不同角度评估推理模型（能力边界 vs 准确率/召回率权衡），构成「同一主题的互补视角」→ 生成要求系统性综合比较各类推理任务上的表现差异</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">2023&ndash;2025 年间，语义分割和音频&ndash;语言表征学习中的自监督方法有哪些进展？不同方法在通用性、下游任务迁移能力和数据效率上如何对比？</div>
+              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>3 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Class-Aware Permutation-Invariant Signal-to-Distortion Ratio for Semantic Segmentation</span><br><span class="pm">Nguyen et al., 2026 &mdash; 语义分割中的排列不变性方法</span></div>
+                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 通用音频&ndash;语言表征</span></div>
+                <div class="s-ex-paper"><span class="pt">CLAP-ART: Automated Audio Captioning with Semantic-rich Audio Representations</span><br><span class="pm">Takeuchi et al., 2025 &mdash; 语义丰富的音频表征</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>3 篇论文分别研究视觉/音频两个模态的自监督表征学习，构成「同一方法论在不同模态的应用」关系 → 生成跨模态比较和通用性评估的综合问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. Methodology Debate ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-meth"></div>
+        <div class="s-body">
+          <h4>方法论争论 <span class="en">Methodology Debate</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 23 条</span></h4>
+          <p class="desc">比较和评价不同的技术方法路线，指出各自的适用条件和局限。考验模型对方法论细节的深度理解。</p>
+          <div class="s-chips"><span>2-3 种方法</span><span>需实验证据</span><span>无显然最优</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">交互式工具使用基准测试（如 ASTRA-bench）和问题复杂度分析（如 The Illusion of Thinking）这两种评估推理模型的方法论，在揭示模型真实推理能力方面各有什么优势和盲区？它们的结论是否一致？</div>
+              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">ASTRA-bench: Evaluating Tool-Use Agent Reasoning and Action Planning</span><br><span class="pm">Xiu et al., 2026 &mdash; 交互式工具使用基准</span></div>
+                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 推理模型能力的系统性分析</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文用完全不同的方法论评估同一目标（推理能力）：一个用工具交互基准，一个用问题复杂度梯度 → 生成要求比较两种评估范式的适用性和局限性</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">BYOL-A 和 M2D-CLAP 在生成通用音频表征方面的方法论有何根本差异？在不同下游任务（分类、检索、生成）中，哪种方法更具优势？各自对标注数据的依赖程度如何？</div>
+              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.52</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">BYOL for Audio: Self-supervised Learning for General-purpose Audio Representation</span><br><span class="pm">Niizumi et al., 2021 &mdash; 基于 Bootstrap Your Own Latent 的音频自监督方法</span></div>
+                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 结合掩码建模和对比学习的音频&ndash;语言表征</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>同一作者团队的两代方法（纯自监督 vs 多模态对比学习），直接对比方法论演进和各自适用场景</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Contradiction Resolution ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-contra"></div>
+        <div class="s-body">
+          <h4>矛盾解决 <span class="en">Contradiction Resolution</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 1 条</span></h4>
+          <p class="desc">聚焦已发表研究中的真实矛盾，要求分析矛盾来源并判断哪个结论更可靠。这是最难的一类策略。</p>
+          <div class="s-chips"><span>真实矛盾</span><span>证据权衡</span><span>需精细分析</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">轻量级决策树框架声称能在资源受限的 IoT 设备上实现高效异常检测，而另一研究则强调需要更复杂的机器学习模型才能达到可靠的入侵检测效果。这两种立场的实验条件和评估指标有何关键差异？哪个结论在实际部署中更可靠？</div>
+              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 主张轻量级决策树足以胜任</span></div>
+                <div class="s-ex-paper"><span class="pt">A Secure and Robust Machine Learning Model for Intrusion Detection</span><br><span class="pm">Tiwari et al., 2025 &mdash; 强调需要更复杂的 ML 模型</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文对「IoT 入侵检测需要多复杂的模型」给出了相反的结论 → 构成真实的学术矛盾 → 生成要求分析实验条件差异和结论可靠性的问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4. Quantitative Verification ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-quant"></div>
+        <div class="s-body">
+          <h4>定量验证 <span class="en">Quantitative Verification</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 2 条</span></h4>
+          <p class="desc">查找、交叉引用和验证具体的量化结果。数字错误在学术场景中代价极高，专门测试精确引用能力。</p>
+          <div class="s-chips"><span>具体数字 / 指标</span><span>多源交叉验证</span><span>区分一手 / 二手</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">对比两个 IoT 入侵检测框架在 NSL-KDD 数据集上报告的检测准确率和能耗效率：轻量级决策树框架 vs 数据驱动无线传感器网络框架，两者的数字差异有多大？各自使用的评测条件是否可比？</div>
+              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.60</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 报告轻量级方案在 NSL-KDD 上的检测率</span></div>
+                <div class="s-ex-paper"><span class="pt">An Efficient Data Driven Framework for Intrusion Detection in Wireless Sensor Networks</span><br><span class="pm">Sinha et al., 2025 &mdash; 报告数据驱动方案在相同基准上的性能</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文在相同基准上报告了具体性能数字，但使用的评测协议可能不完全一致 → 生成要求精确比对数字并判断可比性的定量验证问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. Cross-Domain Bridge ── -->
+      <div class="s-card reveal">
+        <div class="s-bar bar-cross"></div>
+        <div class="s-body">
+          <h4>跨领域桥梁 <span class="en">Cross-Domain Bridge</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 13 条</span></h4>
+          <p class="desc">连接不同研究子领域的方法或发现，分析跨域迁移的可行性与障碍。需要同时理解两个领域。</p>
+          <div class="s-chips"><span>跨 2+ 子领域</span><span>理论 + 实践</span><span>非表面类比</span></div>
+          <div class="s-examples">
+            <div class="s-ex">
+              <div class="s-ex-query">音频&ndash;图像跨检索框架中的时序对齐原理（temporal agreement），能否被整合到对比学习框架中以提升通用音频&ndash;语言表征的质量？这种跨范式融合在技术上面临哪些核心挑战？</div>
+              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Refining Knowledge Transfer on Audio-Image Temporal Agreement for Audio-Visual Retrieval</span><br><span class="pm">Tsubaki et al., 2024 &mdash; 音频&ndash;图像跨模态检索中的时序对齐</span></div>
+                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Masked Modeling Duo Meets CLAP for Learning General-purpose Audio Representations</span><br><span class="pm">Niizumi et al., 2024 &mdash; 通用音频表征的对比学习框架</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文分属不同的多模态学习范式（跨模态检索 vs 对比学习表征），但核心技术有互补性 → 生成要求评估跨范式融合可行性的问题</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">用于冠状动脉疾病预测的集成机器学习方法，能否迁移到城市交通需求预测场景中提升预测精度？两个应用场景在数据特征、特征工程和模型可解释性需求上有哪些根本差异？</div>
+              <div class="s-ex-meta">CS / Explainable AI &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.65</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">A Study on Different Machine Learning Approaches in Coronary Artery Disease Prediction</span><br><span class="pm">Kirubaa et al., 2025 &mdash; 冠状动脉疾病的集成学习预测方法</span></div>
+                <div class="s-ex-paper"><span class="pt">An Exploratory and Predictive Analysis of Travel Patterns and Demand</span><br><span class="pm">P. C et al., 2025 &mdash; 城市交通模式的预测分析</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>医疗预测 × 交通预测，使用相似的集成 ML 方法但面向完全不同的数据分布和可解释性要求 → 生成要求分析方法迁移可行性和领域适配挑战的问题</div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2827,6 +2989,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
               <h6>难化手段</h6>
@@ -2846,6 +3010,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
               <h6>难化手段</h6>
@@ -2865,6 +3031,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
               <h6>难化手段</h6>
@@ -2896,6 +3064,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
               <h6>难化手段</h6>
@@ -2915,6 +3085,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">emerging_liability</span> 新型法律责任场景，如AI生成内容的侵权、平台责任</p>
               <h6>事实场景</h6>
               <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
               <h6>难化手段</h6>
@@ -2934,6 +3106,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>初创公司位于美国，同时在美国、中国及欧洲设有实验室，并计划将新芯片出口至欧洲和中国以进一步研发及商业化。</p>
               <h6>难化手段</h6>
@@ -2965,6 +3139,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">legislative_change</span> 某法域正在推动立法变更，需要预判对企业/个人的影响</p>
               <h6>事实场景</h6>
               <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
               <h6>难化手段</h6>
@@ -2984,6 +3160,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ongoing_litigation</span> 重大诉讼正在进行或判决存在争议，需要预判走向</p>
               <h6>事实场景</h6>
               <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
               <h6>难化手段</h6>
@@ -3003,6 +3181,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN, EU</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
               <h6>事实场景</h6>
               <p>跨国科技公司试图将其开发的先进图像处理软件出口到海外市场。该软件具有较高的分析和处理能力，可能被用于军事侦查和监控。在美国，其功能被界定在Export Administration Regulations中；在中国，该软件可能被列入&#x27;中国禁止出口限制出口技术目录&#x27;；而在欧盟，其两用物项管理需查看&#x27;两用物项和技术进出口许可证管理目录&#x27;。公司需要通过三地的出口许可，但各地对软件的军事用途关注程度不同。</p>
               <h6>难化手段</h6>
@@ -3040,6 +3220,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">emerging_liability</span> 新型法律责任场景，如AI生成内容的侵权、平台责任</p>
               <h6>事实场景</h6>
               <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
               <h6>难化手段</h6>
@@ -3059,6 +3241,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
               <h6>难化手段</h6>
@@ -3078,6 +3262,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">legislative_change</span> 某法域正在推动立法变更，需要预判对企业/个人的影响</p>
               <h6>事实场景</h6>
               <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
               <h6>难化手段</h6>
@@ -3107,6 +3293,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
               <h6>难化手段</h6>
@@ -3126,6 +3314,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">emerging_liability</span> 新型法律责任场景，如AI生成内容的侵权、平台责任</p>
               <h6>事实场景</h6>
               <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
               <h6>难化手段</h6>
@@ -3145,6 +3335,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
               <h6>难化手段</h6>
@@ -3174,6 +3366,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, JP, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
               <h6>难化手段</h6>
@@ -3193,6 +3387,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>CN, US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
               <h6>事实场景</h6>
               <p>科技和半导体行业跨国公司之间的法律纠纷，围绕着全球标准必要专利（SEP）和FRAND条款的跨法域解读，涉及大量财务金额。</p>
               <h6>难化手段</h6>
@@ -3212,6 +3408,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>EU, US</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">new_tech_compliance</span> 新兴技术/商业模式出现，现有法律框架如何适用尚无定论</p>
               <h6>事实场景</h6>
               <p>一家总部位于欧洲的AI公司开发了一款全球招聘平台，使用AI技术自动筛选并推荐候选人。AI系统被发现偏向于推荐某特定族群的候选人而非其他人群，这引起了一些社会组织的投诉。此种偏见在不同法域内是否被视为合规性问题存在争议。EU可能依据其AI法案定义这种偏见为滥用，而在US，Texas Responsible Artificial Intelligence Governance Act并未明确对此类AI偏见进行定义，导致合规性审查存在不确定性。</p>
               <h6>难化手段</h6>
@@ -3241,6 +3439,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">无先例 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">emerging_liability</span> 新型法律责任场景，如AI生成内容的侵权、平台责任</p>
               <h6>事实场景</h6>
               <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
               <h6>难化手段</h6>
@@ -3260,6 +3460,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
               <h6>难化手段</h6>
@@ -3279,6 +3481,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
               <h6>难化手段</h6>
@@ -3308,6 +3512,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ongoing_litigation</span> 重大诉讼正在进行或判决存在争议，需要预判走向</p>
               <h6>事实场景</h6>
               <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
               <h6>难化手段</h6>
@@ -3327,6 +3533,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">legislative_change</span> 某法域正在推动立法变更，需要预判对企业/个人的影响</p>
               <h6>事实场景</h6>
               <p>涉案公司为资产规模约2000万新币的中型金融科技企业，计划向欧洲伙伴传输敏感的客户金融数据。在双方协议下，已使用标准合同条款，但对合同条款内技术措施的适当性存异议。欧盟企业拒绝接受其保障措施并威胁终止合约，而新加坡公司则认为这符合当地法律。涉及金额约100万欧元。</p>
               <h6>难化手段</h6>
@@ -3346,6 +3554,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家跨国金融科技公司运营于支付处理行业，其数据系统被发现涉及洗钱活动，影响金额界定在500万到2000万美元之间。该公司在美国和欧盟各被处罚，需研究两法域内是否有相应判例以提供指导。</p>
               <h6>难化手段</h6>
@@ -3375,6 +3585,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
               <h6>难化手段</h6>
@@ -3394,6 +3606,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
               <h6>难化手段</h6>
@@ -3413,6 +3627,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
               <h6>事实场景</h6>
               <p>一家大型跨国AI公司利用其先进的算法生成音乐内容，并在全球范围内进行商业销售，销售额超过数百万美元；其中没有明确确定人类创作者。该公司的行为引起了业界对AI生成作品版权保护的关注和争议，特别是在不同法域间的版权责任判定。</p>
               <h6>难化手段</h6>
@@ -3442,6 +3658,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
               <h6>难化手段</h6>
@@ -3461,6 +3679,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>EU, SG</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
               <h6>事实场景</h6>
               <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
               <h6>难化手段</h6>
@@ -3480,6 +3700,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">预测类 &middot; 法域 <strong>US, EU, CN</strong> &middot; 难化 <strong>3种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
               <h6>事实场景</h6>
               <p>一家注册在欧盟的高科技公司成功开发了一项颠覆性量子计算技术，其中涉及到若干美国产的关键部件。该公司计划将这项技术出口到中国，但美国已根据50 U.S. Code § 4817加强了对涉及量子技术的出口管制。与此同时，欧盟正在试图在技术创新和出口安全之间寻找平衡，而中国科技法规重点关注国家安全。该公司的出口计划引发了三地的法律和政策争议。</p>
               <h6>难化手段</h6>
@@ -3509,6 +3731,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
               <div class="s-ex-meta">有先例 &middot; 法域 <strong>US, EU</strong> &middot; 难化 <strong>2种</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看详情</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
+              <h6>律师工作场景</h6>
+              <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
               <h6>事实场景</h6>
               <p>某大型科技公司在未明确告知用户的情况下收集用户数据，并将数据用于精准广告，导致遭受隐私保护组织的大规模集体诉讼。涉案公司在全球拥有广泛市场影响力，涉及索赔金额约为1亿美元。公司事务主要在美国进行，但也在欧盟有大量业务运营。</p>
               <h6>难化手段</h6>
@@ -4111,6 +4335,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>一家跨国科技公司在美国、日本和欧盟推出了一个新的AI平台，该平台能够自动分析用户行为并作出个性化决策。由于项目涉及大规模收集和处理用户个人数据，因此触及各地关于数据隐私和AI监管的法律。在欧盟，该项目需要根据&#x27;State of the Digital Decade 2024&#x27;进行评估。此时问题出现于，美国和日本都声称自己的&#x27;轻触式&#x27;AI监管允许项目推进，而欧盟的明确条文可能产生限制。</p>
             <h5>难化手段</h5>
@@ -4137,6 +4363,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">emerging_liability</span> 新型法律责任场景，如AI生成内容的侵权、平台责任</p>
             <h5>事实场景</h5>
             <p>一个由中国和美国团队共同参与的数字艺术项目使用AI技术生成了一幅作品，该作品被指与某中国艺术家的作品相似，中国艺术家声称版权所有并要求赔偿。</p>
             <h5>难化手段</h5>
@@ -4163,6 +4391,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>科技和半导体行业跨国公司之间的法律纠纷，围绕着全球标准必要专利（SEP）和FRAND条款的跨法域解读，涉及大量财务金额。</p>
             <h5>难化手段</h5>
@@ -4189,6 +4419,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>一家总部位于硅谷的大型科技公司因其在线平台的数据安全漏洞，导致超过1000万用户的敏感信息泄露。这起事件引发了国内和国际监管机构的关注，在美国遭遇联邦及州级的合规调查。而欧盟的跨境数据处理也引发了GDPR调查，面临着可能数倍于美国罚款的惩罚。</p>
             <h5>难化手段</h5>
@@ -4215,6 +4447,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>一家总部位于旧金山的大型科技公司开发了一款AI驱动的金融分析工具，在上市后由于算法错误，在十月底的一次市场波动中误判导致一位欧盟客户资产损失500万美元，公司面临美国消费权益团体和欧盟用户的联合诉讼。</p>
             <h5>难化手段</h5>
@@ -4241,6 +4475,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>加州技术公司未经授权使用AI工具处理客户数据，涉及金额200万美元，面临加州法院罚款，公司申请上诉。问题围绕美国与欧盟AI监管的法律适用性和判例差异进行对比。</p>
             <h5>难化手段</h5>
@@ -4267,6 +4503,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">legislative_change</span> 某法域正在推动立法变更，需要预判对企业/个人的影响</p>
             <h5>事实场景</h5>
             <p>一家总部位于日本的跨国公司在US和EU通过轻触式AI技术收集用户数据进行市场分析，并提供个性化产品推荐。EU用户投诉称其数据隐私受到侵害，并诉诸法律。US用户未明确法条支持，但政策倾向易于技术创新。JP公司坚称符合所有地方法规要求。</p>
             <h5>难化手段</h5>
@@ -4293,6 +4531,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>A公司与B公司的争议涉及中美两国法院，因许可费用的谈判未达成一致，引发多场全球诉讼，且各法域对FRAND原则的适用标准不一致。在判案时，中国法院注重市场经济体制下的竞争政策，而美国法院可能更偏向专利权人的利益。欧盟法院则可能寻求在专利权人与市场竞争之间的平衡。学者和顶尖律师对FRAND条款的解读亦存在明显分歧。</p>
             <h5>难化手段</h5>
@@ -4319,6 +4559,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>一家总部设在新加坡的金融科技公司通过某云服务提供商进行用户支付数据的存储和传输，其中数据涉及欧盟居民，并且交易金额巨大。公司需符合EU的GDPR标准及SG的Electronic Transactions Act条件以规避合规风险。</p>
             <h5>难化手段</h5>
@@ -4345,6 +4587,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>一家大型跨国AI公司利用其先进的算法生成音乐内容，并在全球范围内进行商业销售，销售额超过数百万美元；其中没有明确确定人类创作者。该公司的行为引起了业界对AI生成作品版权保护的关注和争议，特别是在不同法域间的版权责任判定。</p>
             <h5>难化手段</h5>
@@ -4371,6 +4615,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>初创公司位于美国，同时在美国、中国及欧洲设有实验室，并计划将新芯片出口至欧洲和中国以进一步研发及商业化。</p>
             <h5>难化手段</h5>
@@ -4397,6 +4643,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>跨国公司X利用在第三国的云服务提供商进行国际数据传输，同时受制于欧盟和中国两种数据保护法的相应要求。X需要在遵循不同法域的同时，面临数据中心位于未受充分认可的第三国的挑战。</p>
             <h5>难化手段</h5>
@@ -4423,6 +4671,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">new_tech_compliance</span> 新兴技术/商业模式出现，现有法律框架如何适用尚无定论</p>
             <h5>事实场景</h5>
             <p>一家总部位于欧洲的AI公司开发了一款全球招聘平台，使用AI技术自动筛选并推荐候选人。AI系统被发现偏向于推荐某特定族群的候选人而非其他人群，这引起了一些社会组织的投诉。此种偏见在不同法域内是否被视为合规性问题存在争议。EU可能依据其AI法案定义这种偏见为滥用，而在US，Texas Responsible Artificial Intelligence Governance Act并未明确对此类AI偏见进行定义，导致合规性审查存在不确定性。</p>
             <h5>难化手段</h5>
@@ -4449,6 +4699,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ongoing_litigation</span> 重大诉讼正在进行或判决存在争议，需要预判走向</p>
             <h5>事实场景</h5>
             <p>社交媒体平台A在美国和中国同时运营。用户在平台上发布一段由AI生成的视频，导致一家中国高科技公司声誉受损，损失约500万美元。平台声称根据美国Section 230享有保护，但该公司在中国起诉平台A。</p>
             <h5>难化手段</h5>
@@ -4475,6 +4727,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>一家中国科技公司需传输数据给其新收购的欧洲数据分析企业，涉及金额两千万美金，担忧两地法律的合规性。</p>
             <h5>难化手段</h5>
@@ -4501,6 +4755,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>某大型科技公司在未明确告知用户的情况下收集用户数据，并将数据用于精准广告，导致遭受隐私保护组织的大规模集体诉讼。涉案公司在全球拥有广泛市场影响力，涉及索赔金额约为1亿美元。公司事务主要在美国进行，但也在欧盟有大量业务运营。</p>
             <h5>难化手段</h5>
@@ -4527,6 +4783,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>一家日本半导体公司成功研发并在中国销售新型专利芯片，总价值超过1千万美元。当地公司对该芯片进行逆向工程并生产类似产品，涉嫌侵权；日本公司欲在中国进行法律维权。</p>
             <h5>难化手段</h5>
@@ -4553,6 +4811,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>某美国公司开发了一款量子计算软件，并计划以开源许可证的方式发布在GitHub，其代码可能被全球开发者在不同法域内使用甚至进一步发展。</p>
             <h5>难化手段</h5>
@@ -4579,6 +4839,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>中国公司A参与了国际标准化组织的工作，认为其专利是标准必要专利（SEP）并要求美国公司B支付许可费用。美国公司B并不认同这一要求，认为该标准并不在美国USPTO注册为SEP，且美国法律缺乏明确对SEP的具体执行标准。</p>
             <h5>难化手段</h5>
@@ -4605,6 +4867,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">new_tech_compliance</span> 新兴技术/商业模式出现，现有法律框架如何适用尚无定论</p>
             <h5>事实场景</h5>
             <p>公司A发布了一款AI驱动的实时社交媒体分析工具，用于动态营销策略调整。其计划在欧盟、美国和日本市场推出，考虑到各法域对轻触式监管的不同规定，该公司的合规策略需如何调整？</p>
             <h5>难化手段</h5>
@@ -4631,6 +4895,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>一家跨国投资公司因信息技术系统漏洞导致不当交易，涉及金额达3000万美元，其在金融服务行业内为中大型企业，并在US和EU均有主要业务运营。</p>
             <h5>难化手段</h5>
@@ -4657,6 +4923,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>一家跨国金融科技公司运营于支付处理行业，其数据系统被发现涉及洗钱活动，影响金额界定在500万到2000万美元之间。该公司在美国和欧盟各被处罚，需研究两法域内是否有相应判例以提供指导。</p>
             <h5>难化手段</h5>
@@ -4683,6 +4951,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>一家总部位于美国的科技公司在欧盟销售其专利保护产品，该产品被指侵权。涉及金额为5千万美元，欧盟法院试图依据《Brussels Convention》对专利有效性进行裁判，但其定义模糊，主流学者认为此类跨境管辖应慎重，而部分欧盟律师支持该管辖权的扩张。</p>
             <h5>难化手段</h5>
@@ -4709,6 +4979,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>公司类型为全球金融科技公司，行为涉及跨境支付数据处理，金额涉及数十亿欧元。</p>
             <h5>难化手段</h5>
@@ -4735,6 +5007,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>美国的一家人工智能公司计划向欧盟出口一种用于智能制造的技术。此技术可以在军事设备中使用，涉及双重用途出口管制和商业秘密保护领域。预计交易金额为500万美元。</p>
             <h5>难化手段</h5>
@@ -4761,6 +5035,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">cross_border_dispute</span> 跨境劳动/商业争议中，不同法域的法律适用与仲裁选择</p>
             <h5>事实场景</h5>
             <p>一名美国女性在中国接受医疗过程中，其生育选择被不当限制，声称违反了她在欧盟和国际公约下的生育权。她寻求跨境法律救济，利用欧盟定义的SRHR保护框架，而中国的相关法律在此问题上较模糊。</p>
             <h5>难化手段</h5>
@@ -4787,6 +5063,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家公司同时在美国、欧盟和英国运营。面对对某特定国家的新制裁，该公司暂停与该国家的所有金融交易和货物运输，担心违反 22 USC 9901 或 Commission Implementing Regulation (EU) 2020/1336。美国和英国当局强调国家安全，而欧盟试图平衡成员国合规。公司管理层担心潜在的法律责任和商业影响。</p>
             <h5>难化手段</h5>
@@ -4813,6 +5091,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>美国公司A与欧盟客户B之间进行跨境金融服务交易，公司A通过其位于美国的技术合作伙伴C从客户B处获取相关数据，同时数据处理涉及金融处罚及反洗钱合规。这涉及跨境数据共享与国际协调的复杂交叉问题，且欧盟的法律协调与美国的技术公司数据共享模式存在差异。</p>
             <h5>难化手段</h5>
@@ -4839,6 +5119,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">jurisdiction_expansion</span> 企业从一个法域扩展到另一个法域，面临全新的合规体系</p>
             <h5>事实场景</h5>
             <p>公司A在US处理涉及敏感数据的银行业务，需要将部分数据传输给在EU的子公司，该数据涉及一些被标记为国家安全关注国家的客户信息。</p>
             <h5>难化手段</h5>
@@ -4865,6 +5147,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>公司A在香港设立子公司，并通过该子公司向中国出口用于军事用途的美国管制技术。该技术的出口是否构成对《Chinese Military and Surveillance Company Sanctions Act》和中国军事政策的违反，因应不同法域对军事用途和经由第三国转运的解释，解决方案或有所不同。</p>
             <h5>难化手段</h5>
@@ -4891,6 +5175,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家美国公司准备与印度合作开发人工智能军事应用，双方已签订联合开发协议。尽管U.S.-India Bilateral Understanding: Additional Revisions中涉及人工智能技术的出口管制进行了更新，但印度在相关法律上依旧缺乏具体法规，导致两国在项目实施出现理解差异。</p>
             <h5>难化手段</h5>
@@ -4917,6 +5203,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">cross_border_dispute</span> 跨境劳动/商业争议中，不同法域的法律适用与仲裁选择</p>
             <h5>事实场景</h5>
             <p>美国公民在中国遭遇性别暴力，但中国缺乏具体法律框架，该事件在欧洲引发关注，并有组织要求中国采取行动。此事件涉及到三法域：US的法律保护，CN的法律机制以及EU的执法框架。</p>
             <h5>难化手段</h5>
@@ -4943,6 +5231,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>跨国公司在中国运营，业务涉及性与生殖健康权，其美国分公司提供与之关联的技术支持，而其服务用户主要为欧盟居民。现有诉讼声称该公司在中国提供的服务违反了SRHR相关国际义务。</p>
             <h5>难化手段</h5>
@@ -4969,6 +5259,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>跨国公司的美国分支通过与受制裁的俄罗斯公司签订的合同进行支付；英国分公司负责合同所涉及的船舶调度；而欧盟的分公司负责技术支持。</p>
             <h5>难化手段</h5>
@@ -4995,6 +5287,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>跨国科技公司试图将其开发的先进图像处理软件出口到海外市场。该软件具有较高的分析和处理能力，可能被用于军事侦查和监控。在美国，其功能被界定在Export Administration Regulations中；在中国，该软件可能被列入&#x27;中国禁止出口限制出口技术目录&#x27;；而在欧盟，其两用物项管理需查看&#x27;两用物项和技术进出口许可证管理目录&#x27;。公司需要通过三地的出口许可，但各地对软件的军事用途关注程度不同。</p>
             <h5>难化手段</h5>
@@ -5021,6 +5315,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家注册在欧盟的高科技公司成功开发了一项颠覆性量子计算技术，其中涉及到若干美国产的关键部件。该公司计划将这项技术出口到中国，但美国已根据50 U.S. Code § 4817加强了对涉及量子技术的出口管制。与此同时，欧盟正在试图在技术创新和出口安全之间寻找平衡，而中国科技法规重点关注国家安全。该公司的出口计划引发了三地的法律和政策争议。</p>
             <h5>难化手段</h5>
@@ -5047,6 +5343,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>中国企业诉美国跨国公司违反SEP条款，主打产品属于通信设备行业，涉嫌过度收费和不合理许可。同时，域名权对该通信设备的市场影响至关重要，企业规模差异明显。近年中国对SEP监管措施逐渐加强，而美国在这类案件上则相对保守，且在TCL诉爱立信案和中兴诉三星案的背景下，两国法院采取不同原则。</p>
             <h5>难化手段</h5>
@@ -5073,6 +5371,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">legislative_change</span> 某法域正在推动立法变更，需要预判对企业/个人的影响</p>
             <h5>事实场景</h5>
             <p>涉案公司为资产规模约2000万新币的中型金融科技企业，计划向欧洲伙伴传输敏感的客户金融数据。在双方协议下，已使用标准合同条款，但对合同条款内技术措施的适当性存异议。欧盟企业拒绝接受其保障措施并威胁终止合约，而新加坡公司则认为这符合当地法律。涉及金额约100万欧元。</p>
             <h5>难化手段</h5>
@@ -5099,6 +5399,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>中国公司A在中国开发了一种人工智能技术产品，该产品在美国子公司的生产过程中涉及《Export Administration Regulations - Definitions》限制的算法，而在欧盟子公司则考虑《两用物项和技术进出口许可证管理目录》的规定。产品欲销售至第三国但未确立适用出口许可。公司认为此产品不受中国国内严格限制，并提出出口计划。</p>
             <h5>难化手段</h5>
@@ -5125,6 +5427,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家美国公司与欧盟和中国的企业计划合作开发量子计算技术。美国基于50 U.S. Code § 4817与15 USC Ch. 114: National Quantum Initiative意图加强对技术的出口管制，而欧盟则依据European Commission Proposal on Quantum Technologies试图在创新和安全间找到平衡。中国则依据其国家安全策略加强控制。美国法院或国际仲裁将如何处理该争议？</p>
             <h5>难化手段</h5>
@@ -5151,6 +5455,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>跨国公司涉及多个法域的业务，其中在乌克兰战争期间与被制裁的俄罗斯企业继续合作。美国强调严格的制裁执行，可能视此为违规，而欧盟更关注统一合规和成员国协调，英国则处于两者之间。该企业声称已根据不同法域的指导进行合规操作。</p>
             <h5>难化手段</h5>
@@ -5177,6 +5483,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家总部设在英国的跨国能源企业，其在美国设有分支机构，并与欧盟国家有深度业务往来。在近期针对某特定国家的交易中，该企业面临美国和欧盟的制裁措施冲突。管理方认为依据EU Single Harmonised Rules Directive的操作规程可以避免违反22 USC 9901。然而，美国和欧盟的政治局势正趋于紧张，该企业在英国也遭遇法律诉讼。</p>
             <h5>难化手段</h5>
@@ -5203,6 +5511,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>一家中国公司与一家美国公司以及一家欧盟公司就一种涉及多项标准必要专利的通信技术展开了许可谈判，因定价分歧导致谈判破裂，中国法院在适用国内严格的SEP执行标准时，需要评鉴美国与欧盟宽松的法律态度，并面对国际贸易组织的压力，同时该中国公司正在利用国内政策试制这项技术。</p>
             <h5>难化手段</h5>
@@ -5229,6 +5539,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家总部位于美国的公司拥有多项量子计算技术专利，该公司计划通过商业合作将部分技术转让给欧洲的企业并与中国的研究机构展开合作。美国政府对于该领域的出口管制严格，而欧盟的相关法律允许成员国对技术转移具有一定自主权，且中国以国家安全为理由对技术出口有具体限制。</p>
             <h5>难化手段</h5>
@@ -5255,6 +5567,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>这家中国企业希望通过数据迁移到中国来优化成本和服务，但由于两地区的法律要求不同，尤其是欧盟对跨境数据传输的严格审查，该计划可能面临法律挑战。企业需权衡数据隐私与商业利益之间的关系。</p>
             <h5>难化手段</h5>
@@ -5281,6 +5595,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>德国科技公司在欧盟单一市场内指控一家荷兰公司侵犯其专利，索求跨境禁令并声称根据CJEU判例应在整个欧盟范围内禁止荷兰公司的相关产品销售。德国尚无明确规定，而荷兰公司表示其行为受限于国内法，且德国法官以往倾向更保守的国内适用。</p>
             <h5>难化手段</h5>
@@ -5307,6 +5623,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">geopolitical_legal_impact</span> 地缘政治变化对法律环境的影响，需要预判企业应对策略</p>
             <h5>事实场景</h5>
             <p>一家美国技术公司通过其中国子公司向一家被列入制裁名单的中国企业提供服务。美国财政部援引Economic Sanctions Enforcement Guidelines对其提起调查，而中国则动用阻断法令阻止美国制裁在中国的执行。</p>
             <h5>难化手段</h5>
@@ -5333,6 +5651,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">regulatory_enforcement</span> 客户因违反某法域法规被处罚，需要找到类似执法案例评估风险</p>
             <h5>事实场景</h5>
             <p>某跨国公司意图将一批化学原料从美国进口到欧盟，但环保标准符合美国规定的最低要求，却不完全满足欧盟的更严格标准，美国海关可能根据19 U.S. Code § 2171给予临时豁免，以促进贸易便利；而欧盟则坚持执行其环保规定。这样的政策差异导致利益冲突，使得公司可能面临双重合规风险。</p>
             <h5>难化手段</h5>
@@ -5359,6 +5679,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>A公司在德国执行从第三方采购的产品，销售进入德国市场，但由B公司在欧盟范围内拥有相关专利。法律问题在于，产品销售的行为是否构成欧盟范围内的专利侵权，并且这种侵权行为是否允许在德国施加跨境禁令。</p>
             <h5>难化手段</h5>
@@ -5385,6 +5707,8 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
           </div>
           <div class="q-toggle" onclick="toggleQ(this)"><span class="chev">&#9662;</span> 查看详情</div>
           <div class="q-detail"><div class="q-detail-inner">
+            <h6>律师工作场景</h6>
+            <p style="display:flex;align-items:center;gap:8px"><span style="font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--tag-teal-bg);color:var(--tag-teal)">ip_infringement_dispute</span> 客户面临跨境知识产权侵权问题，需要找到各法域的类似裁决</p>
             <h5>事实场景</h5>
             <p>一家中国公司开发并管理一个VR应用程序，该应用程序通过中国服务器提供下载服务。该程序在日本用户中广受欢迎并在日本市场实现盈利。</p>
             <h5>难化手段</h5>
