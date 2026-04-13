@@ -1050,148 +1050,126 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
       <div class="acc-item reveal" id="r-phase-1">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-1">&#127981;</div>
-          <div class="acc-title"><h4>Phase 1: 子领域扩展</h4><p>从 6 大领域生成细分研究方向与搜索关键词</p></div>
+          <div class="acc-title"><h4>Phase 1: 领域前沿扫描</h4><p>生成子领域 → 多源论文收集 → 质量筛选 → 未解决问题提取</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
-          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>6 个硬编码研究大领域<span class="arr">&#8594;</span><strong>输出</strong> ~30 个子领域（含搜索关键词）</div>
-          <h5>核心逻辑</h5>
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>6 个研究领域（按研究范式划分）<span class="arr">&#8594;</span><strong>输出</strong> 30 个子领域 + 种子论文 + 未解决问题</div>
+          <h5>三步流程</h5>
           <ul>
-            <li>LLM 为每个大领域生成 N 个具体、当前活跃的研究子领域</li>
-            <li>子领域数量 N 由目标 query 总数反推，保证漏斗产量足够</li>
-            <li>每个子领域附带 3-5 个 Semantic Scholar 搜索关键词</li>
-            <li>要求子领域足够具体（如「检索增强生成」而非「NLP」）</li>
+            <li><strong>Step 1 — 子领域生成（LLM）</strong>：为每个领域生成当前有活跃争议或快速演进的子领域 + 搜索关键词</li>
+            <li><strong>Step 2 — 多源论文收集</strong>：按领域选择 primary source（arXiv / PubMed / Serper）+ Semantic Scholar 补充元数据（引用数、influential citations、作者 h-index）</li>
+            <li><strong>Step 3 — 质量筛选 + 问题提取</strong>：按 h-index &ge; 10 / influential citations &ge; 3 / citation count &ge; 10 过滤；LLM 从真实论文中归纳核心未解决问题</li>
           </ul>
+          <h5>论文时间窗口</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">讨论方论文</span><span class="v">3 年内（2023-2026）</span></div>
+            <div class="param"><span class="k">原始论文</span><span class="v">5 年内（2021-2026）</span></div>
+          </div>
+          <h5>领域数据源映射</h5>
+          <div class="param-grid">
+            <div class="param"><span class="k">CS / Math / Physics</span><span class="v">arXiv API</span></div>
+            <div class="param"><span class="k">Biomedical</span><span class="v">PubMed E-utilities</span></div>
+            <div class="param"><span class="k">Social / Engineering</span><span class="v">Serper (Google Scholar)</span></div>
+          </div>
         </div></div>
       </div>
       <!-- P2 -->
       <div class="acc-item reveal reveal-d1" id="r-phase-2">
         <div class="acc-header" onclick="toggleAcc(this)">
           <div class="acc-dot fi-2">&#128269;</div>
-          <div class="acc-title"><h4>Phase 2: 论文发现与作者定位</h4><p>通过 Serper (Google Scholar) 搜索论文，Semantic Scholar 补全摘要与元数据</p></div>
+          <div class="acc-title"><h4>Phase 2: 多层复杂度挖掘</h4><p>Layer 1 论文级关系挖掘 + Layer 2 领域级模式识别</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
-          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>子领域 + 关键词<span class="arr">&#8594;</span><strong>输出</strong> 每个子领域的论文池</div>
-          <h5>两阶段时间窗口</h5>
-          <div class="param-grid">
-            <div class="param"><span class="k">作者发现窗口</span><span class="v">近 36 个月</span></div>
-            <div class="param"><span class="k">论文采集窗口</span><span class="v">近 18 个月</span></div>
-          </div>
-          <p style="margin:8px 0;font-size:.82rem;color:var(--text-tertiary)">先用 2-3 年窗口找高引论文（确保引用量充足），提取活跃作者后，再拉取他们近 12-18 个月的最新发表（确保前沿性）。</p>
-          <h5>核心逻辑</h5>
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>种子论文 + 引用网络<span class="arr">&#8594;</span><strong>输出</strong> 32 关系图谱 + 70 领域模式</div>
+          <h5>Layer 1 — 论文级关系挖掘</h5>
           <ul>
-            <li><strong>多策略搜索</strong>：先用组合关键词搜索 → 再用子领域名称 → 最后逐个关键词尝试，确保论文覆盖</li>
-            <li><strong>两步获取</strong>：Serper (Google Scholar) 搜索找到论文列表 → Semantic Scholar 按标题匹配补全完整摘要和结构化作者信息</li>
-            <li>按<strong>引用速率</strong>（citations / 论文月龄）排序，避免偏向旧论文</li>
-            <li>统计高频出现的作者 → 取 top 5 活跃研究者</li>
-            <li>拉取每位作者的近期发表（通过 S2 API） → 汇总为子领域论文池</li>
+            <li>用 Semantic Scholar 获取每篇种子论文的 citations</li>
+            <li>LLM 分析 citing paper 与 seed paper 的关系类型：<strong>contradicts</strong>（矛盾）/ <strong>competes_with</strong>（竞争方案）/ <strong>bridges_domains</strong>（跨域桥接）</li>
+            <li>对 contradicts 和 competes_with 递归一层追踪 rebuttal</li>
+            <li>Union-find 构建连通子图，过滤：&ge; 3 篇论文 + &ge; 1 条有意义关系</li>
+            <li>置信度 &lt; 0.7 的关系直接丢弃</li>
           </ul>
-          <h5>关键参数</h5>
-          <div class="param-grid">
-            <div class="param"><span class="k">top 论文 / 子领域</span><span class="v">20</span></div>
-            <div class="param"><span class="k">top 作者 / 子领域</span><span class="v">5</span></div>
-            <div class="param"><span class="k">论文 / 作者</span><span class="v">10</span></div>
-          </div>
+          <h5>Layer 2 — 领域级模式识别</h5>
+          <ul>
+            <li>将同一子领域的论文按主题聚类</li>
+            <li>LLM 识别涌现模式：<strong>paradigm_shift</strong>（范式转换）/ <strong>convergence</strong>（多路收敛）/ <strong>persistent_gap</strong>（持续缺口）/ <strong>rapid_divergence</strong>（快速发散）</li>
+            <li>必须指出哪些具体论文支撑模式判断</li>
+          </ul>
         </div></div>
       </div>
       <!-- P3 -->
       <div class="acc-item reveal reveal-d2" id="r-phase-3">
         <div class="acc-header" onclick="toggleAcc(this)">
-          <div class="acc-dot fi-3">&#128300;</div>
-          <div class="acc-title"><h4>Phase 3: 知识提取 + Layer 1 验证</h4><p>从论文摘要中提取结构化知识，并验证提取准确性</p></div>
+          <div class="acc-dot fi-3">&#128279;</div>
+          <div class="acc-title"><h4>Phase 3: 场景映射</h4><p>将复杂度信号映射到 4 种研究者真实工作场景</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
-          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>论文池（含摘要）<span class="arr">&#8594;</span><strong>输出</strong> 通过验证的结构化知识库</div>
-          <h5>提取内容（LLM Call #1）</h5>
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>关系图谱 + 领域模式<span class="arr">&#8594;</span><strong>输出</strong> 102 个场景记录</div>
+          <h5>映射规则</h5>
           <ul>
-            <li><strong>research_question</strong> &mdash; 核心研究问题</li>
-            <li><strong>methodology</strong> &mdash; 方法论概述</li>
-            <li><strong>key_findings</strong> &mdash; 关键发现列表</li>
-            <li><strong>limitations</strong> &mdash; 研究局限</li>
-            <li><strong>claims</strong> &mdash; 具体可验证声明（含类型标签）</li>
+            <li>Layer 1 <code>contradicts</code> → <strong>方法论争议</strong></li>
+            <li>Layer 1 <code>competes_with</code> → <strong>技术选型决策</strong></li>
+            <li>Layer 1 <code>bridges_domains</code> → <strong>跨领域迁移评估</strong></li>
+            <li>Layer 2 <code>paradigm_shift</code> / <code>convergence</code> → <strong>前沿综合判断</strong></li>
+            <li>Layer 2 <code>persistent_gap</code> / <code>rapid_divergence</code> → <strong>证据缺口分析</strong></li>
           </ul>
-          <h5><span class="vbadge" style="background:var(--tag-green-bg);color:var(--tag-green)">Layer 1</span> 验证逻辑（LLM Call #2）</h5>
+          <h5>场景生成</h5>
           <ul>
-            <li>将提取结果与原始摘要交给另一次 LLM 调用做对比审查</li>
-            <li>通过条件：<strong>accuracy &ge; 0.8</strong> 且无 critical 级别错误</li>
-            <li>未通过验证的论文直接移除，不进入后续阶段</li>
+            <li>LLM 模拟具体研究者角色和情境（如"写 survey 的博士生"、"选技术方案的研究员"、"审稿时发现矛盾数据"等）</li>
+            <li>输出：场景描述 + 研究者角色 + 任务背景 + 信息需求</li>
           </ul>
         </div></div>
       </div>
       <!-- P4 -->
       <div class="acc-item reveal reveal-d3" id="r-phase-4">
         <div class="acc-header" onclick="toggleAcc(this)">
-          <div class="acc-dot fi-4">&#128279;</div>
-          <div class="acc-title"><h4>Phase 4: 关系挖掘 + Layer 2 验证</h4><p>发现论文间的方法论争论、矛盾、互补等非平凡关系</p></div>
+          <div class="acc-dot fi-4">&#9997;</div>
+          <div class="acc-title"><h4>Phase 4: 查询生成</h4><p>基于场景 + 论文生成自然语言中文 query</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
-          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>已验证知识库<span class="arr">&#8594;</span><strong>输出</strong> 已验证的论文关系组</div>
-          <h5>五种关系类型</h5>
+          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>场景 + 源论文详情<span class="arr">&#8594;</span><strong>输出</strong> 102 条候选 query</div>
+          <h5>生成约束</h5>
           <ul>
-            <li><strong>方法论争论</strong> &mdash; 不同方法研究同一问题</li>
-            <li><strong>矛盾解决</strong> &mdash; 论文结论相互冲突</li>
-            <li><strong>文献综合</strong> &mdash; 覆盖同一主题的不同方面</li>
-            <li><strong>定量验证</strong> &mdash; 可交叉引用的量化结果</li>
-            <li><strong>跨领域桥梁</strong> &mdash; 不同子领域的方法可互相借鉴</li>
+            <li><strong>自然语言</strong> &mdash; 像研究者在搜索框里输入的问题，第一人称，先说背景再提问</li>
+            <li><strong>不堆砌论文名</strong> &mdash; 关键概念自然融入语句，不像论文摘要</li>
+            <li><strong>100-250 字中文</strong> &mdash; 包含研究背景、具体困惑和核心问题</li>
+            <li><strong>开放性问题</strong> &mdash; 没有简单对错之分，需多源整合</li>
           </ul>
-          <h5><span class="vbadge" style="background:var(--tag-orange-bg);color:var(--tag-orange)">Layer 2</span> 验证逻辑</h5>
+          <h5>同时生成</h5>
           <ul>
-            <li>将检测到的关系连同论文摘要交给 LLM 做二次确认</li>
-            <li>核心问题：「这些论文是否真的在研究同一问题？矛盾是否真实存在？」</li>
-            <li>通过条件：<strong>verdict = verified</strong> 且 <strong>confidence &ge; 0.7</strong></li>
+            <li><strong>expected_answer_elements</strong> &mdash; 回答应涵盖的要素清单</li>
+            <li><strong>difficulty_factors</strong> &mdash; 为什么这个问题很难回答</li>
           </ul>
         </div></div>
       </div>
       <!-- P5 -->
       <div class="acc-item reveal reveal-d4" id="r-phase-5">
         <div class="acc-header" onclick="toggleAcc(this)">
-          <div class="acc-dot fi-5">&#9997;</div>
-          <div class="acc-title"><h4>Phase 5: 查询生成 + Layer 3 验证</h4><p>基于论文关系生成高难度研究问题</p></div>
+          <div class="acc-dot fi-5">&#128736;</div>
+          <div class="acc-title"><h4>Phase 5: 多维质量过滤</h4><p>4 重验证 + 去重 + 领域平衡</p></div>
           <span class="acc-chev">&#9660;</span>
         </div>
         <div class="acc-body"><div class="acc-inner">
-          <div class="data-row"><strong>输入</strong><span class="arr">&#8594;</span>已验证关系组<span class="arr">&#8594;</span><strong>输出</strong> Query + 源论文</div>
-          <h5>生成内容</h5>
+          <h5>阶段 1-3（并行，各 query 独立）</h5>
           <ul>
-            <li><strong>query</strong> &mdash; 30-80 词研究问题（有明确交付物与时间范围）</li>
-            <li><strong>expected_answer_elements</strong> &mdash; 完整回答应包含的要素清单</li>
-            <li><strong>difficulty_factors</strong> &mdash; 难度来源分析</li>
+            <li><strong>Signal 1 — LLM 盲答测试</strong>：LLM 不给源论文尝试回答，quality_score &le; 0.7 才保留（确需搜索）</li>
+            <li><strong>Signal 2 — 搜索碎片化测试</strong>：用关键词在 Serper + S2 实际搜索，验证无单一来源能直接回答</li>
+            <li><strong>Signal 3 — 源论文团队多样性</strong>：复用 S2 作者元数据，要求来自 &ge; 2 个不同研究团队</li>
           </ul>
-          <h5><span class="vbadge" style="background:var(--tag-red-bg);color:var(--tag-red)">Layer 3</span> 验证逻辑</h5>
+          <h5>阶段 4（串行，依赖 1-3 结果）</h5>
           <ul>
-            <li>核实查询元数据中归因到特定论文的声明是否与论文摘要一致</li>
-            <li>检查是否存在编造的数据、方法或错误归因</li>
-            <li>通过条件：<strong>verification_passed = true</strong> 或 <strong>score &ge; 0.6</strong></li>
+            <li><strong>Signal 4 — 专家综合评审</strong>：LLM 基于 Signal 1-3 的客观证据打分 1-10，&ge; 7 分才保留</li>
           </ul>
-        </div></div>
-      </div>
-      <!-- P6 -->
-      <div class="acc-item reveal reveal-d5" id="r-phase-6">
-        <div class="acc-header" onclick="toggleAcc(this)">
-          <div class="acc-dot fi-6">&#128736;</div>
-          <div class="acc-title"><h4>Phase 6: 过滤与质量控制</h4><p>搜索必要性验证 → 难度下限 → 去重 → 策略均衡</p></div>
-          <span class="acc-chev">&#9660;</span>
-        </div>
-        <div class="acc-body"><div class="acc-inner">
-          <h5>四道过滤门</h5>
+          <h5>阶段 5（串行）</h5>
           <ul>
-            <li><strong>搜索必要性测试</strong> &mdash; LLM 在无搜索条件下回答 → 评估基线质量 → 淘汰基线已足够好的问题（quality_score &le; 0.7 才保留）</li>
-            <li><strong>难度下限</strong> &mdash; 需引用论文 &ge; 2 篇，难度因子 &ge; 2 项</li>
             <li><strong>语义去重</strong> &mdash; Jaccard 相似度 > 0.6 视为重复</li>
-            <li><strong>策略均衡裁剪</strong> &mdash; 按权重分配配额，裁剪至目标数量</li>
+            <li><strong>领域平衡</strong> &mdash; 按 expert_review_score 降序，每领域取 top N</li>
           </ul>
-          <h5>基线评估五维度</h5>
-          <div class="param-grid">
-            <div class="param"><span class="k">准确性</span><span class="v">accuracy</span></div>
-            <div class="param"><span class="k">完整性</span><span class="v">completeness</span></div>
-            <div class="param"><span class="k">深度</span><span class="v">depth</span></div>
-            <div class="param"><span class="k">时效性</span><span class="v">timeliness</span></div>
-            <div class="param"><span class="k">具体性</span><span class="v">specificity</span></div>
-          </div>
-          <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：如果 LLM 不搜索就能给出高质量回答 → 该问题不需要深度搜索 → 淘汰。</p>
+          <p style="margin-top:10px;font-size:.82rem;color:var(--text-tertiary)">核心逻辑：4 个独立信号全部通过才保留，任一不通过即淘汰。前 3 个提供客观证据，第 4 个基于证据做综合判断。</p>
         </div></div>
       </div>
     </div>
