@@ -247,7 +247,7 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 .v-card:nth-child(5){z-index:1;margin-left:32px}
 .v-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
 .v-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-inverse);font-size:.78rem;font-weight:700;flex-shrink:0}
-.vn1{background:#5BA08A}.vn2{background:#C4903C}.vn3{background:#C45A3C}
+.vn1{background:#5BA08A}.vn2{background:#C4903C}.vn3{background:#C45A3C}.vn4{background:#7B68AE}
 .v-head h4{flex:1;font-size:1.05rem}
 .v-phase{font-size:.78rem;color:var(--text-tertiary);background:var(--bg-secondary);padding:4px 12px;border-radius:50px;font-weight:500}
 .v-card>p{font-size:.95rem;color:var(--text-tertiary);margin-bottom:12px;line-height:1.75}
@@ -782,53 +782,43 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 <section class="pipeline-section" id="r-pipeline">
   <div class="container">
     <p class="overline">Pipeline Overview</p>
-    <h2>六阶段流水线全景</h2>
-    <p class="section-desc">从领域种子到最终问题，数据经过逐级精炼。每个阶段都有明确的输入、输出与质量门控。</p>
+    <h2>五阶段流水线全景</h2>
+    <p class="section-desc">从领域前沿扫描到多维质量验证，数据经过逐级精炼。每个阶段都有明确的输入、输出与质量门控。</p>
 
     <div class="flow-wrap">
       <div class="flow reveal">
         <div class="flow-node" onclick="scrollToPhase('r',1)">
           <div class="flow-icon fi-1"><span class="flow-num">1</span>&#127981;</div>
-          <div class="flow-name">子领域扩展</div>
-          <div class="flow-brief">6 大领域 → 细分方向</div>
+          <div class="flow-name">领域前沿扫描</div>
+          <div class="flow-brief">6 领域 &rarr; 子领域 + 论文</div>
         </div>
-        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">40 子领域</span>&#8594;</div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">30 子领域</span>&#8594;</div>
 
         <div class="flow-node" onclick="scrollToPhase('r',2)">
           <div class="flow-icon fi-2"><span class="flow-num">2</span>&#128269;</div>
-          <div class="flow-name">论文发现</div>
-          <div class="flow-brief">Serper + S2 → 论文 + 作者</div>
+          <div class="flow-name">复杂度挖掘</div>
+          <div class="flow-brief">论文关系 + 领域模式</div>
         </div>
-        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">610 论文</span>&#8594;</div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">32 图谱 + 70 模式</span>&#8594;</div>
 
         <div class="flow-node" onclick="scrollToPhase('r',3)">
-          <div class="flow-icon fi-3"><span class="flow-num">3</span>&#128300;</div>
-          <div class="flow-name">知识提取</div>
-          <div class="flow-brief">结构化抽取 + 验证</div>
-          <span class="flow-badge">Layer 1</span>
+          <div class="flow-icon fi-3"><span class="flow-num">3</span>&#128279;</div>
+          <div class="flow-name">场景映射</div>
+          <div class="flow-brief">映射到研究者场景</div>
         </div>
-        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">已验证知识</span>&#8594;</div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">102 场景</span>&#8594;</div>
 
         <div class="flow-node" onclick="scrollToPhase('r',4)">
-          <div class="flow-icon fi-4"><span class="flow-num">4</span>&#128279;</div>
-          <div class="flow-name">关系挖掘</div>
-          <div class="flow-brief">论文间关系识别</div>
-          <span class="flow-badge">Layer 2</span>
+          <div class="flow-icon fi-4"><span class="flow-num">4</span>&#9997;</div>
+          <div class="flow-name">查询生成</div>
+          <div class="flow-brief">自然语言 query 生成</div>
         </div>
-        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">219 关系组</span>&#8594;</div>
+        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">102 候选</span>&#8594;</div>
 
         <div class="flow-node" onclick="scrollToPhase('r',5)">
-          <div class="flow-icon fi-5"><span class="flow-num">5</span>&#9997;</div>
-          <div class="flow-name">查询生成</div>
-          <div class="flow-brief">5 种策略生成</div>
-          <span class="flow-badge">Layer 3</span>
-        </div>
-        <div class="flow-arrow" style="position:relative"><span class="flow-arrow-label">50 queries</span>&#8594;</div>
-
-        <div class="flow-node" onclick="scrollToPhase('r',6)">
-          <div class="flow-icon fi-6"><span class="flow-num">6</span>&#128736;</div>
-          <div class="flow-name">过滤与质控</div>
-          <div class="flow-brief">基线测试 + 去重均衡</div>
+          <div class="flow-icon fi-5"><span class="flow-num">5</span>&#128736;</div>
+          <div class="flow-name">多维过滤</div>
+          <div class="flow-brief">4 重验证 + 去重平衡</div>
         </div>
       </div>
     </div>
@@ -840,153 +830,140 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
   <div class="container">
     <p class="overline">Live Example</p>
     <h2>一条 Query 的诞生过程</h2>
-    <p class="section-desc">以「计算机科学 &gt; 对抗性机器学习」子领域为例，完整追踪一条研究查询从领域种子到最终输出的六阶段旅程。</p>
+    <p class="section-desc">以「实验自然科学 &gt; 马约拉纳纳米线」子领域为例，完整追踪一条研究查询从领域前沿扫描到最终输出的五阶段旅程。</p>
 
     <div class="wt-timeline">
 
       <!-- ── Phase 1 ── -->
       <div class="wt-step reveal">
         <div class="wt-dot wt-dot-1">1</div>
-        <h4>子领域扩展 <span>Phase 1 &mdash; LLM Call</span></h4>
+        <h4>领域前沿扫描 <span>Phase 1 &mdash; LLM + arXiv + S2</span></h4>
         <div class="wt-card">
           <span class="wt-label wt-label-in">INPUT</span>
-          <p>领域种子：<strong>Computer Science</strong>（人工智能、机器学习、系统、安全、人机交互）</p>
-          <div class="wt-arrow">&darr; LLM 生成 &darr;</div>
+          <p>领域种子：<strong>Experimental Natural Sciences</strong>（凝聚态、量子物理、粒子物理、天体物理）</p>
+          <div class="wt-arrow">&darr; LLM 生成子领域 + 搜索 &darr;</div>
           <span class="wt-label wt-label-out">OUTPUT</span>
           <dl class="wt-kv">
-            <dt>子领域</dt><dd><strong>Adversarial Machine Learning</strong>（对抗性机器学习）</dd>
-            <dt>描述</dt><dd>研究机器学习模型在对抗性输入下的脆弱性及防御方法</dd>
-            <dt>搜索关键词</dt><dd><code>adversarial attacks</code>, <code>adversarial robustness</code>, <code>FGSM</code></dd>
+            <dt>子领域</dt><dd><strong>纳米线/二维平台中的马约拉纳零模：零偏置峰的"真伪之争"</strong></dd>
+            <dt>搜索关键词</dt><dd><code>Majorana nanowire</code>, <code>zero-bias peak</code>, <code>topological superconductor</code></dd>
           </dl>
+          <p style="margin-top:8px">arXiv + Semantic Scholar 搜索 &rarr; 收集 8 篇高相关论文，质量过滤后保留</p>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">Disorder-induced zero-bias peaks in Majorana nanowires</div>
+            <div class="wt-paper-meta">Sankar Das Sarma, Haining Pan &bull; 2021</div>
+            <div class="wt-paper-abstract">Focusing on the retracted Nature 2018 Zhang et al. work, we discuss the general problem of confirmation bias in experimental Majorana research and the role of disorder-induced trivial zero-bias peaks...</div>
+          </div>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">Quantized and unquantized zero-bias tunneling conductance peaks in Majorana nanowires</div>
+            <div class="wt-paper-meta">Haining Pan, Chun-Xiao Liu, Michael Wimmer, Sankar Das Sarma &bull; 2021</div>
+            <div class="wt-paper-abstract">Majorana zero modes can appear at wire ends of a 1D topological superconductor, but in hybrid nanowires, zero-bias conductance peaks can also arise from trivial mechanisms with conductance both below and above 2e&sup2;/h...</div>
+          </div>
+
+          <div class="wt-paper">
+            <div class="wt-paper-title">Large zero bias peaks and dips in a four-terminal thin InAs-Al nanowire device</div>
+            <div class="wt-paper-meta">Huading Song, Zitong Zhang, Dong Pan et al. &bull; 2021</div>
+            <div class="wt-paper-abstract">Electron transport studies of a thin InAs-Al hybrid nanowire device using a four-terminal design, which excludes end-to-end coupling effects and provides additional constraints for identifying Majorana signatures...</div>
+          </div>
         </div>
       </div>
 
       <!-- ── Phase 2 ── -->
       <div class="wt-step reveal">
         <div class="wt-dot wt-dot-2">2</div>
-        <h4>论文发现 <span>Phase 2 &mdash; Serper + Semantic Scholar</span></h4>
+        <h4>复杂度挖掘 <span>Phase 2 &mdash; S2 Citations + LLM</span></h4>
         <div class="wt-card">
-          <span class="wt-label wt-label-in">INPUT</span>
-          <p>搜索关键词 &rarr; Google Scholar (Serper API) &rarr; S2 补全摘要</p>
-          <div class="wt-arrow">&darr; 发现 20 篇论文、5 位活跃作者 &darr;</div>
-          <span class="wt-label wt-label-out">OUTPUT &mdash; 代表性论文</span>
-
+          <span class="wt-label wt-label-llm">Layer 1 &mdash; 论文关系图谱</span>
+          <p>通过 Semantic Scholar 引用链分析论文间关系：</p>
           <div class="wt-paper">
-            <div class="wt-paper-title">ASTRA-bench: Evaluating Tool-Use Agent Reasoning and Action Planning with Personal User Context</div>
-            <div class="wt-paper-meta">Zidi Xiu, David Q. Sun, Kevin Cheng et al. &bull; 2026</div>
-            <div class="wt-paper-abstract">We introduce ASTRA-bench, a benchmark for evaluating AI agents' ability to manage evolving personal data and complex user intents using interactive tools. The benchmark tests reasoning and action planning capabilities in realistic multi-step scenarios...</div>
+            <dl class="wt-kv">
+              <dt>关系类型</dt><dd><strong>contradiction / mutual_critique</strong></dd>
+              <dt>涉及论文</dt><dd>Das Sarma &amp; Pan (理论模拟) &harr; Zhang et al. (实验数据) &harr; Song et al. (四端设计)</dd>
+              <dt>核心张力</dt><dd>理论表明无序和非均匀势可在非拓扑区产生 ZBP，而实验组报告的 ZBP 是否为拓扑态仍有争议</dd>
+            </dl>
           </div>
-
-          <div class="wt-paper">
-            <div class="wt-paper-title">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models via the Lens of Problem Complexity</div>
-            <div class="wt-paper-meta">P. Shojaee, Iman Mirzadeh, Keivan Alizadeh-Vahid et al. &bull; 2025</div>
-            <div class="wt-paper-abstract">We systematically evaluate extended thinking models across controlled complexity levels, revealing that while these models excel at certain tasks, their reasoning capabilities break down predictably as problem complexity increases...</div>
-          </div>
-
-          <div class="wt-paper">
-            <div class="wt-paper-title">Reasoning's Razor: Reasoning Improves Accuracy but Can Hurt Recall at Scale</div>
-            <div class="wt-paper-meta">Atoosa Malemir Chegini et al. &bull; 2025</div>
-            <div class="wt-paper-abstract">We find that while chain-of-thought reasoning improves precision on complex tasks, it systematically reduces recall at scale &mdash; a tradeoff that has significant implications for real-world deployment of reasoning models...</div>
-          </div>
+          <div class="wt-arrow">&darr; 模式识别 &darr;</div>
+          <span class="wt-label wt-label-verify">Layer 2 &mdash; 领域模式挖掘</span>
+          <p>LLM 分析论文集合，识别领域级复杂度模式：</p>
+          <dl class="wt-kv">
+            <dt>模式类型</dt><dd><strong>persistent_gap</strong>（持续未解决问题）</dd>
+            <dt>描述</dt><dd>多篇论文反复指向同一核心问题 &mdash; ZBP 的拓扑/平庸歧义性 &mdash; 但至今缺乏公认的可证伪判据体系</dd>
+          </dl>
         </div>
       </div>
 
       <!-- ── Phase 3 ── -->
       <div class="wt-step reveal">
         <div class="wt-dot wt-dot-3">3</div>
-        <h4>知识提取 + Layer 1 验证 <span>Phase 3 &mdash; LLM Call &times;2 per paper</span></h4>
+        <h4>场景映射 <span>Phase 3 &mdash; LLM Call</span></h4>
         <div class="wt-card">
-          <span class="wt-label wt-label-llm">LLM CALL #1 &mdash; 结构化提取</span>
-          <p>从每篇论文的 Abstract 中提取结构化知识：</p>
-          <div class="wt-paper">
-            <div class="wt-paper-title" style="font-size:.85rem">Paper: The Illusion of Thinking &mdash; Understanding Strengths and Limitations of Reasoning Models</div>
-            <dl class="wt-kv" style="margin-top:8px">
-              <dt>研究问题</dt><dd>推理模型（如 o1、Claude 3.5）的推理能力在不同复杂度问题上的真实表现如何？</dd>
-              <dt>方法论</dt><dd>设计复杂度可控的推理任务梯度，系统性评估模型表现随复杂度变化的规律</dd>
-              <dt>关键发现</dt><dd>推理模型在中等复杂度问题上优势明显，但在高复杂度和低复杂度问题上与标准 LLM 差距缩小</dd>
-              <dt>局限性</dt><dd>测试任务主要为结构化逻辑推理，对自然语言推理的覆盖不足</dd>
-            </dl>
-          </div>
-          <div class="wt-arrow">&darr; 验证 &darr;</div>
-          <span class="wt-label wt-label-verify">LLM CALL #2 &mdash; Layer 1 验证</span>
-          <p>将提取结果与原始 Abstract 逐字段对比：提取的研究问题是否准确？关键发现是否在摘要中有明确依据？</p>
-          <p><span class="wt-verdict wt-pass">&#10003; VERIFIED</span> overall_accuracy: 0.92 &mdash; 无 critical issues</p>
+          <span class="wt-label wt-label-in">INPUT</span>
+          <p>模式类型 <strong>persistent_gap</strong> &rarr; 映射到研究者场景类型</p>
+          <div class="wt-arrow">&darr; LLM 生成场景 &darr;</div>
+          <span class="wt-label wt-label-out">OUTPUT</span>
+          <dl class="wt-kv">
+            <dt>场景类型</dt><dd><strong>前沿综合判断</strong>（Frontier Assessment）</dd>
+            <dt>研究者角色</dt><dd>写基金申请的 PI，需要把 ZBP 降级为「必要但不充分」并构建可证伪的证据链</dd>
+            <dt>核心需求</dt><dd>系统梳理排除平庸机制的实验判据、对照设计，并转化为可量化的里程碑与风险备选路线</dd>
+          </dl>
         </div>
       </div>
 
       <!-- ── Phase 4 ── -->
       <div class="wt-step reveal">
         <div class="wt-dot wt-dot-4">4</div>
-        <h4>关系挖掘 + Layer 2 验证 <span>Phase 4 &mdash; LLM Call &times;2</span></h4>
+        <h4>查询生成 <span>Phase 4 &mdash; LLM Call</span></h4>
         <div class="wt-card">
-          <span class="wt-label wt-label-llm">LLM CALL #1 &mdash; 关系发现</span>
-          <p>将上述论文分组（2&ndash;6 篇一组），LLM 识别论文间的深层关系：</p>
-          <div class="wt-paper">
-            <dl class="wt-kv">
-              <dt>关系类型</dt><dd><strong>methodology_debate</strong>（方法论辩论）</dd>
-              <dt>涉及论文</dt><dd>ASTRA-bench (Xiu et al.) &amp; The Illusion of Thinking (Shojaee et al.)</dd>
-              <dt>描述</dt><dd>两篇论文都旨在评估 AI 推理模型的真实能力，但方法论完全不同：ASTRA-bench 通过交互式工具使用场景测试，The Illusion of Thinking 通过问题复杂度梯度分析</dd>
-              <dt>核心张力</dt><dd>「实际应用场景测试」vs「受控复杂度实验」两种评估范式，哪种更能揭示模型的真实推理能力？</dd>
-            </dl>
+          <span class="wt-label wt-label-llm">基于场景 + 论文 &rarr; 生成自然语言查询</span>
+          <p>LLM 根据研究者场景和源论文集合，生成完整的中文研究查询：</p>
+
+          <div class="wt-query-box" style="margin:12px 0">
+            我在写杂化半导体-超导纳米线马约拉纳基金申请，原计划把零偏置峰(ZBP)当核心里程碑，但内审被质疑：无序、化学势/势垒非均匀、偶然Andreev束缚态在非拓扑区也能做出接近甚至超过2e&sup2;/h的ZBP。现在我想把ZBP降级为&ldquo;必要但不充分&rdquo;，需要一条可证伪的证据链：有哪些实验判据/对照设计能系统排除这些平庸机制（比如多端/四端几何、参数扫描的稳定性、峰-谷结构、可重复性、拓扑能隙与磁场窗口约束等）？同时怎样把这些判据写成可量化的里程碑和风险备选路线？
           </div>
-          <div class="wt-arrow">&darr; 验证 &darr;</div>
-          <span class="wt-label wt-label-verify">LLM CALL #2 &mdash; Layer 2 验证</span>
-          <p>审核关系是否真实存在？类型是否准确？是否具有足够的学术深度？</p>
-          <p><span class="wt-verdict wt-pass">&#10003; VERIFIED</span> confidence: 0.85 &mdash; verdict: verified</p>
+
+          <div class="wt-tags">
+            <span>难度因素: 拓扑与平庸机制在隧穿谱上高度拟态</span>
+            <span>难度因素: 不同实验的器件几何与数据处理差异大</span>
+            <span>源论文: 8 篇</span>
+          </div>
         </div>
       </div>
 
       <!-- ── Phase 5 ── -->
       <div class="wt-step reveal">
         <div class="wt-dot wt-dot-5">5</div>
-        <h4>查询生成 + Layer 3 验证 <span>Phase 5 &mdash; LLM Call &times;2</span></h4>
+        <h4>多维过滤 <span>Phase 5 &mdash; 四重验证</span></h4>
         <div class="wt-card">
-          <span class="wt-label wt-label-llm">LLM CALL #1 &mdash; 策略: methodology_debate</span>
-          <p>基于已验证的论文关系，按「方法论辩论」策略生成研究问题和结构化元数据：</p>
-
-          <div class="wt-query-box" style="margin:12px 0">
-            交互式工具使用基准测试（如 ASTRA-bench）和问题复杂度分析（如 The Illusion of Thinking）这两种评估推理模型的方法论，在揭示模型真实推理能力方面各有什么优势和盲区？它们的结论在哪些方面一致、在哪些方面矛盾？在实际选择评估方法时应如何权衡？
-          </div>
-
-          <div class="wt-tags">
-            <span>难度因素: 需深入理解两种截然不同的评估范式</span>
-            <span>难度因素: 需比较不同实验条件下的结论一致性</span>
-            <span>最少需要论文: 3&ndash;5 篇</span>
-          </div>
-
-          <div class="wt-arrow">&darr; 验证 &darr;</div>
-          <span class="wt-label wt-label-verify">LLM CALL #2 &mdash; Layer 3 验证</span>
-          <p>逐条核实查询中引用的论文是否真实存在？是否存在编造的数据或错误归因？</p>
-          <p><span class="wt-verdict wt-pass">&#10003; PASSED</span> score: 0.88 &mdash; 0 unsupported claims &mdash; 0 external papers cited</p>
-        </div>
-      </div>
-
-      <!-- ── Phase 6 ── -->
-      <div class="wt-step reveal">
-        <div class="wt-dot wt-dot-6">6</div>
-        <h4>过滤与质控 <span>Phase 6 &mdash; 三重过滤</span></h4>
-        <div class="wt-card">
-          <span class="wt-label wt-label-filter">FILTER 1 &mdash; 搜索必要性</span>
-          <p>让 LLM <strong>不搜索</strong>直接回答此问题，然后评估基线质量：</p>
+          <span class="wt-label wt-label-filter">S1 &mdash; LLM 盲答测试</span>
+          <p>LLM 仅凭内部知识尝试回答，评估不搜索能答到什么程度：</p>
           <dl class="wt-kv">
-            <dt>基线质量</dt><dd>medium (0.58) &mdash; 能泛泛而谈但缺乏两篇论文的具体实验设计对比</dd>
-            <dt>需要搜索?</dt><dd><strong>Yes</strong> &mdash; ASTRA-bench (2026) 为最新发表，LLM 训练数据未覆盖</dd>
+            <dt>盲答质量</dt><dd>quality_score: <strong>0.62</strong> &le; 0.7 阈值</dd>
+            <dt>判定</dt><dd>能泛泛谈 ZBP 争议，但缺乏 8 篇论文中具体的器件设计对比和四端实验细节</dd>
           </dl>
-          <p><span class="wt-verdict wt-pass">&#10003; 通过</span> 基线质量不足，确实需要深度搜索</p>
+          <p><span class="wt-verdict wt-pass">&#10003; 通过</span> 确需搜索</p>
 
           <div style="margin-top:14px">
-            <span class="wt-label wt-label-filter">FILTER 2 &mdash; 难度门槛</span>
+            <span class="wt-label wt-label-filter">S2 &mdash; 搜索碎片化测试</span>
+            <p>用 query 关键词实际搜索，验证信息分散在多个来源、无法单一来源直接回答</p>
+            <p><span class="wt-verdict wt-pass">&#10003; 通过</span> 无单一来源可完整回答，来源多样性达标</p>
+          </div>
+
+          <div style="margin-top:14px">
+            <span class="wt-label wt-label-filter">S3 &mdash; 源论文团队多样性</span>
             <dl class="wt-kv">
-              <dt>来源论文数</dt><dd>2 篇 &ge; 最低要求 2 篇 &#10003;</dd>
-              <dt>难度因素数</dt><dd>2 个 &ge; 最低要求 2 个 &#10003;</dd>
+              <dt>独立团队数</dt><dd>&ge; 3 个（Das Sarma 组、Zhang/Song 组、Kong/Ding 组、Qiao/Sun 组）&#10003;</dd>
             </dl>
             <p><span class="wt-verdict wt-pass">&#10003; 通过</span></p>
           </div>
 
           <div style="margin-top:14px">
-            <span class="wt-label wt-label-filter">FILTER 3 &mdash; 去重 + 策略均衡</span>
-            <p>Jaccard 相似度检查：与已有 queries 无重复 (max similarity &lt; 0.6)</p>
-            <p><span class="wt-verdict wt-pass">&#10003; 通过</span> &rarr; 进入最终输出集</p>
+            <span class="wt-label wt-label-filter">S4 &mdash; 专家综合评审</span>
+            <p>LLM 基于 S1&ndash;S3 客观证据做综合评分：</p>
+            <dl class="wt-kv">
+              <dt>专家评分</dt><dd><strong>9/10</strong> &ge; 7 阈值 &#10003;</dd>
+            </dl>
+            <p><span class="wt-verdict wt-pass">&#10003; 通过</span> &rarr; 去重 &rarr; 进入最终输出集</p>
           </div>
         </div>
       </div>
@@ -1006,39 +983,39 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 <section class="domains-section" id="r-domains">
   <div class="container">
     <p class="overline">Research Domains</p>
-    <h2>六大学科领域覆盖</h2>
-    <p class="section-desc">硬编码领域保证可复现性与覆盖面，子领域由 LLM 动态生成以探索不同方向。</p>
+    <h2>六大研究领域覆盖（按研究范式划分）</h2>
+    <p class="section-desc">按研究范式多样性划分领域，确保每个领域产生的查询类型天然不同，避免&ldquo;换个领域名但问题结构一样&rdquo;。</p>
 
     <div class="domains-grid">
       <div class="domain-card reveal">
-        <h4>&#128187; 计算机科学</h4>
-        <p>人工智能、机器学习、系统、安全、人机交互</p>
-        <div class="dtags"><span>大语言模型</span><span>计算机视觉</span><span>强化学习</span><span>软件工程</span><span>网络安全</span></div>
+        <h4>&#128187; 计算机科学与人工智能</h4>
+        <p>系统构建 + Benchmark 驱动</p>
+        <div class="dtags"><span>大语言模型</span><span>多模态</span><span>代码生成</span><span>推理加速</span><span>安全对齐</span></div>
       </div>
       <div class="domain-card reveal reveal-d1">
-        <h4>&#129516; 生物医学与生命科学</h4>
-        <p>分子生物学、基因组学、神经科学、药理学</p>
-        <div class="dtags"><span>CRISPR 基因编辑</span><span>癌症免疫治疗</span><span>神经退行性疾病</span><span>药物发现</span><span>微生物组</span></div>
+        <h4>&#128208; 数学与理论科学</h4>
+        <p>形式化证明 + 演绎推理</p>
+        <div class="dtags"><span>自动证明</span><span>组合优化</span><span>SoS 方法</span><span>类型论</span><span>证明复杂性</span></div>
       </div>
       <div class="domain-card reveal reveal-d2">
-        <h4>&#9883; 物理学与天文学</h4>
-        <p>凝聚态、量子物理、天体物理、粒子物理</p>
-        <div class="dtags"><span>量子计算硬件</span><span>暗物质探测</span><span>拓扑材料</span><span>引力波</span><span>聚变能源</span></div>
+        <h4>&#9883; 实验自然科学</h4>
+        <p>实验-理论对话</p>
+        <div class="dtags"><span>W 玻色子质量</span><span>马约拉纳零模</span><span>暗物质探测</span><span>高压超导</span><span>量子传感</span></div>
       </div>
       <div class="domain-card reveal reveal-d3">
-        <h4>&#9878; 材料科学与化学</h4>
-        <p>纳米材料、催化、高分子、电化学、计算化学</p>
-        <div class="dtags"><span>固态电池</span><span>金属有机框架</span><span>钙钛矿太阳能</span><span>绿色催化</span><span>二维材料</span></div>
+        <h4>&#129516; 生物医学与生命科学</h4>
+        <p>临床证据等级 + 转化医学</p>
+        <div class="dtags"><span>替代终点验证</span><span>平台试验</span><span>去中心化RCT</span><span>网络Meta分析</span><span>数字终点</span></div>
       </div>
       <div class="domain-card reveal reveal-d4">
-        <h4>&#128200; 经济学与社会科学</h4>
-        <p>宏观经济、行为经济、政治学、社会学</p>
-        <div class="dtags"><span>AI 与劳动力市场</span><span>气候经济学</span><span>行为金融</span><span>平台监管</span><span>虚假信息</span></div>
+        <h4>&#128200; 社会与行为科学</h4>
+        <p>因果推断 + 可重复性危机</p>
+        <div class="dtags"><span>DID 估计量</span><span>Shift-share IV</span><span>因果ML公平性</span><span>multiverse analysis</span><span>恐惧条件化</span></div>
       </div>
       <div class="domain-card reveal reveal-d5">
-        <h4>&#127758; 环境与地球科学</h4>
-        <p>气候科学、生态学、水文学、环境工程</p>
-        <div class="dtags"><span>碳捕获</span><span>生物多样性建模</span><span>极端天气预测</span><span>微塑料污染</span><span>可持续农业</span></div>
+        <h4>&#9881; 工程与应用科学</h4>
+        <p>跨学科设计优化</p>
+        <div class="dtags"><span>神经算子</span><span>数字孪生</span><span>安全RL</span><span>生成式设计</span><span>约束优化</span></div>
       </div>
     </div>
   </div>
@@ -1389,49 +1366,63 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 <section class="verif-section" id="r-verification">
   <div class="container">
     <p class="overline">Quality Assurance</p>
-    <h2>三层交叉验证体系</h2>
-    <p class="section-desc">防止 LLM 在流水线中引入幻觉。每一层验证解决一个特定的可信性问题。</p>
+    <h2>四重验证体系</h2>
+    <p class="section-desc">每条 query 必须通过四重独立验证才能进入最终输出。前三个信号提供客观证据，第四个信号基于证据做综合判断。</p>
 
     <div class="verif-stack">
       <div class="v-card reveal">
         <div class="v-head">
-          <div class="v-num vn1">L1</div>
-          <h4>知识提取验证</h4>
-          <span class="v-phase">Phase 3</span>
+          <div class="v-num vn1">S1</div>
+          <h4>LLM 盲答测试</h4>
+          <span class="v-phase">Phase 5 Stage 1</span>
         </div>
-        <p>确保从论文摘要中提取的结构化知识与原文一致，不存在 LLM 的过度推断或臆造。</p>
+        <p>LLM 仅凭内部知识尝试回答，评估不搜索能答到什么程度。</p>
         <div class="v-tags">
-          <span class="t t-pass">accuracy &ge; 0.8</span>
-          <span class="t t-pass">无 critical 错误</span>
-          <span class="t t-fail">失败 → 论文移除</span>
+          <span class="t t-pass">quality_score &le; 0.7</span>
+          <span class="t t-pass">确需搜索</span>
+          <span class="t t-fail">失败 &rarr; Query 丢弃</span>
         </div>
       </div>
-      <div class="v-sep reveal">&#9662; 已验证知识流入</div>
+      <div class="v-sep reveal">&darr; 客观证据流入</div>
       <div class="v-card reveal">
         <div class="v-head">
-          <div class="v-num vn2">L2</div>
-          <h4>论文关系验证</h4>
-          <span class="v-phase">Phase 4</span>
+          <div class="v-num vn2">S2</div>
+          <h4>搜索碎片化测试</h4>
+          <span class="v-phase">Phase 5 Stage 2</span>
         </div>
-        <p>确保检测到的论文间关系是真实且有实质意义的，而非基于表面主题重叠的错误判断。</p>
+        <p>用 query 关键词实际执行搜索，验证信息是否分散在多个来源、无法单一来源直接回答。</p>
         <div class="v-tags">
-          <span class="t t-pass">verdict = verified</span>
-          <span class="t t-pass">confidence &ge; 0.7</span>
-          <span class="t t-fail">失败 → 关系丢弃</span>
+          <span class="t t-pass">无单一来源可答</span>
+          <span class="t t-pass">来源多样性达标</span>
+          <span class="t t-fail">失败 &rarr; Query 丢弃</span>
         </div>
       </div>
-      <div class="v-sep reveal">&#9662; 已验证关系流入</div>
+      <div class="v-sep reveal">&darr; 客观证据流入</div>
       <div class="v-card reveal">
         <div class="v-head">
-          <div class="v-num vn3">L3</div>
-          <h4>Query 溯源验证</h4>
-          <span class="v-phase">Phase 5</span>
+          <div class="v-num vn3">S3</div>
+          <h4>源论文团队多样性</h4>
+          <span class="v-phase">Phase 5 Stage 3</span>
         </div>
-        <p>确保生成的 query 中涉及的论文关系和声明都可以追溯到源论文，杜绝基于虚假关系或错误归因生成的问题。</p>
+        <p>验证源论文来自不同研究团队，避免同一团队自说自话。</p>
         <div class="v-tags">
-          <span class="t t-pass">引用均可追溯</span>
-          <span class="t t-pass">score &ge; 0.6</span>
-          <span class="t t-fail">失败 → Query 丢弃</span>
+          <span class="t t-pass">&ge; 2 个独立团队</span>
+          <span class="t t-pass">复用 S2 元数据</span>
+          <span class="t t-fail">失败 &rarr; Query 丢弃</span>
+        </div>
+      </div>
+      <div class="v-sep reveal">&darr; 基于证据的综合判断</div>
+      <div class="v-card reveal">
+        <div class="v-head">
+          <div class="v-num vn4">S4</div>
+          <h4>专家综合评审</h4>
+          <span class="v-phase">Phase 5 Stage 4</span>
+        </div>
+        <p>LLM 基于 S1&ndash;S3 的客观证据做综合评分，而非凭空判断。</p>
+        <div class="v-tags">
+          <span class="t t-pass">score &ge; 7/10</span>
+          <span class="t t-pass">基于证据评分</span>
+          <span class="t t-fail">失败 &rarr; Query 丢弃</span>
         </div>
       </div>
     </div>
