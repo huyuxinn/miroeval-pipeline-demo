@@ -1226,153 +1226,148 @@ h4{font-size:1.1rem;font-weight:600;color:var(--text-primary)}
   <div class="container">
     <p class="overline">Generation Strategies</p>
     <h2>五种查询生成策略</h2>
-    <p class="section-desc">不同论文关系类型映射到不同的出题策略，难度来自论文关系的真实复杂性。</p>
+    <p class="section-desc">不同复杂度信号（论文间关系 + 领域级模式）映射到不同的研究者场景，每种场景考察深度搜索的不同能力维度。</p>
 
     <div class="strategy-grid">
 
-      <!-- ── 1. Literature Synthesis ── -->
+      <!-- ── 技术选型决策 ── -->
       <div class="s-card reveal">
-        <div class="s-bar bar-lit"></div>
+        <div class="s-bar bar-tech"></div>
         <div class="s-body">
-          <h4>文献综合 <span class="en">Literature Synthesis</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 11 条</span></h4>
-          <p class="desc">综合多篇论文的方法、发现与理论视角，做系统性比较分析。考验模型能否全面覆盖某个研究问题的各个方面。</p>
-          <div class="s-chips"><span>需 3-5 篇论文</span><span>30-80 词</span><span>含时间范围</span></div>
+          <h4>技术选型决策 <span class="en">Technology Selection</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 12 条</span></h4>
+          <p class="desc">面临多条技术路线各有优劣的场景，需要综合 benchmark、实际案例、已知限制做出工程/研究决策。考验模型对多方案权衡的系统分析能力。</p>
+          <div class="s-chips"><span>2-3 条路线</span><span>需实证对比</span><span>含约束条件</span></div>
           <div class="s-examples">
             <div class="s-ex">
-              <div class="s-ex-query">2023&ndash;2025 年间，大推理模型（Large Reasoning Models）与标准大语言模型在复杂推理任务上的准确率和精确度有何差异？各自在哪些任务类型上表现更优、在哪些任务上反而退化？</div>
-              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-query">我在搭建俄语大模型评测流水线准备做顶会对比实验，但算力/人力有限，只能选一条主基准。现在纠结用 MERA（含 MERA Code 的代码/软件工程扩展）还是用 RuSimulBench 或 POLLUX 做主线：它们在任务覆盖（通用俄语能力 vs 代码生成/SE）、评分指标（自动分数 vs LLM-as-a-judge 细粒度准则）、统一接口/脚本可复现性、以及社区可比性上到底差异多大？如果我想同时兼顾通用+代码任务，哪套更容易形成“可复现且审稿人认可”的主基准，代价和风险分别是什么？</div>
+              <div class="s-ex-meta">Computer Science & AI / 大语言模型 Benchmark 可信度与数据污染（含 leaderboard 过 &middot; 源论文 <strong>4 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 系统评估推理模型的能力边界</span></div>
-                <div class="s-ex-paper"><span class="pt">Reasoning's Razor: Reasoning Improves Accuracy but Can Hurt Recall</span><br><span class="pm">Malemir Chegini et al., 2025 &mdash; 发现推理能力提升准确率但损害召回率</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文从不同角度评估推理模型（能力边界 vs 准确率/召回率权衡），构成「同一主题的互补视角」→ 生成要求系统性综合比较各类推理任务上的表现差异</div>
+                <div class="s-ex-paper"><span class="pt">MERA: A Comprehensive LLM Evaluation in Russian</span><br><span class="pm">Alena Fenogenova et al., 2024</span></div>
+                <div class="s-ex-paper"><span class="pt">MERA Code: A Unified Framework for Evaluating Code Generation Across Tasks</span><br><span class="pm">A. Chervyakov et al., 2025</span></div>
+                <div class="s-ex-paper"><span class="pt">RuSimulBench a Benchmark for Assessing the Quality of Language Models in Russian</span><br><span class="pm">Muslimbek Abdurakhimov et al., 2025</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>不同基准的任务类型、指标定义和评测协议不一致（尤其是 judge-based 细粒度评分 vs 传统自动指标），很难做严格可比的对齐</div>
               </div></div>
             </div>
             <div class="s-ex">
-              <div class="s-ex-query">2023&ndash;2025 年间，语义分割和音频&ndash;语言表征学习中的自监督方法有哪些进展？不同方法在通用性、下游任务迁移能力和数据效率上如何对比？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>3 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-query">我在准备申请“结构力学快速求解+数字孪生”项目，想走无标注、纯物理约束的神经算子路线。组里已有PINN基线但收敛慢、精度不稳。我现在犹豫用能量变分的VINO，还是走PILNO这种基于LNO的实现路径：它们在损失构造（强/弱形式、能量泛函）、边界条件（尤其Dirichlet/复杂几何）施加、训练稳定性与算力成本上各自的坑在哪里？另外多分辨率hash+精确边界的做法能否作为边界/几何模块接到神经算子里，或直接替代PINN类求解？有没有在结构/车-轨耦合这类多场耦合问题上的可复现实证对比可参考？</div>
+              <div class="s-ex-meta">Engineering & Applied Sciences / 可微分物理与神经算子驱动的端到端多物理场优化（泛化与边界条件之争） &middot; 源论文 <strong>5 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">Class-Aware Permutation-Invariant Signal-to-Distortion Ratio for Semantic Segmentation</span><br><span class="pm">Nguyen et al., 2026 &mdash; 语义分割中的排列不变性方法</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 通用音频&ndash;语言表征</span></div>
-                <div class="s-ex-paper"><span class="pt">CLAP-ART: Automated Audio Captioning with Semantic-rich Audio Representations</span><br><span class="pm">Takeuchi et al., 2025 &mdash; 语义丰富的音频表征</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>3 篇论文分别研究视觉/音频两个模态的自监督表征学习，构成「同一方法论在不同模态的应用」关系 → 生成跨模态比较和通用性评估的综合问题</div>
+                <div class="s-ex-paper"><span class="pt">A branched Fourier neural operator for efficient calculation of vehicle–track spatially coupled dynamics</span><br><span class="pm">Qingjing Wang et al., 2024</span></div>
+                <div class="s-ex-paper"><span class="pt">Exact Dirichlet boundary multi‐resolution hash encoding solver for structures</span><br><span class="pm">Xiaoge Tian et al., 2025</span></div>
+                <div class="s-ex-paper"><span class="pt">Physics‐informed neural operator solver and super‐resolution for solid mechanics</span><br><span class="pm">Chawit Kaewnuratchadasorn et al., 2024</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>不同方法的论文实验设置与PDE类型差异大（强/弱形式、离散方式、边界处理、采样策略各不相同），很难直接做“苹果对苹果”的公平对照</div>
               </div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── 2. Methodology Debate ── -->
+      <!-- ── 前沿综合判断 ── -->
       <div class="s-card reveal">
-        <div class="s-bar bar-meth"></div>
+        <div class="s-bar bar-frontier"></div>
         <div class="s-body">
-          <h4>方法论争论 <span class="en">Methodology Debate</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 23 条</span></h4>
-          <p class="desc">比较和评价不同的技术方法路线，指出各自的适用条件和局限。考验模型对方法论细节的深度理解。</p>
-          <div class="s-chips"><span>2-3 种方法</span><span>需实验证据</span><span>无显然最优</span></div>
+          <h4>前沿综合判断 <span class="en">Frontier Assessment</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 13 条</span></h4>
+          <p class="desc">某研究方向近期出现重要进展或范式转换，需要理解多篇论文之间的关系和领域整体走向。考验模型对研究趋势的综合把握能力。</p>
+          <div class="s-chips"><span>多篇近期论文</span><span>趋势/范式判断</span><span>立项/基金场景</span></div>
           <div class="s-examples">
             <div class="s-ex">
-              <div class="s-ex-query">交互式工具使用基准测试（如 ASTRA-bench）和问题复杂度分析（如 The Illusion of Thinking）这两种评估推理模型的方法论，在揭示模型真实推理能力方面各有什么优势和盲区？它们的结论是否一致？</div>
-              <div class="s-ex-meta">CS / Adversarial Machine Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
+              <div class="s-ex-query">我在写立项，想做一个覆盖文本越狱、VLM 越狱以及带在线搜索/工具调用的 agent 系统的“自动化 red teaming 评测框架”。但现在各家对成功判定、危害分类、攻击预算/成本（调用次数、token、搜索轮次、工具动作数）和可复现流程的口径差太大，尤其 model-level 跟 agentic-level（含 action-graph observability 记录）很难横向对齐。有没有比较公认的统一标准/报告模板可以复用？哪些维度必须按文本/多模态/搜索增强分叉设子基准，才能既可比又可复现？</div>
+              <div class="s-ex-meta">Computer Science & AI / 对齐与安全评测：越狱（jailbreak）攻防与基准有效性 &middot; 源论文 <strong>8 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">ASTRA-bench: Evaluating Tool-Use Agent Reasoning and Action Planning</span><br><span class="pm">Xiu et al., 2026 &mdash; 交互式工具使用基准</span></div>
-                <div class="s-ex-paper"><span class="pt">The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models</span><br><span class="pm">Shojaee et al., 2025 &mdash; 推理模型能力的系统性分析</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文用完全不同的方法论评估同一目标（推理能力）：一个用工具交互基准，一个用问题复杂度梯度 → 生成要求比较两种评估范式的适用性和局限性</div>
+                <div class="s-ex-paper"><span class="pt">HarmBench: A Standardized Evaluation Framework for Automated Red Teaming and Robust Refusal</span><br><span class="pm">Mantas Mazeika et al., 2024</span></div>
+                <div class="s-ex-paper"><span class="pt">Red Teaming for Large Language Models At Scale: Tackling Hallucinations on Mathematics Tasks</span><br><span class="pm">Aleksander Buszydlik et al., 2023</span></div>
+                <div class="s-ex-paper"><span class="pt">Mind the Gap: Comparing Model- vs Agentic-Level Red Teaming with Action-Graph Observability on GPT-OSS-20B</span><br><span class="pm">Ilham Wicaksono et al., 2025</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>评测对象从静态模型扩展到含工具与在线环境的 agent，导致观测粒度、成功判定与成本口径天然不一致，难以形成一刀切的统一指标</div>
               </div></div>
             </div>
             <div class="s-ex">
-              <div class="s-ex-query">BYOL-A 和 M2D-CLAP 在生成通用音频表征方面的方法论有何根本差异？在不同下游任务（分类、检索、生成）中，哪种方法更具优势？各自对标注数据的依赖程度如何？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.52</strong></div>
+              <div class="s-ex-query">我在写杂化半导体-超导纳米线马约拉纳基金申请，原计划把零偏置峰(ZBP)当核心里程碑，但内审被质疑：无序、化学势/势垒非均匀、偶然Andreev束缚态在非拓扑区也能做出接近甚至超过2e^2/h的ZBP。现在我想把ZBP降级为“必要但不充分”，需要一条可证伪的证据链：有哪些实验判据/对照设计能系统排除这些平庸机制（比如多端/四端几何、参数扫描的稳定性、峰-谷结构、可重复性、拓扑能隙与磁场窗口约束等）？同时怎样把这些判据写成可量化的里程碑和风险备选路线？</div>
+              <div class="s-ex-meta">Experimental Natural Sciences / 纳米线/二维平台中的马约拉纳零模：零偏置峰的“真伪之争” &middot; 源论文 <strong>8 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">BYOL for Audio: Self-supervised Learning for General-purpose Audio Representation</span><br><span class="pm">Niizumi et al., 2021 &mdash; 基于 Bootstrap Your Own Latent 的音频自监督方法</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Exploring General-Purpose Audio-Language Representations Beyond Text-Audio Matching</span><br><span class="pm">Niizumi et al., 2025 &mdash; 结合掩码建模和对比学习的音频&ndash;语言表征</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>同一作者团队的两代方法（纯自监督 vs 多模态对比学习），直接对比方法论演进和各自适用场景</div>
+                <div class="s-ex-paper"><span class="pt">Emergent vortex Majorana zero mode in iron-based superconductors</span><br><span class="pm">Lingyuan Kong et al., 2021</span></div>
+                <div class="s-ex-paper"><span class="pt">Disorder-induced zero-bias peaks in Majorana nanowires</span><br><span class="pm">Sankar Das Sarma et al., 2021</span></div>
+                <div class="s-ex-paper"><span class="pt">Crossover between trivial zero modes in Majorana nanowires</span><br><span class="pm">Haining Pan et al., 2021</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>拓扑与平庸机制在隧穿谱上高度拟态，且在有限温度、有限展宽、非理想接触与器件不均匀下，ZBP高度与形状都可能“看起来像”量子化</div>
               </div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── 3. Contradiction Resolution ── -->
+      <!-- ── 证据缺口分析 ── -->
       <div class="s-card reveal">
-        <div class="s-bar bar-contra"></div>
+        <div class="s-bar bar-gap"></div>
         <div class="s-body">
-          <h4>矛盾解决 <span class="en">Contradiction Resolution</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 1 条</span></h4>
-          <p class="desc">聚焦已发表研究中的真实矛盾，要求分析矛盾来源并判断哪个结论更可靠。这是最难的一类策略。</p>
-          <div class="s-chips"><span>真实矛盾</span><span>证据权衡</span><span>需精细分析</span></div>
+          <h4>证据缺口分析 <span class="en">Evidence Gap Analysis</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 15 条</span></h4>
+          <p class="desc">现有方法被广泛使用但某些条件下缺乏系统验证，或领域存在反复被提及但未解决的问题。考验模型识别和分析研究空白的能力。</p>
+          <div class="s-chips"><span>已知局限</span><span>缺乏系统验证</span><span>需风险评估</span></div>
           <div class="s-examples">
             <div class="s-ex">
-              <div class="s-ex-query">轻量级决策树框架声称能在资源受限的 IoT 设备上实现高效异常检测，而另一研究则强调需要更复杂的机器学习模型才能达到可靠的入侵检测效果。这两种立场的实验条件和评估指标有何关键差异？哪个结论在实际部署中更可靠？</div>
-              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.58</strong></div>
+              <div class="s-ex-query">我在做下一轮 LLM 推理加速项目的技术尽调，目标是 6 个月内在真实在线服务负载下交付可复现的“KV cache 优化 + speculative decoding”端到端方案。但现在路线分叉很快：比如 QuantSpec 这类分层量化 KV + 自推测到底把代价转移到多少精度/回退开销/实现复杂度？Speculative decoding 在不同采样策略和失败回退下的理论加速上限在哪里？再加上 safety-aware decoding 的约束会不会把吞吐/尾延迟打回原形。扩散式生成里 KV 的瓶颈画像又和自回归不同，调度或 CXL/FPGA 解耦 KV 是否更稳？有没有能对齐 P95、吞吐、单位成本、精度/安全指标的对比与可复现实验基线，帮助我做风险矩阵和里程碑选择？</div>
+              <div class="s-ex-meta">Computer Science & AI / 高性能 LLM 推理/训练系统的端到端 Benchmark 竞赛（吞吐、延迟、成 &middot; 源论文 <strong>8 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 主张轻量级决策树足以胜任</span></div>
-                <div class="s-ex-paper"><span class="pt">A Secure and Robust Machine Learning Model for Intrusion Detection</span><br><span class="pm">Tiwari et al., 2025 &mdash; 强调需要更复杂的 ML 模型</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文对「IoT 入侵检测需要多复杂的模型」给出了相反的结论 → 构成真实的学术矛盾 → 生成要求分析实验条件差异和结论可靠性的问题</div>
+                <div class="s-ex-paper"><span class="pt">QuantSpec: Self-Speculative Decoding with Hierarchical Quantized KV Cache</span><br><span class="pm">Rishabh Tiwari et al., 2025</span></div>
+                <div class="s-ex-paper"><span class="pt">Tutorial Proposal: Speculative Decoding for Efficient LLM Inference</span><br><span class="pm">Heming Xia et al., 2025</span></div>
+                <div class="s-ex-paper"><span class="pt">Speculative Safety-Aware Decoding</span><br><span class="pm">Xuekang Wang et al., 2025</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>证据分散且实验设置不可比：不同论文的负载、模型、硬件、指标口径（吞吐/延迟/成本/精度/安全）与回退策略差异大，难以直接对齐</div>
+              </div></div>
+            </div>
+            <div class="s-ex">
+              <div class="s-ex-query">我准备立项复现兆巴压力下超氢化物（如Y、Ca体系）接近室温的高Tc实验，但学校要求我提交“可重复性/数据可追溯”风险评估。看文献感觉Tc对氢含量/化学计量、结构相判定和压力标定都极敏感，而我们DAC流程缺少统一的原位定量方案。现在有哪些被多组采用的做法来：原位确认化学计量与相（XRD/拉曼等）并量化不确定度、监测氢扩散/逃逸的时间尺度、以及用红宝石或Sm:SrB4O7荧光压力计（含LED光源）实现可追溯校准？还能从LK-99复现争议里总结哪些“最低可复核判据”能避免实验间不可比？</div>
+              <div class="s-ex-meta">Experimental Natural Sciences / “室温超导”与高压氢化物超导的可重复性/测量判据争议 &middot; 源论文 <strong>8 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
+              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
+              <div class="s-ex-detail"><div class="s-ex-detail-inner">
+                <h6>源论文</h6>
+                <div class="s-ex-paper"><span class="pt">Synthesis and Superconductivity in yttrium superhydrides under high pressure</span><br><span class="pm">Yingying Wang et al., 2022</span></div>
+                <div class="s-ex-paper"><span class="pt">Absence of superconductivity in LK-99 at ambient conditions</span><br><span class="pm">Kapil Kumar et al., 2023</span></div>
+                <div class="s-ex-paper"><span class="pt">Massive electrons and unconventional room-temperature superconductivity in superhydrides</span><br><span class="pm">Theja N. De Silva, 2021</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>不同实验室在DAC几何、电极制作、温度计量、压力介质与标尺选择上差异很大，导致系统误差难以直接对照且常缺少完整元数据</div>
               </div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── 4. Quantitative Verification ── -->
-      <div class="s-card reveal">
-        <div class="s-bar bar-quant"></div>
-        <div class="s-body">
-          <h4>定量验证 <span class="en">Quantitative Verification</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 2 条</span></h4>
-          <p class="desc">查找、交叉引用和验证具体的量化结果。数字错误在学术场景中代价极高，专门测试精确引用能力。</p>
-          <div class="s-chips"><span>具体数字 / 指标</span><span>多源交叉验证</span><span>区分一手 / 二手</span></div>
-          <div class="s-examples">
-            <div class="s-ex">
-              <div class="s-ex-query">对比两个 IoT 入侵检测框架在 NSL-KDD 数据集上报告的检测准确率和能耗效率：轻量级决策树框架 vs 数据驱动无线传感器网络框架，两者的数字差异有多大？各自使用的评测条件是否可比？</div>
-              <div class="s-ex-meta">CS / Verification of Neural Networks &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.60</strong></div>
-              <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
-              <div class="s-ex-detail"><div class="s-ex-detail-inner">
-                <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Lightweight Framework to Secure IoT Devices with Limited Resources</span><br><span class="pm">Pandey et al., 2025 &mdash; 报告轻量级方案在 NSL-KDD 上的检测率</span></div>
-                <div class="s-ex-paper"><span class="pt">An Efficient Data Driven Framework for Intrusion Detection in Wireless Sensor Networks</span><br><span class="pm">Sinha et al., 2025 &mdash; 报告数据驱动方案在相同基准上的性能</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文在相同基准上报告了具体性能数字，但使用的评测协议可能不完全一致 → 生成要求精确比对数字并判断可比性的定量验证问题</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 5. Cross-Domain Bridge ── -->
+      <!-- ── 跨领域迁移评估 ── -->
       <div class="s-card reveal">
         <div class="s-bar bar-cross"></div>
         <div class="s-body">
-          <h4>跨领域桥梁 <span class="en">Cross-Domain Bridge</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 13 条</span></h4>
-          <p class="desc">连接不同研究子领域的方法或发现，分析跨域迁移的可行性与障碍。需要同时理解两个领域。</p>
-          <div class="s-chips"><span>跨 2+ 子领域</span><span>理论 + 实践</span><span>非表面类比</span></div>
+          <h4>跨领域迁移评估 <span class="en">Cross-Domain Transfer</span> <span style="float:right;font-size:.72rem;color:var(--text-tertiary)">本次生成 10 条</span></h4>
+          <p class="desc">A 领域的方法/发现在 B 领域有潜在应用价值，但适用条件和风险不明。需要同时理解两个领域的差异。</p>
+          <div class="s-chips"><span>跨 2+ 领域</span><span>迁移可行性</span><span>适配风险</span></div>
           <div class="s-examples">
             <div class="s-ex">
-              <div class="s-ex-query">音频&ndash;图像跨检索框架中的时序对齐原理（temporal agreement），能否被整合到对比学习框架中以提升通用音频&ndash;语言表征的质量？这种跨范式融合在技术上面临哪些核心挑战？</div>
-              <div class="s-ex-meta">CS / Self-Supervised Learning &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.50</strong></div>
+              <div class="s-ex-query">我在系统验证团队做技术尽调，想把 LLM 辅助的 Lean4 证明生成接入现有协议/OS/分布式系统的验证流水线。现在纠结该押注“最佳优先树搜索”的 BFS-Prover 路线，还是像 Seed-Prover 1.5 那样用大规模 RL 再配推理时扩展（TTS）；另外 Stepwise 把 BFS/神经符号搜索搬到系统验证后，工程上到底改了哪些关键点？我想找：这几类方法在 Lean4 里状态/动作怎么定义、打分/剪枝/并行怎么做、与 tactic/验证工具链怎么交互；以及在系统验证这种长程依赖和稀疏回报分布下，把树搜索嵌进多轮 RL 代理（类似 Tree-GRPO）的真实收益-成本曲线和落地坑有哪些？</div>
+              <div class="s-ex-meta">Mathematics & Theoretical Sciences / AI 辅助形式化证明与证明自动化（Lean/Isabelle 等） &middot; 源论文 <strong>4 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">Refining Knowledge Transfer on Audio-Image Temporal Agreement for Audio-Visual Retrieval</span><br><span class="pm">Tsubaki et al., 2024 &mdash; 音频&ndash;图像跨模态检索中的时序对齐</span></div>
-                <div class="s-ex-paper"><span class="pt">M2D-CLAP: Masked Modeling Duo Meets CLAP for Learning General-purpose Audio Representations</span><br><span class="pm">Niizumi et al., 2024 &mdash; 通用音频表征的对比学习框架</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>两篇论文分属不同的多模态学习范式（跨模态检索 vs 对比学习表征），但核心技术有互补性 → 生成要求评估跨范式融合可行性的问题</div>
+                <div class="s-ex-paper"><span class="pt">Seed-Prover 1.5: Mastering Undergraduate-Level Theorem Proving via Learning from Experience</span><br><span class="pm">Jiangjie Chen et al., 2025</span></div>
+                <div class="s-ex-paper"><span class="pt">Stepwise: Neuro-Symbolic Proof Search for Automated Systems Verification</span><br><span class="pm">Baoding He et al., 2026</span></div>
+                <div class="s-ex-paper"><span class="pt">BFS-Prover: Scalable Best-First Tree Search for LLM-based Automatic Theorem Proving</span><br><span class="pm">Ran Xin et al., 2025</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>不同方法的评价指标与实验设定不一致（通用定理证明 vs 系统验证定理分布、证明长度、约束），很难直接横向对比收益-成本</div>
               </div></div>
             </div>
             <div class="s-ex">
-              <div class="s-ex-query">用于冠状动脉疾病预测的集成机器学习方法，能否迁移到城市交通需求预测场景中提升预测精度？两个应用场景在数据特征、特征工程和模型可解释性需求上有哪些根本差异？</div>
-              <div class="s-ex-meta">CS / Explainable AI &middot; 源论文 <strong>2 篇</strong> &middot; 基线 <strong>0.65</strong></div>
+              <div class="s-ex-query">我在写原发性浆细胞白血病（pPCL）新方案的II期试验，团队想借鉴多发性骨髓瘤里把MRD阴性当早期终点来加速决策。但pPCL更侵袭、治疗路径（含ASCT）也不同，我困惑骨髓瘤里MRD作为中间/替代终点的量化证据（比如EVIDENCE那类meta分析框架）能否迁移过来？如果要做，方案里该怎么论证终点可接受性、定义MRD阈值/检测方法与时间点，并在统计上设定与OS/PFS关联或预测的假设与敏感性分析？</div>
+              <div class="s-ex-meta">Biomedical & Life Sciences / 替代终点与生物标志物驱动的加速批准：验证危机与回归到临床获益 &middot; 源论文 <strong>3 篇</strong> &middot; 专家评分 <strong>9/10</strong></div>
               <div class="s-ex-toggle" onclick="toggleSex(this)"><span class="chev">&#9662;</span> 查看论文来源与生成逻辑</div>
               <div class="s-ex-detail"><div class="s-ex-detail-inner">
                 <h6>源论文</h6>
-                <div class="s-ex-paper"><span class="pt">A Study on Different Machine Learning Approaches in Coronary Artery Disease Prediction</span><br><span class="pm">Kirubaa et al., 2025 &mdash; 冠状动脉疾病的集成学习预测方法</span></div>
-                <div class="s-ex-paper"><span class="pt">An Exploratory and Predictive Analysis of Travel Patterns and Demand</span><br><span class="pm">P. C et al., 2025 &mdash; 城市交通模式的预测分析</span></div>
-                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>医疗预测 × 交通预测，使用相似的集成 ML 方法但面向完全不同的数据分布和可解释性要求 → 生成要求分析方法迁移可行性和领域适配挑战的问题</div>
+                <div class="s-ex-paper"><span class="pt">MRD as an early endpoint in myeloma and other hematologic malignancies: Implication for ongoing and future study designs.</span><br><span class="pm">Elizabeth Hill et al., 2026</span></div>
+                <div class="s-ex-paper"><span class="pt">EVIDENCE meta-analysis: evaluating minimal residual disease as an intermediate clinical endpoint for multiple myeloma.</span><br><span class="pm">O. Landgren et al., 2024</span></div>
+                <div class="s-ex-paper"><span class="pt">Prognostic Implications of Measurable Residual Disease and Autologous Hematopoietic Stem Cell Transplantation in Primary Plasma Cell Leukemia in the Era of Novel Agents.</span><br><span class="pm">Qiling Bu et al., 2025</span></div>
+                <div class="s-ex-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>MRD替代终点的验证依赖试验层面证据与一致的检测标准，而pPCL样本量小、研究异质性大，导致外推与统计把握度不足</div>
               </div></div>
             </div>
           </div>
